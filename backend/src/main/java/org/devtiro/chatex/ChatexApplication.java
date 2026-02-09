@@ -1,4 +1,4 @@
-package org.devtiro.chatex;
+package src.main.java.org.devtiro.chatex;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
