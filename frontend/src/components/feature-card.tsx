@@ -15,4 +15,3 @@ export function FeatureCard({ title, description }: FeatureCardProps) {
     </div>
   );
 }
-

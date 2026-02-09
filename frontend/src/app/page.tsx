@@ -1,6 +1,12 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import Link from "next/link";
 import { ModeToggle } from "@/components/mode-toggle";
 import { FeatureCard } from "@/components/feature-card";
@@ -20,13 +26,21 @@ export default function Home() {
               alt="Chatex Logo"
               className="sm:w-10 sm:h-10"
             />
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">Chatex</h1>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+              Chatex
+            </h1>
           </div>
           <nav className="flex items-center gap-2 sm:gap-4">
-            <Link href="/about" className="hidden text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:inline">
+            <Link
+              href="/about"
+              className="hidden text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:inline"
+            >
               About
             </Link>
-            <Link href="/features" className="hidden text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:inline">
+            <Link
+              href="/features"
+              className="hidden text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:inline"
+            >
               Features
             </Link>
             <ModeToggle />
@@ -51,7 +65,8 @@ export default function Home() {
                 Chat Everywhere
               </h2>
               <p className="px-4 text-base text-gray-600 dark:text-gray-300 sm:text-xl md:text-2xl">
-                Connect with friends, share moments, and stay in touch wherever you are
+                Connect with friends, share moments, and stay in touch wherever
+                you are
               </p>
             </div>
           </div>
@@ -61,15 +76,20 @@ export default function Home() {
             {/* Sign Up Card */}
             <Card className="border-2 transition-all hover:border-violet-500 hover:shadow-xl dark:bg-[#262626] dark:border-violet-900/50 dark:hover:border-violet-500">
               <CardHeader>
-                <CardTitle className="text-xl sm:text-2xl">Create Account</CardTitle>
+                <CardTitle className="text-xl sm:text-2xl">
+                  Create Account
+                </CardTitle>
                 <CardDescription className="text-sm sm:text-base">
                   Join our community and start chatting today
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <CreateAccountDialog>
-                  <Button className="w-full bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
-                  dark:text-white" size="lg">
+                  <Button
+                    className="w-full bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
+                  dark:text-white"
+                    size="lg"
+                  >
                     Get Started
                   </Button>
                 </CreateAccountDialog>
@@ -85,7 +105,11 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full border-violet-600 text-violet-600 hover:bg-violet-50 dark:border-violet-500 dark:text-violet-400 dark:hover:bg-violet-950/30" variant="outline" size="lg">
+                <Button
+                  className="w-full border-violet-600 text-violet-600 hover:bg-violet-50 dark:border-violet-500 dark:text-violet-400 dark:hover:bg-violet-950/30"
+                  variant="outline"
+                  size="lg"
+                >
                   Start
                 </Button>
               </CardContent>
@@ -118,13 +142,22 @@ export default function Home() {
               © 2026 Chatex. All rights reserved.
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs sm:gap-6 sm:text-sm">
-              <Link href="/terms" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+              <Link
+                href="/terms"
+                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >
                 Terms of Service
               </Link>
-              <Link href="/cookies" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+              <Link
+                href="/cookies"
+                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >
                 Cookies
               </Link>
-              <Link href="/contact" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+              <Link
+                href="/contact"
+                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >
                 Contact Us
               </Link>
             </div>
