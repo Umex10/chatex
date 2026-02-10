@@ -1,13 +1,12 @@
 package org.devtiro.chatex.controllers;
 
 import jakarta.validation.Valid;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.devtiro.chatex.domain.dtos.requests.CreateAccountRequestDto;
-import org.devtiro.chatex.domain.dtos.UserDto;
-import org.devtiro.chatex.domain.dtos.responses.CreateAccountResponseDto;
+import org.devtiro.chatex.domain.TkExpiry;
+import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.responses.AuthAccountResponseDto;
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.services.AuthenticationService;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -26,18 +25,31 @@ public class AuthController {
 
 
     @PostMapping(path = "/sign-up")
-    public ResponseEntity<CreateAccountResponseDto> createAccount(
-            @Valid @RequestBody CreateAccountRequestDto createAccountRequestDto
+    public ResponseEntity<AuthAccountResponseDto> signUpAccount(
+            @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto
     ) {
-        User user = userService.createAccount(createAccountRequestDto);
+        User user = userService.createAccount(signUpAccountRequestDto);
+        String username = user.getUsername();
 
-        CreateAccountResponseDto createAccountResponseDto = CreateAccountResponseDto.builder()
-                .username(user.getUsername())
-                .refreshJwt(authenticationService.createTk(user))
-                .expiresIn(8555L)
-                .build();
+        AuthAccountResponseDto authAccountResponseDto = authenticationService.createAuthAccountResponseDto(username);
 
-        return new ResponseEntity<>(createAccountResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(authAccountResponseDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/sign-in")
+    public ResponseEntity<AuthAccountResponseDto> signInAccount(
+            @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto
+    ) {
+        UserDetails userDetails = authenticationService.authenticate(
+                signUpAccountRequestDto.getUsername(),
+                signUpAccountRequestDto.getKey()
+        );
+
+        String username = userDetails.getUsername();
+
+        AuthAccountResponseDto authAccountResponseDto = authenticationService.createAuthAccountResponseDto(username);
+
+        return new ResponseEntity<>(authAccountResponseDto, HttpStatus.CREATED);
     }
 
 }

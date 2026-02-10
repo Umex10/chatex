@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import {createAccount} from "@/actions/auth"
+import {signUpAccount} from "@/actions/auth"
 
 const createAccountSchema = z
     .object({
@@ -56,16 +56,16 @@ const createAccountSchema = z
         path: ["keyConfirm"],
     });
 
-export type CreateAccountFormValues = z.infer<typeof createAccountSchema>;
+export type SignUpAccountValues = z.infer<typeof createAccountSchema>;
 
-interface CreateAccountDialogProps {
+interface SignUpAccountProps {
     children: React.ReactNode;
 }
 
-export function CreateAccountDialog({children}: CreateAccountDialogProps) {
+export function SignUpAccount({children}: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
 
-    const form = useForm<CreateAccountFormValues>({
+    const form = useForm<SignUpAccountValues>({
         resolver: zodResolver(createAccountSchema),
         mode: "onChange",
         defaultValues: {

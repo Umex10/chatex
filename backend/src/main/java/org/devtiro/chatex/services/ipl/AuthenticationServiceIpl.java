@@ -2,7 +2,8 @@ package org.devtiro.chatex.services.ipl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.TkExpiry;
+import org.devtiro.chatex.domain.dtos.responses.AuthAccountResponseDto;
 import org.devtiro.chatex.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,8 +31,11 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long jwtExpiryMs = 2592000000L; // 30 days
+    private final long REFRESH_TK = 1000L * 60 * 15;
+    private final long ACCESS_TK = 1000L * 60 * 60 * 24 * 30;
 
+    // The authentication Manager will tell us if the user credentials
+    // are valid
     @Override
     public UserDetails authenticate(String username, String key) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, key));
@@ -40,13 +44,32 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     }
 
     @Override
-    public String createTk(User user) {
+    public AuthAccountResponseDto createAuthAccountResponseDto(String username) {
+
+        return AuthAccountResponseDto.builder()
+                .username(username)
+                .refreshJwt(createTk(username, TkExpiry.REFRESH))
+                .accessJwt(createTk(username, TkExpiry.ACCESS))
+                .accessTokenExpiresIn(1000L * 60 * 15 / 1000)
+                .build();
+    }
+
+    @Override
+    public String createTk(String username, TkExpiry tkExpiry) {
+
+        long expiryMs;
+        if (tkExpiry == TkExpiry.ACCESS) {
+            expiryMs = ACCESS_TK;
+        } else {
+            expiryMs = REFRESH_TK;
+        }
+
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setClaims(claims) // Infos which the frontend can read from without any request to the server: f.e Role
-                .setSubject(user.getUsername()) // The user's email
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiryMs)) // Date needed for the server
+                .setExpiration(new Date(System.currentTimeMillis() + expiryMs)) // Date needed for the server
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) // Our checksum
                 .compact(); // Creates the xxxxx.yyyyy.zzzzz String
     }

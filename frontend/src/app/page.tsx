@@ -10,7 +10,8 @@ import {
 import Link from "next/link";
 import { ModeToggle } from "@/components/mode-toggle";
 import { FeatureCard } from "@/components/feature-card";
-import { CreateAccountDialog } from "@/components/create-account-dialog";
+import { SignUpAccount } from "@/components/signup-account";
+import { SignInAccount } from "@/components/signin-account";
 
 export default function Home() {
   return (
@@ -77,14 +78,14 @@ export default function Home() {
             <Card className="border-2 transition-all hover:border-violet-500 hover:shadow-xl dark:bg-[#262626] dark:border-violet-900/50 dark:hover:border-violet-500">
               <CardHeader>
                 <CardTitle className="text-xl sm:text-2xl">
-                  Create Account
+                  Sign up
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base">
                   Join our community and start chatting today
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <CreateAccountDialog>
+                <SignUpAccount>
                   <Button
                     className="w-full bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
                   dark:text-white"
@@ -92,7 +93,7 @@ export default function Home() {
                   >
                     Get Started
                   </Button>
-                </CreateAccountDialog>
+                </SignUpAccount>
               </CardContent>
             </Card>
 
@@ -105,13 +106,15 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
-                  className="w-full border-violet-600 text-violet-600 hover:bg-violet-50 dark:border-violet-500 dark:text-violet-400 dark:hover:bg-violet-950/30"
-                  variant="outline"
-                  size="lg"
-                >
-                  Start
-                </Button>
+                <SignInAccount>
+                  <Button
+                    className="w-full border-violet-600 text-violet-600 hover:bg-violet-50 dark:border-violet-500 dark:text-violet-400 dark:hover:bg-violet-950/30"
+                    variant="outline"
+                    size="lg"
+                  >
+                    Start
+                  </Button>
+                </SignInAccount>
               </CardContent>
             </Card>
           </div>

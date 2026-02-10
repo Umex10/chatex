@@ -2,7 +2,7 @@ package org.devtiro.chatex.services.ipl;
 
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
-import org.devtiro.chatex.domain.dtos.requests.CreateAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.UserService;
@@ -17,11 +17,11 @@ public class UserServiceIpl implements UserService {
     private final PasswordEncoder encoder;
 
     @Override
-    public User createAccount(CreateAccountRequestDto createAccountRequestDto) {
+    public User createAccount(SignUpAccountRequestDto signUpAccountRequestDto) {
 
-        String username = createAccountRequestDto.getUsername();
-        String email = createAccountRequestDto.getEmail();
-        String phone = createAccountRequestDto.getPhone();
+        String username = signUpAccountRequestDto.getUsername();
+        String email = signUpAccountRequestDto.getEmail();
+        String phone = signUpAccountRequestDto.getPhone();
 
         // Needed Checks, since these field have to be unique
         if(userRep.existsUserByUsername(username)) {
@@ -33,10 +33,10 @@ public class UserServiceIpl implements UserService {
         }
 
         // Using our bean from SecurityConfig
-        String encodedKey = encoder.encode(createAccountRequestDto.getKey());
+        String encodedKey = encoder.encode(signUpAccountRequestDto.getKey());
 
         User user = User.builder()
-                .name(createAccountRequestDto.getName())
+                .name(signUpAccountRequestDto.getName())
                 .username(username)
                 .email(email)
                 .phone(phone)

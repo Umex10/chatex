@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateAccountResponseDto {
+public class AuthAccountResponseDto {
 
     private String username;
     private String refreshJwt;
-    private Long expiresIn;
-
+    private String accessJwt;
+    private Long accessTokenExpiresIn;
 }
