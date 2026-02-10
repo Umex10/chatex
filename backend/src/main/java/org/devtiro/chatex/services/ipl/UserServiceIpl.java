@@ -2,7 +2,7 @@ package org.devtiro.chatex.services.ipl;
 
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
-import org.devtiro.chatex.domain.CreateAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.requests.CreateAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.UserService;
