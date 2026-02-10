@@ -20,6 +20,10 @@ public class CreateAccountRequestDto {
     @Size(min = 2, message = "Name must be at least {min} characters.")
     private String name;
 
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 20, message = "Username must be between {min} and {max} characters.")
+    private String username;
+
     @NotBlank(message = "Email is required")
     @Email(message = "Please enter a valid email address.")
     private String email;

@@ -29,6 +29,17 @@ const createAccountSchema = z
         name: z.string().min(2, {
             message: "Name must be at least 2 characters.",
         }),
+        username: z
+            .string()
+            .min(3, {
+                message: "Username must be at least 3 characters.",
+            })
+            .max(20, {
+                message: "Username must be at most 20 characters.",
+            })
+            .regex(/^[a-zA-Z0-9_]+$/, {
+                message: "Username can only contain letters, numbers, and underscores.",
+            }),
         email: z.string().email({
             message: "Please enter a valid email address.",
         }),
@@ -59,6 +70,7 @@ export function CreateAccountDialog({children}: CreateAccountDialogProps) {
         mode: "onChange",
         defaultValues: {
             name: "",
+            username: "",
             email: "",
             phone: "",
             key: "",
@@ -99,6 +111,20 @@ export function CreateAccountDialog({children}: CreateAccountDialogProps) {
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="John Doe" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="username"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Username</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="johndoe123" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
