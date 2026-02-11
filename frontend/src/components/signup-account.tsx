@@ -1,8 +1,8 @@
 "use client";
 
-import {useState} from "react";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
     Dialog,
@@ -20,9 +20,12 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {signUpAccount} from "@/actions/auth"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { signUpAccount } from "@/actions/auth"
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { setAuthState } from "@redux/slices/authSlice";
 
 const createAccountSchema = z
     .object({
@@ -62,8 +65,11 @@ interface SignUpAccountProps {
     children: React.ReactNode;
 }
 
-export function SignUpAccount({children}: SignUpAccountProps) {
+export function SignUpAccount({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
+
+    const dispatch: AppDispatch = useDispatch();
+
 
     const form = useForm<SignUpAccountValues>({
         resolver: zodResolver(createAccountSchema),
@@ -78,9 +84,17 @@ export function SignUpAccount({children}: SignUpAccountProps) {
         },
     });
 
-    const onSubmit = (data: CreateAccountFormValues) => {
-        const {keyConfirm, ...freshData} = data;
-        createAccount(freshData);
+    const onSubmit = async (data: SignUpAccountValues) => {
+        const { keyConfirm, ...freshData } = data;
+        const res = await signUpAccount(freshData);
+
+        if (!res.success) {
+            return;
+        }
+
+        dispatch(setAuthState(res.data));
+        console.log(res.data);
+
         setOpen(false);
         form.reset();
     };
@@ -106,13 +120,13 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                         <FormField
                             control={form.control}
                             name="name"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="John Doe" {...field} />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -120,13 +134,13 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                         <FormField
                             control={form.control}
                             name="username"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Username</FormLabel>
                                     <FormControl>
                                         <Input placeholder="johndoe123" {...field} />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -134,7 +148,7 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                         <FormField
                             control={form.control}
                             name="email"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
@@ -144,7 +158,7 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -152,13 +166,13 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                         <FormField
                             control={form.control}
                             name="phone"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Phone Number</FormLabel>
                                     <FormControl>
                                         <Input type="tel" placeholder="+1234567890" {...field} />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -166,7 +180,7 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                         <FormField
                             control={form.control}
                             name="key"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Key</FormLabel>
                                     <FormControl>
@@ -176,7 +190,7 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -184,7 +198,7 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                         <FormField
                             control={form.control}
                             name="keyConfirm"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Confirm Key</FormLabel>
                                     <FormControl>
@@ -194,7 +208,7 @@ export function SignUpAccount({children}: SignUpAccountProps) {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />

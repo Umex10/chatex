@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class AuthAccountResponseDto {
 
     private String username;
-    private String refreshJwt;
     private String accessJwt;
     private Long accessTokenExpiresIn;
 }

@@ -7,13 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
+import Link from "next/link"
 import { ModeToggle } from "@/components/mode-toggle";
 import { FeatureCard } from "@/components/feature-card";
 import { SignUpAccount } from "@/components/signup-account";
 import { SignInAccount } from "@/components/signin-account";
 
 export default function Home() {
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-violet-50 via-white to-purple-50 dark:from-[#1a1a1a] dark:via-[#262626] dark:to-[#1a1a1a]">
       {/* Header */}

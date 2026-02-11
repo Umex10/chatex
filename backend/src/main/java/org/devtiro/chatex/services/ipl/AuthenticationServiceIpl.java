@@ -1,6 +1,8 @@
 package org.devtiro.chatex.services.ipl;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.TkExpiry;
 import org.devtiro.chatex.domain.dtos.responses.AuthAccountResponseDto;
@@ -44,13 +46,24 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     }
 
     @Override
-    public AuthAccountResponseDto createAuthAccountResponseDto(String username) {
+    public AuthAccountResponseDto createAuthAccountResponseDto(String username, HttpServletResponse response) {
 
-        return AuthAccountResponseDto.builder()
+        String accessToken = createTk(username, TkExpiry.ACCESS);
+        String refreshToken = createTk(username, TkExpiry.REFRESH);
+
+        // Send it as HTTP cookie
+        Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(false);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+
+        response.addCookie(refreshCookie);
+
+       return AuthAccountResponseDto.builder()
                 .username(username)
-                .refreshJwt(createTk(username, TkExpiry.REFRESH))
-                .accessJwt(createTk(username, TkExpiry.ACCESS))
-                .accessTokenExpiresIn(1000L * 60 * 15 / 1000)
+                .accessJwt(accessToken)
+                .accessTokenExpiresIn(15 * 60L)
                 .build();
     }
 

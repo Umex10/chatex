@@ -1,8 +1,8 @@
 "use client";
 
-import {useState} from "react";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
     Dialog,
@@ -20,9 +20,12 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {signInAccount} from "@/actions/auth"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { signInAccount } from "@/actions/auth"
+import { AppDispatch } from "@redux/store";
+import { useDispatch } from "react-redux";
+import { setAuthState } from "@redux/slices/authSlice";
 
 const signInAccountSchema = z.object({
     username: z
@@ -44,8 +47,10 @@ interface SignInAccountProps {
     children: React.ReactNode;
 }
 
-export function SignInAccount({children}: SignInAccountProps) {
+export function SignInAccount({ children }: SignInAccountProps) {
     const [open, setOpen] = useState(false);
+
+    const dispatch: AppDispatch = useDispatch();
 
     const form = useForm<SignInAccountValues>({
         resolver: zodResolver(signInAccountSchema),
@@ -56,9 +61,15 @@ export function SignInAccount({children}: SignInAccountProps) {
         },
     });
 
-    const onSubmit = (data: SignInAccountFormValues) => {
-        // Handle sign in logic here
-        console.log("Sign in data:", data);
+    const onSubmit = async (data: SignInAccountValues) => {
+
+        const res = await signInAccount(data);
+
+        if (!res.success) {
+            return;
+        }
+
+        dispatch(setAuthState(res.data));
         setOpen(false);
         form.reset();
     };
@@ -83,13 +94,13 @@ export function SignInAccount({children}: SignInAccountProps) {
                         <FormField
                             control={form.control}
                             name="username"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Username</FormLabel>
                                     <FormControl>
                                         <Input placeholder="johndoe123" {...field} />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -97,7 +108,7 @@ export function SignInAccount({children}: SignInAccountProps) {
                         <FormField
                             control={form.control}
                             name="key"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Key</FormLabel>
                                     <FormControl>
@@ -107,7 +118,7 @@ export function SignInAccount({children}: SignInAccountProps) {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />

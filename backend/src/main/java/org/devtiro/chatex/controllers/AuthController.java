@@ -1,8 +1,8 @@
 package org.devtiro.chatex.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.devtiro.chatex.domain.TkExpiry;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthAccountResponseDto;
@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 @RequiredArgsConstructor
@@ -26,19 +26,22 @@ public class AuthController {
 
     @PostMapping(path = "/sign-up")
     public ResponseEntity<AuthAccountResponseDto> signUpAccount(
-            @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto
+            @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto,
+            HttpServletResponse response
     ) {
         User user = userService.createAccount(signUpAccountRequestDto);
         String username = user.getUsername();
 
-        AuthAccountResponseDto authAccountResponseDto = authenticationService.createAuthAccountResponseDto(username);
+        AuthAccountResponseDto authAccountResponseDto =
+                authenticationService.createAuthAccountResponseDto(username, response);
 
         return new ResponseEntity<>(authAccountResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/sign-in")
     public ResponseEntity<AuthAccountResponseDto> signInAccount(
-            @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto
+            @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto,
+            HttpServletResponse response
     ) {
         UserDetails userDetails = authenticationService.authenticate(
                 signUpAccountRequestDto.getUsername(),
@@ -47,9 +50,10 @@ public class AuthController {
 
         String username = userDetails.getUsername();
 
-        AuthAccountResponseDto authAccountResponseDto = authenticationService.createAuthAccountResponseDto(username);
+        AuthAccountResponseDto authAccountResponseDto =
+                authenticationService.createAuthAccountResponseDto(username, response);
 
-        return new ResponseEntity<>(authAccountResponseDto, HttpStatus.CREATED);
+        return ResponseEntity.ok(authAccountResponseDto);
     }
 
 }
