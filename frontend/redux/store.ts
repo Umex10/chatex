@@ -2,11 +2,11 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 
-import authSlice from "./slices/authSlice";
+import accessJwtSlice from "./slices/accessJwtSlice";
 
 export const store = configureStore({
     reducer: {
-        authState: authSlice
+        accessJwtState: accessJwtSlice
     }
 })
 

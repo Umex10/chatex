@@ -1,13 +1,11 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 
-export interface AuthSlice {
-    username: string | null,
+export interface AccessJwtSlice {
     accessJwt: string | null,
     accessTokenExpiresIn: number | null
 }
 
-const initialState: AuthSlice = {
-    username: null,
+const initialState: AccessJwtSlice = {
     accessJwt: null,
     accessTokenExpiresIn: null
 }
@@ -16,11 +14,11 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setAuthState: (_state, action: PayloadAction<AuthSlice>) => {
+        setAccessJwtState: (_state, action: PayloadAction<AccessJwtSlice>) => {
             return action.payload;
         }
     }
 })
 
-export const {setAuthState} = authSlice.actions;
+export const {setAccessJwtState} = authSlice.actions;
 export default authSlice.reducer;

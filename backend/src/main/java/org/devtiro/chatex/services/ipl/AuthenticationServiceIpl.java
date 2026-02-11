@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.TkExpiry;
-import org.devtiro.chatex.domain.dtos.responses.AuthAccountResponseDto;
+import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
 import org.devtiro.chatex.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +46,7 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     }
 
     @Override
-    public AuthAccountResponseDto createAuthAccountResponseDto(String username, HttpServletResponse response) {
+    public AuthResponseDto createAuthAccountResponseDto(String username, HttpServletResponse response) {
 
         String accessToken = createTk(username, TkExpiry.ACCESS);
         String refreshToken = createTk(username, TkExpiry.REFRESH);
@@ -60,8 +60,7 @@ public class AuthenticationServiceIpl implements AuthenticationService {
 
         response.addCookie(refreshCookie);
 
-       return AuthAccountResponseDto.builder()
-                .username(username)
+       return AuthResponseDto.builder()
                 .accessJwt(accessToken)
                 .accessTokenExpiresIn(15 * 60L)
                 .build();

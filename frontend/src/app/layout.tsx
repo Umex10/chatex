@@ -10,16 +10,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <StoreProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
+             <StoreProvider>
             {children}
+            </StoreProvider>
           </ThemeProvider>
-        </StoreProvider>
       </body>
     </html>
   );

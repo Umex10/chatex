@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuthAccountResponseDto {
-
-    private String username;
+public class AuthResponseDto {
     private String accessJwt;
     private Long accessTokenExpiresIn;
 }

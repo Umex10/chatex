@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { signUpAccount } from "@/actions/auth"
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { setAuthState } from "@redux/slices/authSlice";
+import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 
 const createAccountSchema = z
     .object({
@@ -92,7 +92,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
             return;
         }
 
-        dispatch(setAuthState(res.data));
+        dispatch(setAccessJwtState(res.data));
         console.log(res.data);
 
         setOpen(false);

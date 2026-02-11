@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { signInAccount } from "@/actions/auth"
 import { AppDispatch } from "@redux/store";
 import { useDispatch } from "react-redux";
-import { setAuthState } from "@redux/slices/authSlice";
+import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 
 const signInAccountSchema = z.object({
     username: z
@@ -69,7 +69,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
             return;
         }
 
-        dispatch(setAuthState(res.data));
+        dispatch(setAccessJwtState(res.data));
         setOpen(false);
         form.reset();
     };

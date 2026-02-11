@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
-import org.devtiro.chatex.domain.dtos.responses.AuthAccountResponseDto;
+import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.services.AuthenticationService;
 import org.devtiro.chatex.services.UserService;
@@ -25,21 +25,21 @@ public class AuthController {
 
 
     @PostMapping(path = "/sign-up")
-    public ResponseEntity<AuthAccountResponseDto> signUpAccount(
+    public ResponseEntity<AuthResponseDto> signUpAccount(
             @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto,
             HttpServletResponse response
     ) {
         User user = userService.createAccount(signUpAccountRequestDto);
         String username = user.getUsername();
 
-        AuthAccountResponseDto authAccountResponseDto =
+        AuthResponseDto authAccountResponseDto =
                 authenticationService.createAuthAccountResponseDto(username, response);
 
         return new ResponseEntity<>(authAccountResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/sign-in")
-    public ResponseEntity<AuthAccountResponseDto> signInAccount(
+    public ResponseEntity<AuthResponseDto> signInAccount(
             @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto,
             HttpServletResponse response
     ) {
@@ -50,7 +50,7 @@ public class AuthController {
 
         String username = userDetails.getUsername();
 
-        AuthAccountResponseDto authAccountResponseDto =
+        AuthResponseDto authAccountResponseDto =
                 authenticationService.createAuthAccountResponseDto(username, response);
 
         return ResponseEntity.ok(authAccountResponseDto);
