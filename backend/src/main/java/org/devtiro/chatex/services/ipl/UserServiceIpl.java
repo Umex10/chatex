@@ -1,7 +1,11 @@
 package org.devtiro.chatex.services.ipl;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
+
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;
@@ -24,7 +28,7 @@ public class UserServiceIpl implements UserService {
         String phone = signUpAccountRequestDto.getPhone();
 
         // Needed Checks, since these field have to be unique
-        if(userRep.existsUserByUsername(username)) {
+        if (userRep.existsUserByUsername(username)) {
             throw new EntityExistsException("An user already exists with the username: " + username);
         } else if (userRep.existsUserByEmail(email)) {
             throw new EntityExistsException("An user already exists with the email: " + email);
@@ -44,5 +48,12 @@ public class UserServiceIpl implements UserService {
                 .build();
 
         return userRep.save(user);
+    }
+
+    @Override
+    public User findById(UUID userId) {
+        return userRep.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
     }
 }

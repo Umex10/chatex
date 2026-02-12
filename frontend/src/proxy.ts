@@ -2,18 +2,18 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // If the user visits the website, we will first check if the user has an refresh token
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 
-  const token = request.cookies.get('refresh_token')?.value;
+  const token = request.cookies.get('refresh_jwt')?.value;
 
-  const isAuthPage = request.nextUrl.pathname = "/";
+  const isAuthPage = request.nextUrl.pathname === "/";
 
-  if (!token && isAuthPage) {
+  if (!token && !isAuthPage) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/home", request.url))
+    return NextResponse.redirect(new URL("/feed", request.url))
   }
 
   return NextResponse.next();

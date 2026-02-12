@@ -1,8 +1,10 @@
 package org.devtiro.chatex.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
@@ -20,40 +22,65 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
-    private final AuthenticationService authenticationService;
+        private final UserService userService;
+        private final AuthenticationService authenticationService;
 
+        @PostMapping(path = "/sign-up")
+        public ResponseEntity<AuthResponseDto> signUpAccount(
+                        @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto,
+                        HttpServletRequest request,
+                        HttpServletResponse response) {
+                User user = userService.createAccount(signUpAccountRequestDto);
+                String username = user.getUsername();
 
-    @PostMapping(path = "/sign-up")
-    public ResponseEntity<AuthResponseDto> signUpAccount(
-            @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto,
-            HttpServletResponse response
-    ) {
-        User user = userService.createAccount(signUpAccountRequestDto);
-        String username = user.getUsername();
+                AuthResponseDto authResponseDto = authenticationService.createAuthResponseDto(username, request,
+                                response);
 
-        AuthResponseDto authAccountResponseDto =
-                authenticationService.createAuthAccountResponseDto(username, response);
+                return new ResponseEntity<>(authResponseDto, HttpStatus.CREATED);
+        }
 
-        return new ResponseEntity<>(authAccountResponseDto, HttpStatus.CREATED);
-    }
+        @PostMapping(path = "/sign-in")
+        public ResponseEntity<AuthResponseDto> signInAccount(
+                        @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto,
+                        HttpServletRequest request,
+                        HttpServletResponse response) {
+                UserDetails userDetails = authenticationService.authenticate(
+                                signUpAccountRequestDto.getUsername(),
+                                signUpAccountRequestDto.getKey());
 
-    @PostMapping(path = "/sign-in")
-    public ResponseEntity<AuthResponseDto> signInAccount(
-            @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto,
-            HttpServletResponse response
-    ) {
-        UserDetails userDetails = authenticationService.authenticate(
-                signUpAccountRequestDto.getUsername(),
-                signUpAccountRequestDto.getKey()
-        );
+                String username = userDetails.getUsername();
 
-        String username = userDetails.getUsername();
+                AuthResponseDto authResponseDto = authenticationService.createAuthResponseDto(username, request,
+                                response);
 
-        AuthResponseDto authAccountResponseDto =
-                authenticationService.createAuthAccountResponseDto(username, response);
+                return ResponseEntity.ok(authResponseDto);
+        }
 
-        return ResponseEntity.ok(authAccountResponseDto);
-    }
+        @GetMapping(path = "/access-jwt")
+        public ResponseEntity<?> createAccessJwt(HttpServletRequest request,
+                        HttpServletResponse response) {
+
+                System.out.println("Wurde erreicht!");
+
+                String refreshTk = authenticationService.extractRefreshTk(request);
+
+                if (refreshTk == null || refreshTk.isEmpty()) {
+                        System.out.println("Refresh token exisitiert net!");
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .body("The refresh token is missing");
+                }
+
+                 System.out.println("Refresh token exisitert!");
+
+                UserDetails userDetails = authenticationService.validateTk(refreshTk);
+
+                 System.out.println("Refresh token ist valid!");
+
+                AuthResponseDto authResponseDto = authenticationService.createAuthResponseDto(userDetails.getUsername(),
+                                request, response);
+
+                return ResponseEntity.ok(authResponseDto);
+
+        }
 
 }

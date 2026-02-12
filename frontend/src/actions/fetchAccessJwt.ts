@@ -2,21 +2,23 @@
 "use server"
 
 import axios from "axios"
-
-const api = axios.create({
-  baseURL: "http://localhost:8080/api/v1/auth",
-  headers: {
-    "Content-Type": "application/json"
-  }
-})
+import { cookies } from "next/headers";
 
 export async function fetchAccessJwt() {
 
   try {
 
-    const res = await api.get("/accessJwt");
+    const cookieStore = await cookies();
+    const refreshCookie = cookieStore.get("refresh_jwt");
 
-    return {success: true, data: res.data};
+    const res = await axios.get("http://localhost:8080/api/v1/auth/access-jwt", {
+      headers: {
+        "Content-Type": "application/json",
+        "Cookie": `refresh_jwt=${refreshCookie?.value}`
+      }
+    });
+
+    return { success: true, data: res.data };
 
   } catch (error: any) {
     const errorMessage =

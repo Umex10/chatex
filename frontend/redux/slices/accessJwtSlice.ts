@@ -2,12 +2,12 @@ import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 
 export interface AccessJwtSlice {
     accessJwt: string | null,
-    accessTokenExpiresIn: number | null
+    expiresIn: number | null
 }
 
 const initialState: AccessJwtSlice = {
     accessJwt: null,
-    accessTokenExpiresIn: null
+    expiresIn: null
 }
 
 const authSlice = createSlice({

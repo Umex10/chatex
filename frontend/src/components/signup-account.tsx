@@ -26,6 +26,7 @@ import { signUpAccount } from "@/actions/auth"
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
+import { useRouter } from "next/navigation";
 
 const createAccountSchema = z
     .object({
@@ -67,6 +68,7 @@ interface SignUpAccountProps {
 
 export function SignUpAccount({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
+    const router = useRouter();
 
     const dispatch: AppDispatch = useDispatch();
 
@@ -93,10 +95,16 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
         }
 
         dispatch(setAccessJwtState(res.data));
-        console.log(res.data);
+        console.warn(res.data);
 
         setOpen(false);
         form.reset();
+        
+        router.refresh();
+        
+        setTimeout(() => {
+            router.push("/feed");
+        }, 100);
     };
 
     return (

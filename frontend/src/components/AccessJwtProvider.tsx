@@ -25,6 +25,7 @@ const AccessJwtProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+      console.warn(res.data);
       dispatch(setAccessJwtState(res.data));
     }
     init();

@@ -10,12 +10,15 @@ public interface AuthenticationService {
 
     UserDetails authenticate(String username, String key);
 
-    AuthResponseDto createAuthAccountResponseDto(String username, HttpServletResponse response);
+    AuthResponseDto createAuthResponseDto(String username,
+         HttpServletRequest request, HttpServletResponse response);
 
     String createTk(String username, TkExpiry tkExpiry);
 
     UserDetails validateTk(String tk);
 
-    String extractTk(HttpServletRequest request);
+    String extractAccesTk(HttpServletRequest request);
+
+    String extractRefreshTk(HttpServletRequest request);
 
 }

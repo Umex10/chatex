@@ -57,7 +57,7 @@ async function setCookie(setCookieHeader: string[]) {
   // Needed check, because the cookie could be stored with other cookies
   // in an array, but could also be a standalone string
   const refreshTokenCookie = Array.isArray(setCookieHeader)
-    ? setCookieHeader.find(c => c.startsWith('refresh_token='))
+    ? setCookieHeader.find(c => c.startsWith('refresh_jwt='))
     : setCookieHeader;
 
   if (refreshTokenCookie) {
@@ -69,7 +69,7 @@ async function setCookie(setCookieHeader: string[]) {
     const [, value] = nameValue.split('=');
 
     cookieStore.set({
-      name: 'refresh_token',
+      name: 'refresh_jwt',
       value: value,
       httpOnly: true,
       secure: false,

@@ -19,6 +19,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +34,8 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private final long REFRESH_TK = 1000L * 60 * 15;
-    private final long ACCESS_TK = 1000L * 60 * 60 * 24 * 30;
+    private final long REFRESH_TK = 1000L * 60 * 60 * 24 * 30;
+    private final long ACCESS_TK = 1000L * 60 * 15;
 
     // The authentication Manager will tell us if the user credentials
     // are valid
@@ -46,23 +47,32 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     }
 
     @Override
-    public AuthResponseDto createAuthAccountResponseDto(String username, HttpServletResponse response) {
+    public AuthResponseDto createAuthResponseDto(String username,
+            HttpServletRequest request, HttpServletResponse response) {
 
-        String accessToken = createTk(username, TkExpiry.ACCESS);
-        String refreshToken = createTk(username, TkExpiry.REFRESH);
+        String accessTk = createTk(username, TkExpiry.ACCESS);
 
-        // Send it as HTTP cookie
-        Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(false);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+        String refreshTk = extractRefreshTk(request);
 
-        response.addCookie(refreshCookie);
+        if (refreshTk == null || refreshTk.isEmpty()) {
 
-       return AuthResponseDto.builder()
-                .accessJwt(accessToken)
-                .accessTokenExpiresIn(15 * 60L)
+            System.out.println("Cookie was not found!");
+
+            String refreshToken = createTk(username, TkExpiry.REFRESH);
+
+            // Send it as HTTP cookie
+            Cookie refreshCookie = new Cookie("refresh_jwt", refreshToken);
+            refreshCookie.setHttpOnly(true);
+            refreshCookie.setSecure(false);
+            refreshCookie.setPath("/");
+            refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+
+            response.addCookie(refreshCookie);
+        }
+
+        return AuthResponseDto.builder()
+                .accessJwt(accessTk)
+                .expiresIn(15 * 60L)
                 .build();
     }
 
@@ -78,9 +88,11 @@ public class AuthenticationServiceIpl implements AuthenticationService {
 
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .setClaims(claims) // Infos which the frontend can read from without any request to the server: f.e Role
+                .setClaims(claims) // Infos which the frontend can read from without any request to the server: f.e
+                                   // Role
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                .claim("type_jwt", tkExpiry)
                 .setExpiration(new Date(System.currentTimeMillis() + expiryMs)) // Date needed for the server
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) // Our checksum
                 .compact(); // Creates the xxxxx.yyyyy.zzzzz String
@@ -93,13 +105,28 @@ public class AuthenticationServiceIpl implements AuthenticationService {
     }
 
     @Override
-    public String extractTk(HttpServletRequest request) {
+    public String extractAccesTk(HttpServletRequest request) {
+
         String bearerTk = request.getHeader("Authorization");
 
         if (bearerTk != null && bearerTk.startsWith("Bearer ")) {
             return bearerTk.substring(7);
         }
         return null;
+    }
+
+    @Override
+    public String extractRefreshTk(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return null;
+        }
+
+        return Arrays.stream(cookies)
+                .filter(cookie -> "refresh_jwt".equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
     }
 
     private String extractUsername(String tk) {
@@ -115,4 +142,5 @@ public class AuthenticationServiceIpl implements AuthenticationService {
         byte[] keyBytes = secretKey.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
 }

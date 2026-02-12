@@ -26,6 +26,7 @@ import { signInAccount } from "@/actions/auth"
 import { AppDispatch } from "@redux/store";
 import { useDispatch } from "react-redux";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
+import { useRouter } from "next/navigation";
 
 const signInAccountSchema = z.object({
     username: z
@@ -49,6 +50,7 @@ interface SignInAccountProps {
 
 export function SignInAccount({ children }: SignInAccountProps) {
     const [open, setOpen] = useState(false);
+    const router = useRouter();
 
     const dispatch: AppDispatch = useDispatch();
 
@@ -70,8 +72,15 @@ export function SignInAccount({ children }: SignInAccountProps) {
         }
 
         dispatch(setAccessJwtState(res.data));
+
         setOpen(false);
         form.reset();
+
+        router.refresh();
+    
+        setTimeout(() => {
+            router.push("/feed");
+        }, 100);
     };
 
     return (
