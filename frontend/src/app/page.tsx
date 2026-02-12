@@ -95,6 +95,7 @@ export default function Home() {
                     className="w-full bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
                   dark:text-white"
                     size="lg"
+                   
                   >
                     Get Started
                   </Button>
@@ -116,6 +117,7 @@ export default function Home() {
                     className="w-full border-violet-600 text-violet-600 hover:bg-violet-50 dark:border-violet-500 dark:text-violet-400 dark:hover:bg-violet-950/30"
                     variant="outline"
                     size="lg"
+                    data-testid="sign-in-button"
                   >
                     Start
                   </Button>

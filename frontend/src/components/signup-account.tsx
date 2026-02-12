@@ -114,9 +114,9 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
 
         setOpen(false);
         form.reset();
-        
+
         router.refresh();
-        
+
         setTimeout(() => {
             router.push("/feed");
         }, 100);
@@ -124,7 +124,10 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>{children}</DialogTrigger>
+            <DialogTrigger asChild
+                data-testid="sign-up-button">
+                {children}
+            </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">
@@ -147,7 +150,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="John Doe" {...field} />
+                                        <Input data-testid="name" placeholder="John Doe" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -161,7 +164,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                 <FormItem>
                                     <FormLabel>Username</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="johndoe123" {...field} />
+                                        <Input data-testid="username" placeholder="johndoe123" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -176,6 +179,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
                                         <Input
+                                            data-testid="email"
                                             type="email"
                                             placeholder="john@example.com"
                                             {...field}
@@ -193,7 +197,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                 <FormItem>
                                     <FormLabel>Phone Number</FormLabel>
                                     <FormControl>
-                                        <Input type="tel" placeholder="+1234567890" {...field} />
+                                        <Input data-testid="phone" type="tel" placeholder="+1234567890" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -208,6 +212,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                     <FormLabel>Key</FormLabel>
                                     <FormControl>
                                         <Input
+                                            data-testid="key"
                                             type="password"
                                             placeholder="Enter your key"
                                             {...field}
@@ -226,6 +231,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                     <FormLabel>Confirm Key</FormLabel>
                                     <FormControl>
                                         <Input
+                                            data-testid="keyConfirm"
                                             type="password"
                                             placeholder="Confirm your key"
                                             {...field}
@@ -247,6 +253,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                             </Button>
                             <Button
                                 type="submit"
+                                data-testid="create-account-button"
                                 disabled={!form.formState.isValid}
                                 className="flex-1 bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
                 disabled:opacity-50 disabled:cursor-not-allowed
