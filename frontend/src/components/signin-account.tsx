@@ -122,7 +122,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
                                 <FormItem>
                                     <FormLabel>Username</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="johndoe123" {...field} />
+                                        <Input placeholder="johndoe123" {...field} data-testid="username" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -139,6 +139,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
                                         <Input
                                             type="password"
                                             placeholder="Enter your key"
+                                            data-testid="key"
                                             {...field}
                                         />
                                     </FormControl>
@@ -159,6 +160,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
                             <Button
                                 type="submit"
                                 disabled={!form.formState.isValid}
+                                data-testid="confirm-sign-in-button"
                                 className="flex-1 bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
                 disabled:opacity-50 disabled:cursor-not-allowed
                 dark:text-white"
