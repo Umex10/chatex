@@ -1,24 +1,18 @@
 package org.devtiro.chatex.services;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.devtiro.chatex.domain.TkExpiry;
-import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * Service interface for handling user authentication operations.
+ * Provides methods to authenticate users with their credentials.
+ */
 public interface AuthenticationService {
 
+    /**
+     * Authenticates a user with the provided username and password.
+     *
+     * @return UserDetails object containing authenticated user information
+     */
     UserDetails authenticate(String username, String key);
-
-    AuthResponseDto createAuthResponseDto(String username,
-         HttpServletRequest request, HttpServletResponse response);
-
-    String createTk(String username, TkExpiry tkExpiry);
-
-    UserDetails validateTk(String tk);
-
-    String extractAccesTk(HttpServletRequest request);
-
-    String extractRefreshTk(HttpServletRequest request);
 
 }

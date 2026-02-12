@@ -7,8 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.devtiro.chatex.domain.TkExpiry;
-import org.devtiro.chatex.services.AuthenticationService;
+import org.devtiro.chatex.services.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,22 +15,34 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * JWT authentication filter that intercepts HTTP requests to validate JWT tokens.
+ * Extends OncePerRequestFilter to ensure single execution per request.
+ * Validates access tokens from the Authorization header and sets the security context.
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
+    /**
+     * Filters incoming HTTP requests to validate JWT tokens and set authentication context.
+     * Extracts and validates the access token, then sets the user's authentication in the security context.
+     *
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         try {
-            String tk = authenticationService.extractAccesTk(request);
+            String tk = jwtService.extractAccesTk(request);
 
             if (tk != null) {
 
-                UserDetails userDetails = authenticationService.validateTk(tk);
+                UserDetails userDetails = jwtService.validateTk(tk);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,

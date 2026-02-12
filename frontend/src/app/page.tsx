@@ -13,6 +13,10 @@ import { FeatureCard } from "@/components/feature-card";
 import { SignUpAccount } from "@/components/signup-account";
 import { SignInAccount } from "@/components/signin-account";
 
+/**
+ * Home page component displaying the landing page.
+ * Features hero section with sign-up and sign-in options.
+ */
 export default function Home() {
 
   return (

@@ -28,6 +28,10 @@ import { AppDispatch } from "../../redux/store";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
 
+/**
+ * Zod schema for validating sign-up form data.
+ * Includes validation for all user registration fields and password confirmation.
+ */
 const createAccountSchema = z
     .object({
         name: z.string().min(2, {
@@ -60,12 +64,19 @@ const createAccountSchema = z
         path: ["keyConfirm"],
     });
 
+/**
+ * Type representing the validated sign-up form values.
+ */
 export type SignUpAccountValues = z.infer<typeof createAccountSchema>;
 
 interface SignUpAccountProps {
     children: React.ReactNode;
 }
 
+/**
+ * Dialog component for user registration.
+ * Displays a form modal for creating new user accounts.
+ */
 export function SignUpAccount({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
@@ -86,6 +97,10 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
         },
     });
 
+    /**
+     * Handles form submission for user registration.
+     * Creates a new account, updates Redux state, and navigates to the feed page.
+     */
     const onSubmit = async (data: SignUpAccountValues) => {
         const { keyConfirm, ...freshData } = data;
         const res = await signUpAccount(freshData);

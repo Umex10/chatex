@@ -3,6 +3,10 @@ interface FeatureCardProps {
   description: string;
 }
 
+/**
+ * Card component for displaying feature information.
+ * Shows a title and description in a styled card layout.
+ */
 export function FeatureCard({ title, description }: FeatureCardProps) {
   return (
     <div className="rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-transparent">

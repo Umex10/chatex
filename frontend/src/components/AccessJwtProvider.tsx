@@ -6,6 +6,10 @@ import { AppDispatch, RootState } from '@redux/store'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+/**
+ * Provider component that manages access JWT token fetching and state.
+ * Automatically fetches and stores the access token when the component mounts.
+ */
 const AccessJwtProvider = ({ children }: { children: React.ReactNode }) => {
 
   const dispatch: AppDispatch = useDispatch();

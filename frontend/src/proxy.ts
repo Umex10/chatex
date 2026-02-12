@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+/**
+ * Middleware function to handle authentication and routing based on refresh token.
+ * Redirects unauthenticated users to the homepage and authenticated users away from it.
+ *
+ * @returns NextResponse for redirect or to proceed to the next middleware
+ */
 // If the user visits the website, we will first check if the user has an refresh token
 export async function proxy(request: NextRequest) {
 
@@ -20,6 +26,10 @@ export async function proxy(request: NextRequest) {
 
 }
 
+/**
+ * Configuration object defining which routes the middleware should apply to.
+ * Excludes API routes, static files, and Next.js internal paths.
+ */
 export const config = {
   matcher: [
     // Will not check the cookie if the paths match with one of these

@@ -28,6 +28,10 @@ import { useDispatch } from "react-redux";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
 
+/**
+ * Zod schema for validating sign-in form data.
+ * Defines validation rules for username and password fields.
+ */
 const signInAccountSchema = z.object({
     username: z
         .string()
@@ -42,12 +46,19 @@ const signInAccountSchema = z.object({
     }),
 });
 
+/**
+ * Type representing the validated sign-in form values.
+ */
 export type SignInAccountValues = z.infer<typeof signInAccountSchema>;
 
 interface SignInAccountProps {
     children: React.ReactNode;
 }
 
+/**
+ * Dialog component for user sign-in.
+ * Displays a form modal for authenticating existing users.
+ */
 export function SignInAccount({ children }: SignInAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
@@ -63,6 +74,10 @@ export function SignInAccount({ children }: SignInAccountProps) {
         },
     });
 
+    /**
+     * Handles form submission for user sign-in.
+     * Authenticates the user, updates Redux state, and navigates to the feed page.
+     */
     const onSubmit = async (data: SignInAccountValues) => {
 
         const res = await signInAccount(data);

@@ -4,6 +4,12 @@
 import axios from "axios"
 import { cookies } from "next/headers";
 
+/**
+ * Server action to fetch a new access JWT token using the refresh token.
+ * Retrieves the refresh token from cookies and requests a new access token from the backend.
+ *
+ * @returns Promise with success status and token data or error message
+ */
 export async function fetchAccessJwt() {
 
   try {

@@ -1,0 +1,50 @@
+package org.devtiro.chatex.services;
+
+import org.devtiro.chatex.domain.TkExpiry;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * Service interface for JWT token operations.
+ * Handles creation, validation, and extraction of access and refresh tokens.
+ */
+public interface JwtService {
+
+    /**
+     * Creates an access JWT token for the given username.
+     *
+     * @return the generated access token as a string
+     */
+    String createAccessTk(String username, TkExpiry tkExpiry);
+    
+    /**
+     * Creates a refresh JWT token and stores it as an HTTP-only cookie.
+     *
+     * @return void
+     */
+    void createRefreshTk(String username, TkExpiry tkExpiry, HttpServletResponse response);
+
+    /**
+     * Validates a JWT token and retrieves the associated user details.
+     *
+     * @return UserDetails object for the token's user
+     */
+    UserDetails validateTk(String tk);
+
+    /**
+     * Extracts the access token from the Authorization header of an HTTP request.
+     *
+     * @return the access token string, or null if not found
+     */
+    String extractAccesTk(HttpServletRequest request);
+
+    /**
+     * Extracts the refresh token from the cookies of an HTTP request.
+     *
+     * @return the refresh token string, or null if not found
+     */
+    String extractRefreshTk(HttpServletRequest request);
+  
+}

@@ -5,6 +5,10 @@ import { cookies } from "next/headers";
 import { SignUpAccountValues } from "@/components/signup-account";
 import { SignInAccountValues } from "@/components/signin-account";
 
+/**
+ * Axios instance configured for authentication API calls.
+ * Targets the backend authentication endpoints.
+ */
 const api = axios.create({
   baseURL: "http://localhost:8080/api/v1/auth",
   headers: {
@@ -12,6 +16,12 @@ const api = axios.create({
   }
 });
 
+/**
+ * Server action to handle user account creation.
+ * Sends sign-up data to the backend and stores the refresh token as a cookie.
+ *
+ * @returns Promise with success status and data or error message
+ */
 export async function signUpAccount(formData: Omit<SignUpAccountValues, 'keyConfirm'>) {
   try {
     const res = await api.post("/sign-up", formData);
@@ -32,6 +42,12 @@ export async function signUpAccount(formData: Omit<SignUpAccountValues, 'keyConf
   }
 }
 
+/**
+ * Server action to handle user sign-in.
+ * Authenticates user credentials and stores the refresh token as a cookie.
+ *
+ * @returns Promise with success status and data or error message
+ */
 export async function signInAccount(formData: SignInAccountValues) {
   try {
     const res = await api.post("/sign-in", formData);
@@ -50,6 +66,12 @@ export async function signInAccount(formData: SignInAccountValues) {
   }
 }
 
+/**
+ * Helper function to extract and store the refresh token cookie.
+ * Parses the Set-Cookie header and stores the refresh token with appropriate settings.
+ *
+ * @returns Promise that resolves when cookie is set
+ */
 async function setCookie(setCookieHeader: string[]) {
 
   const cookieStore = await cookies();

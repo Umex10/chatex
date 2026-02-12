@@ -2,6 +2,10 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import StoreProvider from "@redux/StoreProvider";
 
+/**
+ * Root layout component for the application.
+ * Wraps the entire application with theme provider and Redux store.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

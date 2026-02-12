@@ -13,6 +13,10 @@ import org.devtiro.chatex.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of the UserService interface.
+ * Handles user account creation and retrieval operations with validation.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceIpl implements UserService {
@@ -20,6 +24,14 @@ public class UserServiceIpl implements UserService {
     private final UserRep userRep;
     private final PasswordEncoder encoder;
 
+    /**
+     * Creates a new user account with validation.
+     * Validates uniqueness of username, email, and phone before creating the account.
+     * Encodes the user's password before storing.
+     *
+     * @return the created and persisted User entity
+     * @throws EntityExistsException if username, email, or phone already exists
+     */
     @Override
     public User createAccount(SignUpAccountRequestDto signUpAccountRequestDto) {
 
@@ -50,6 +62,12 @@ public class UserServiceIpl implements UserService {
         return userRep.save(user);
     }
 
+    /**
+     * Finds a user by their unique identifier.
+     *
+     * @return the User entity
+     * @throws EntityNotFoundException if no user exists with the given ID
+     */
     @Override
     public User findById(UUID userId) {
         return userRep.findById(userId).orElseThrow(

@@ -17,10 +17,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * Security configuration class for the application.
+ * Configures Spring Security settings including CORS, CSRF, session management,
+ * password encoding, and authentication mechanisms.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * Configures the security filter chain with CORS, authorization rules,
+     * CSRF protection, and session management.
+     *
+     * @return the configured security filter chain
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -31,11 +43,24 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Provides a password encoder bean for encoding and validating passwords.
+     * Uses Spring Security's delegating password encoder which supports multiple encoding formats.
+     *
+     * @return the password encoder instance
+     */
     @Bean
     public PasswordEncoder  encoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    /**
+     * Exposes the authentication manager as a bean.
+     * This is necessary because the default configuration would hide this instance.
+     *
+     * @return the authentication manager instance
+     * @throws Exception if an error occurs while retrieving the authentication manager
+     */
     // We have to register the authentication manager as a bean, since
     // the usual config would hide this instance from us
     @Bean
@@ -43,6 +68,12 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Configures Cross-Origin Resource Sharing (CORS) settings.
+     * Allows requests from localhost:3000 with credentials and specified HTTP methods.
+     *
+     * @return the CORS configuration source
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

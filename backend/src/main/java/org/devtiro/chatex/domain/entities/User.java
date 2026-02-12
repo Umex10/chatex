@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Entity class representing a user in the system.
+ * Stores user account information including credentials and contact details.
+ */
 @Entity
 @Table(name = "users")
 @NoArgsConstructor

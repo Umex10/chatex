@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for user information.
+ * Contains basic user details for client-server communication.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
