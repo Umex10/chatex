@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.devtiro.chatex.domain.TkExpiry;
+import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.services.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,7 +55,7 @@ public class JwtServiceIpl implements JwtService {
    * @return the generated JWT token string
    */
   @Override
-  public String createAccessTk(String username, TkExpiry tkExpiry) {
+  public String createAccessTk(String username, TkName tkExpiry) {
     return createTk(username, tkExpiry);
   }
 
@@ -65,10 +65,10 @@ public class JwtServiceIpl implements JwtService {
    * @return void
    */
   @Override
-  public void createRefreshTk(String username, TkExpiry tkExpiry,
+  public void createRefreshTk(String username, TkName tkExpiry,
       HttpServletResponse response) {
 
-    String refreshToken = createTk(username, TkExpiry.REFRESH);
+    String refreshToken = createTk(username, TkName.REFRESH);
 
     // Send it as HTTP cookie
     Cookie refreshCookie = new Cookie("refresh_jwt", refreshToken);
@@ -121,10 +121,10 @@ public class JwtServiceIpl implements JwtService {
    *
    * @return the generated JWT token string
    */
-  private String createTk(String username, TkExpiry tkExpiry) {
+  private String createTk(String username, TkName tkExpiry) {
 
     long expiryMs;
-    if (tkExpiry == TkExpiry.ACCESS) {
+    if (tkExpiry == TkName.ACCESS) {
       expiryMs = ACCESS_TK;
     } else {
       expiryMs = REFRESH_TK;

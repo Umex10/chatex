@@ -4,7 +4,7 @@ package org.devtiro.chatex.domain;
  * Enumeration representing JWT token expiry types.
  * Defines different expiration periods for access and refresh tokens.
  */
-public enum TkExpiry {
+public enum TkName {
     /**
      * Access token type with shorter expiration time (15 minutes).
      */

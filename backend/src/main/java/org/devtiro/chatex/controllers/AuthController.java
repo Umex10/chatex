@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.devtiro.chatex.domain.TkExpiry;
+import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
@@ -111,11 +111,11 @@ public class AuthController {
                         HttpServletResponse response) {
 
                 String accessTk = jwtService.createAccessTk(username,
-                                TkExpiry.ACCESS);
+                                TkName.ACCESS);
 
                 if (response != null) {
                         jwtService.createRefreshTk(username,
-                                        TkExpiry.REFRESH, response);
+                                        TkName.REFRESH, response);
                 }
 
                 return AuthResponseDto.builder()

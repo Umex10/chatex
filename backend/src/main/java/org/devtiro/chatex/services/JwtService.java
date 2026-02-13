@@ -1,6 +1,6 @@
 package org.devtiro.chatex.services;
 
-import org.devtiro.chatex.domain.TkExpiry;
+import org.devtiro.chatex.domain.TkName;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,14 +17,14 @@ public interface JwtService {
      *
      * @return the generated access token as a string
      */
-    String createAccessTk(String username, TkExpiry tkExpiry);
+    String createAccessTk(String username, TkName tkExpiry);
     
     /**
      * Creates a refresh JWT token and stores it as an HTTP-only cookie.
      *
      * @return void
      */
-    void createRefreshTk(String username, TkExpiry tkExpiry, HttpServletResponse response);
+    void createRefreshTk(String username, TkName tkExpiry, HttpServletResponse response);
 
     /**
      * Validates a JWT token and retrieves the associated user details.

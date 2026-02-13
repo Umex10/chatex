@@ -1,35 +1,59 @@
 package org.devtiro.chatex.reps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.domain.entities.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 @DataJpaTest
-class UserRepTest {
+public class UserRepTest {
 
   @Autowired
   private UserRep underTest;
 
+  
+
   @Test
-  void itShouldSaveUser() {
+  void itShouldFindUserByUsername() {
 
-    User user = User.builder()
-    .name("max")
-    .username("max123")
-    .email("max@mail.com")
-    .phone("+43 333 22222")
-    .key("max+1234")
-    .build();
+    // Data
+    User user = TestData.createTestUser();
 
-    User savedUser = underTest.save(user);
+    // User not in the database
+    assertFalse(underTest.findByUsername(user.getUsername()).isPresent());
 
-    assertNotNull(savedUser.getId());
-    assertEquals("max123", savedUser.getUsername());
+    // save the user to the h2 database
+    underTest.save(user);
+
+    // User in the database
+    assertTrue(underTest.findByUsername(user.getUsername()).isPresent());
 
   }
 
+  @Test
+  void itShouldCheckIfUserExistsByVariousFields() {
+
+    // Data
+    User user = TestData.createTestUser();
+    String username = user.getUsername();
+    String email = user.getEmail();
+    String phone = user.getPhone();
+
+    // User not in the database
+    assertFalse(underTest.existsUserByUsername(username));
+    assertFalse(underTest.existsUserByEmail(email));
+    assertFalse(underTest.existsUserByPhone(phone));
+
+    // save the user to the h2 database
+    underTest.save(user);
+
+    // User in the database
+    assertTrue(underTest.existsUserByUsername(username));
+    assertTrue(underTest.existsUserByEmail(email));
+    assertTrue(underTest.existsUserByPhone(phone));
+  }
 }
