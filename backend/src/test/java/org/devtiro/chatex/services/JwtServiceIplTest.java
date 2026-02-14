@@ -104,6 +104,17 @@ public class JwtServiceIplTest {
     assertEquals(cookie.getValue(), refreshTk);
   }
 
+   @Test
+  void itShouldNotExtractRefreshToken() {
+
+    MockHttpServletRequest request = new MockHttpServletRequest();
+
+    String refreshTk = underTest.extractRefreshTk(request);
+
+    assertNull(refreshTk);
+  }
+
+
   @Test
   void itShouldExtractAccessToken() {
 
