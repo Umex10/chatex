@@ -1,6 +1,5 @@
 package org.devtiro.chatex.security;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;

@@ -123,5 +123,4 @@ public class AuthController {
                                 .expiresIn(15 * 60L)
                                 .build();
         }
-
 }

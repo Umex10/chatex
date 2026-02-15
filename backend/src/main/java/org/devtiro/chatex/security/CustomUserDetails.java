@@ -12,7 +12,8 @@ import java.util.UUID;
 
 /**
  * Custom implementation of Spring Security's UserDetails interface.
- * Wraps the User entity to provide authentication and authorization information.
+ * Wraps the User entity to provide authentication and authorization
+ * information.
  */
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
@@ -56,7 +57,7 @@ public class CustomUserDetails implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-       // return UserDetails.super.isAccountNonExpired();
+        // return UserDetails.super.isAccountNonExpired();
         return true;
     }
 
@@ -93,12 +94,12 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-/**
- * Retrieves the user's unique identifier.
- *
- * @return the user's UUID
- */
-public UUID getId() {
+    /**
+     * Retrieves the user's unique identifier.
+     *
+     * @return the user's UUID
+     */
+    public UUID getId() {
         return user.getId();
-}
+    }
 }
