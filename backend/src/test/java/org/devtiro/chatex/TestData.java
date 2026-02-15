@@ -4,6 +4,10 @@ import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
 
+/**
+ * Utility class providing reusable test data for unit and integration tests.
+ * Contains factory methods for creating consistent test entities and DTOs.
+ */
 public class TestData {
 
     static String name = "max";
@@ -12,6 +16,11 @@ public class TestData {
     static String phone = "+43 333 22222";
     static String key = "max+1234";
 
+    /**
+     * Creates a test {@link User} entity with predefined values.
+     *
+     * @return a new User instance populated with test data
+     */
     public static User createTestUser() {
         return User.builder()
                 .name(name)
@@ -22,6 +31,11 @@ public class TestData {
                 .build();
     }
 
+    /**
+     * Creates a test {@link SignUpAccountRequestDto} with predefined values.
+     *
+     * @return a new SignUpAccountRequestDto instance populated with test data
+     */
     public static SignUpAccountRequestDto createSignUpAccountRequestDto() {
         return SignUpAccountRequestDto.builder()
                 .name(name)
@@ -32,6 +46,11 @@ public class TestData {
                 .build();
     }
 
+    /**
+     * Creates a test {@link SignInAccountRequestDto} with predefined values.
+     *
+     * @return a new SignInAccountRequestDto instance populated with test data
+     */
     public static SignInAccountRequestDto createSignInAccountRequestDto() {
         return SignInAccountRequestDto.builder()
                 .username(username)

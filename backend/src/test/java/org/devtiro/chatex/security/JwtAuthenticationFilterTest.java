@@ -22,6 +22,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+/**
+ * Unit tests for {@link JwtAuthenticationFilter}.
+ * Validates the filter's behavior for valid tokens, invalid tokens,
+ * and missing tokens in the request.
+ */
 @ExtendWith(MockitoExtension.class)
 public class JwtAuthenticationFilterTest {
 
@@ -31,6 +36,11 @@ public class JwtAuthenticationFilterTest {
   @InjectMocks
   private JwtAuthenticationFilter underTest;
 
+  /**
+   * Verifies that a valid access token sets the authentication in the
+   * {@link org.springframework.security.core.context.SecurityContextHolder}
+   * and stores the user ID as a request attribute.
+   */
   @Test
   void shouldDoFilterInternal() throws Exception {
 
@@ -60,6 +70,10 @@ public class JwtAuthenticationFilterTest {
 
   }
 
+  /**
+   * Verifies that when token validation throws a {@link org.springframework.security.core.userdetails.UsernameNotFoundException},
+   * the SecurityContext remains unauthenticated.
+   */
   @Test
   void shouldNotDoFilterInternalWithError() throws Exception {
 
@@ -85,6 +99,10 @@ public class JwtAuthenticationFilterTest {
   }
 
 
+  /**
+   * Verifies that when no access token is present in the request,
+   * the SecurityContext remains unauthenticated.
+   */
   @Test
   void shouldNotDoFilterInternalWithNullToken() throws Exception {
     

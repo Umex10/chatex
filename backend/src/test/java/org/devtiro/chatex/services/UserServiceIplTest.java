@@ -26,6 +26,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
+/**
+ * Unit tests for {@link UserServiceIpl}.
+ * Validates account creation logic, duplicate detection, and user lookup operations
+ * using mocked dependencies.
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceIplTest {
 
@@ -38,6 +43,10 @@ public class UserServiceIplTest {
   @InjectMocks
   private UserServiceIpl underTest;
 
+  /**
+   * Verifies that a new user account is created successfully
+   * when no duplicate username, email, or phone exists.
+   */
   @Test
   void itShouldCreateAccount() {
 
@@ -66,6 +75,10 @@ public class UserServiceIplTest {
 
   }
 
+  /**
+   * Verifies that account creation fails with an {@link jakarta.persistence.EntityExistsException}
+   * when the username is already taken.
+   */
   @Test
   void itShouldNotCreateAccountWhenUsernameExists() {
 
@@ -77,6 +90,10 @@ public class UserServiceIplTest {
         "username");
   }
 
+  /**
+   * Verifies that account creation fails with an {@link jakarta.persistence.EntityExistsException}
+   * when the email is already registered.
+   */
   @Test
   void itShouldNotCreateAccountWhenEmailExists() {
 
@@ -89,6 +106,10 @@ public class UserServiceIplTest {
 
   }
 
+  /**
+   * Verifies that account creation fails with an {@link jakarta.persistence.EntityExistsException}
+   * when the phone number is already registered.
+   */
   @Test
   void itShouldNotCreateAccountWhenPhoneExists() {
 
@@ -101,6 +122,9 @@ public class UserServiceIplTest {
 
   }
 
+  /**
+   * Verifies that a user is returned when found by their unique ID.
+   */
   @Test
   void UserShouldBeFoundById() {
 
@@ -119,6 +143,10 @@ public class UserServiceIplTest {
 
   }
 
+  /**
+   * Verifies that an {@link jakarta.persistence.EntityNotFoundException} is thrown
+   * when no user exists with the given ID.
+   */
   @Test
   void UserShouldNotBeFoundById() {
 
@@ -139,6 +167,11 @@ public class UserServiceIplTest {
 
   }
 
+  /**
+   * Helper method that asserts account creation fails with an
+   * {@link jakarta.persistence.EntityExistsException} containing the expected field name.
+   * Also verifies that no user is persisted.
+   */
   private void assertAccountCreationFails(
       SignUpAccountRequestDto signUpAccountRequestDto,
       Runnable setup,

@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +29,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import jakarta.servlet.http.Cookie;
 
+/**
+ * Unit tests for {@link AuthController}.
+ * Uses mocked services to validate controller logic for sign-up, sign-in,
+ * and access token generation without booting the full application context.
+ */
 public class AuthControllerTest {
 
   @Mock
@@ -49,6 +53,10 @@ public class AuthControllerTest {
     MockitoAnnotations.openMocks(this);
   }
 
+  /**
+   * Verifies that the sign-up flow creates a user, generates access and refresh tokens,
+   * and returns a {@code 201 CREATED} response with the expected body.
+   */
   @Test
   void itShouldSignUpAccount() throws Exception {
     SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
@@ -57,6 +65,7 @@ public class AuthControllerTest {
 
     when(userService.createAccount(requestDto)).thenReturn(user);
     when(jwtService.createAccessTk(username, TkName.ACCESS)).thenReturn("Access Token");
+    when(jwtService.createRefreshTk(username, TkName.REFRESH)).thenReturn("Refresh Token");
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -68,10 +77,14 @@ public class AuthControllerTest {
     assertEquals("Access Token", (responseEntity.getBody()).getAccessJwt());
     assertEquals(15 * 60L, (responseEntity.getBody()).getExpiresIn());
 
-    verify(jwtService).createRefreshTk(eq(username), eq(TkName.REFRESH), any());
+    verify(jwtService).createRefreshTk(username, TkName.REFRESH);
     verify(jwtService).createAccessTk(username, TkName.ACCESS);
   }
 
+  /**
+   * Verifies that the sign-in flow authenticates the user, generates access and refresh tokens,
+   * and returns a {@code 200 OK} response with the expected body.
+   */
   @Test
   void itShouldSignInAccount() throws Exception {
     SignInAccountRequestDto requestDto = TestData.createSignInAccountRequestDto();
@@ -81,6 +94,7 @@ public class AuthControllerTest {
 
     when(authenticationService.authenticate(username, user.getKey())).thenReturn(userDetails);
     when(jwtService.createAccessTk(username, TkName.ACCESS)).thenReturn("Access Token");
+    when(jwtService.createRefreshTk(username, TkName.REFRESH)).thenReturn("Refresh Token");
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -92,10 +106,14 @@ public class AuthControllerTest {
     assertEquals("Access Token", (responseEntity.getBody()).getAccessJwt());
     assertEquals(15 * 60L, (responseEntity.getBody()).getExpiresIn());
 
-    verify(jwtService).createRefreshTk(eq(username), eq(TkName.REFRESH), any());
+    verify(jwtService).createRefreshTk(username, TkName.REFRESH);
     verify(jwtService).createAccessTk(username, TkName.ACCESS);
   }
 
+  /**
+   * Verifies that a new access token is returned when a valid refresh token
+   * is extracted from the request cookies.
+   */
   @Test
   void itShouldReturnAccessJwt() throws Exception {
     User user = TestData.createTestUser();
@@ -120,6 +138,10 @@ public class AuthControllerTest {
 
   }
 
+  /**
+   * Verifies that a {@code 401 UNAUTHORIZED} response is returned when no
+   * refresh token is present in the request.
+   */
   @Test
   void itShouldNotReturnAccessJwt() throws Exception {
     User user = TestData.createTestUser();

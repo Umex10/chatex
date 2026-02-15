@@ -4,7 +4,6 @@ import org.devtiro.chatex.domain.TkName;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Service interface for JWT token operations.
@@ -19,12 +18,7 @@ public interface JwtService {
      */
     String createAccessTk(String username, TkName tkExpiry);
     
-    /**
-     * Creates a refresh JWT token and stores it as an HTTP-only cookie.
-     *
-     * @return void
-     */
-    void createRefreshTk(String username, TkName tkExpiry, HttpServletResponse response);
+    String createRefreshTk(String username, TkName tkExpiry);
 
     /**
      * Validates a JWT token and retrieves the associated user details.

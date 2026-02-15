@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.Cookie;
+
 /**
  * REST controller handling authentication operations.
  * Provides endpoints for user sign-up, sign-in, and access token generation.
@@ -86,7 +88,6 @@ public class AuthController {
                 String refreshTk = jwtService.extractRefreshTk(request);
 
                 if (refreshTk == null || refreshTk.isEmpty()) {
-                        System.out.println("Refresh token exisitiert net!");
                         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                                         .body("The refresh token is missing");
                 }
@@ -114,8 +115,15 @@ public class AuthController {
                                 TkName.ACCESS);
 
                 if (response != null) {
-                        jwtService.createRefreshTk(username,
-                                        TkName.REFRESH, response);
+                        String refreshTk = jwtService.createRefreshTk(username, TkName.REFRESH);
+
+                        Cookie refreshCookie = new Cookie("refresh_jwt", refreshTk);
+                        refreshCookie.setHttpOnly(true);
+                        refreshCookie.setSecure(false);
+                        refreshCookie.setPath("/");
+                        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+
+                        response.addCookie(refreshCookie);
                 }
 
                 return AuthResponseDto.builder()

@@ -19,13 +19,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import jakarta.servlet.http.Cookie;
 
+/**
+ * Unit tests for {@link JwtServiceIpl}.
+ * Validates JWT creation, validation, and extraction logic
+ * using a manually injected secret key and mocked dependencies.
+ */
 @ExtendWith(MockitoExtension.class)
 public class JwtServiceIplTest {
 
@@ -41,9 +45,12 @@ public class JwtServiceIplTest {
   void setUp() {
     // Hier setzt du den Secret Key manuell für den Test
     // "secretKey" muss exakt so heißen wie der Variablenname in deiner Klasse
-    ReflectionTestUtils.setField(underTest, "secretKey", "meinSuperLangesTestSecretDasMindestens32ZeichenHat123!");
+    ReflectionTestUtils.setField(underTest, "secretKey", "meinSehrLangesTestSecretDasMindestens32ZeichenHat123!");
   }
 
+  /**
+   * Verifies that an access token is successfully generated for a given username.
+   */
   @Test
   void itShouldCreateAccessToken() {
 
@@ -55,24 +62,25 @@ public class JwtServiceIplTest {
     assertNotNull(accessTk);
   }
 
+  /**
+   * Verifies that a refresh token is successfully generated and is not blank.
+   */
   @Test
   void itShouldCreateRefreshToken() {
 
     User user = TestData.createTestUser();
     String username = user.getUsername();
 
-    MockHttpServletResponse response = new MockHttpServletResponse();
+    String refreshTk = underTest.createRefreshTk(username, TkName.REFRESH);
 
-    underTest.createRefreshTk(username, TkName.REFRESH, response);
-
-    // Did createRefreshTk set the cookie?
-    Cookie cookie = response.getCookie("refresh_jwt");
-    assertNotNull(cookie);
-    assertFalse(cookie.getValue().isBlank());
-    assertTrue(cookie.isHttpOnly());
-    assertEquals(cookie.getMaxAge(), 30 * 24 * 60 * 60);
+    assertNotNull(refreshTk);
+    assertFalse(refreshTk.isBlank());
   }
 
+  /**
+   * Verifies that a valid token is correctly parsed and the associated
+   * {@link org.springframework.security.core.userdetails.UserDetails} is returned.
+   */
   @Test
   void itShouldValidateToken() {
 
@@ -89,6 +97,9 @@ public class JwtServiceIplTest {
     assertTrue(customUserDetails.getUsername().equals(userDetails.getUsername()));
   }
 
+  /**
+   * Verifies that the refresh token is correctly extracted from the request cookies.
+   */
   @Test
   void itShouldExtractRefreshToken() {
 
@@ -104,6 +115,9 @@ public class JwtServiceIplTest {
     assertEquals(cookie.getValue(), refreshTk);
   }
 
+  /**
+   * Verifies that {@code null} is returned when no refresh token cookie is present.
+   */
    @Test
   void itShouldNotExtractRefreshToken() {
 
@@ -115,6 +129,9 @@ public class JwtServiceIplTest {
   }
 
 
+  /**
+   * Verifies that the access token is correctly extracted from the Authorization header.
+   */
   @Test
   void itShouldExtractAccessToken() {
 
@@ -132,6 +149,9 @@ public class JwtServiceIplTest {
     assertEquals(rawTk, accessTk);
   }
 
+  /**
+   * Verifies that {@code null} is returned when no Authorization header is present.
+   */
   @Test
   void itShouldNotExtractAccessToken() {
 

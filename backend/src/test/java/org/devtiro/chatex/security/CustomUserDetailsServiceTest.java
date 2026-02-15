@@ -18,6 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+/**
+ * Unit tests for {@link CustomUserDetailsService}.
+ * Validates user loading behavior for both existing and non-existing usernames.
+ */
 @ExtendWith(MockitoExtension.class)
 public class CustomUserDetailsServiceTest {
 
@@ -27,6 +31,10 @@ public class CustomUserDetailsServiceTest {
   @InjectMocks
   private CustomUserDetailsService customUserDetailsService;
 
+  /**
+   * Verifies that a user is successfully loaded by username and the returned
+   * {@link org.springframework.security.core.userdetails.UserDetails} contains the correct username.
+   */
   @Test
   void itShouldLoadUserByUsername() {
 
@@ -43,6 +51,10 @@ public class CustomUserDetailsServiceTest {
 
   }
 
+  /**
+   * Verifies that a {@link org.springframework.security.core.userdetails.UsernameNotFoundException}
+   * is thrown when no user exists with the given username.
+   */
   @Test
   void itShouldNotLoadUserByUsername() {
 

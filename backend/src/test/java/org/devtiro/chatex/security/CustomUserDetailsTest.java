@@ -9,8 +9,17 @@ import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.domain.entities.User;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for {@link CustomUserDetails}.
+ * Validates that the User entity is correctly wrapped and that
+ * all UserDetails contract methods return the expected values.
+ */
 public class CustomUserDetailsTest {
 
+  /**
+   * Verifies that {@link CustomUserDetails} correctly delegates to the underlying
+   * User entity for ID, username, password, and enabled status.
+   */
   @Test
   void shouldWrapUserCorrectly() {
 

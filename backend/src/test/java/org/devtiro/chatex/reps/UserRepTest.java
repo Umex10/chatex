@@ -9,6 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
+/**
+ * Repository tests for {@link UserRep}.
+ * Uses {@link org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest} to bootstrap
+ * a minimal JPA context with an in-memory database for verifying custom query methods.
+ */
 @DataJpaTest
 public class UserRepTest {
 
@@ -17,6 +22,10 @@ public class UserRepTest {
 
   
 
+  /**
+   * Verifies that {@link UserRep#findByUsername(String)} returns an empty Optional
+   * when the user does not exist, and a present Optional after the user is persisted.
+   */
   @Test
   void itShouldFindUserByUsername() {
 
@@ -34,6 +43,10 @@ public class UserRepTest {
 
   }
 
+  /**
+   * Verifies that the existence checks by username, email, and phone
+   * correctly return {@code false} before and {@code true} after persisting a user.
+   */
   @Test
   void itShouldCheckIfUserExistsByVariousFields() {
 

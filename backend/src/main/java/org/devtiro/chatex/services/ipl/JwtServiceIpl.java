@@ -19,7 +19,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -65,20 +64,8 @@ public class JwtServiceIpl implements JwtService {
    * @return void
    */
   @Override
-  public void createRefreshTk(String username, TkName tkExpiry,
-      HttpServletResponse response) {
-
-    String refreshToken = createTk(username, TkName.REFRESH);
-
-    // Send it as HTTP cookie
-    Cookie refreshCookie = new Cookie("refresh_jwt", refreshToken);
-    refreshCookie.setHttpOnly(true);
-    refreshCookie.setSecure(false);
-    refreshCookie.setPath("/");
-    refreshCookie.setMaxAge(30 * 24 * 60 * 60);
-
-    response.addCookie(refreshCookie);
-
+  public String createRefreshTk(String username, TkName tkExpiry) {
+    return createTk(username, TkName.REFRESH);
   }
 
   /**

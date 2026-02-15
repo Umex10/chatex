@@ -19,6 +19,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+/**
+ * Unit tests for {@link AuthenticationServiceIpl}.
+ * Validates that the authentication flow correctly delegates to the
+ * {@link org.springframework.security.authentication.AuthenticationManager}
+ * and returns the expected {@link org.springframework.security.core.userdetails.UserDetails}.
+ */
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceIplTest {
 
@@ -31,6 +37,10 @@ public class AuthenticationServiceIplTest {
   @InjectMocks
   private AuthenticationServiceIpl underTest;
 
+  /**
+   * Verifies that a user is successfully authenticated and the correct
+   * {@link org.springframework.security.core.userdetails.UserDetails} is returned.
+   */
   @Test
   void itShouldAuthenticateUser() {
     User user = TestData.createTestUser();
