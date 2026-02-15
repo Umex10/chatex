@@ -1,5 +1,6 @@
 package org.devtiro.chatex;
 
+import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
 
@@ -27,6 +28,13 @@ public class TestData {
                 .username(username)
                 .email(email)
                 .phone(phone)
+                .key(key)
+                .build();
+    }
+
+    public static SignInAccountRequestDto createSignInAccountRequestDto() {
+        return SignInAccountRequestDto.builder()
+                .username(username)
                 .key(key)
                 .build();
     }
