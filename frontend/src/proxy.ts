@@ -32,6 +32,6 @@ export const config = {
   matcher: [
     // Will not check the cookie if the paths match with one of these
     // /api, /_next, /static
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 };
