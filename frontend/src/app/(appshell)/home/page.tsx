@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { CreateShout } from '@/components/CreateShout';
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux/store';
+import { PencilLine } from 'lucide-react';
 
 
 /**
@@ -31,18 +32,23 @@ const Home = () => {
           <TabsTrigger value="following" className={`flex-1 text-lg
             ${activeTab === "following" ? "underline decoration-2 underline-offset-20" : ""}`}>Following</TabsTrigger>
         </TabsList>
-        <TabsContent value="for-you" className='m-0 md:min-w-[700px]'>
-        
+        <TabsContent value="for-you" className='m-0 sm:min-w-[700px]'>
+
         </TabsContent>
-        <TabsContent value="following" className='m-0 md:min-w-[700px]'>Change your following here.</TabsContent>
+        <TabsContent value="following" className='m-0 sm:min-w-[700px]'>Change your following here.</TabsContent>
       </Tabs>
 
-      {shouts.map(shout => (
-         <Shout {...shout} key={shout.name}></Shout>
-      ))}
-     
 
-      <CreateShout></CreateShout>
+
+      {shouts.map(shout => (
+        <Shout {...shout} key={shout.name}></Shout>
+      ))}
+
+      <CreateShout>
+        <Button className="fixed right-6 bottom-24 h-12 w-12 rounded-full bg-violet-500 md:hidden [&_svg]:!size-6">
+          <PencilLine className="w-8 h-8 text-white" />
+        </Button>
+      </CreateShout>
     </div>
   )
 }

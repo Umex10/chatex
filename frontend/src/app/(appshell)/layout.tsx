@@ -50,7 +50,7 @@ export const Layout = ({
           {/* content area that sits next to the sidebar */}
           <SidebarInset>
             {/* full-height app shell wrapper (mobile-first layout) */}
-            <div className='flex overflow-hidden flex-col md:gap-10  w-full md:flex-row md:pl-10 h-dvh'>
+            <div className='flex overflow-hidden flex-col md:gap-10  w-full md:flex-row sm:pl-10 h-dvh'>
 
               {/* mobile top header with trigger, logo and quick action */}
               <header className='flex z-50 flex-row justify-between items-center p-4 w-full min-w-0 border-b md:hidden' aria-label='banner'>

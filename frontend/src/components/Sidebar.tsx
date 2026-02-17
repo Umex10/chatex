@@ -6,7 +6,8 @@ import {
   Bell,
   Mail,
   User,
-  MoreHorizontal
+  MoreHorizontal,
+  PencilLine
 } from "lucide-react"
 
 import {
@@ -24,6 +25,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { CreateShout } from "./CreateShout"
 
 const navItems = [
   { title: "Home", href: "/home", icon: Home },
@@ -39,7 +41,7 @@ export function AppSidebar() {
   const { toggleSidebar } = useSidebar()
   const isMobile = useIsMobile();
 
-   const path = "";
+  const path = "";
 
   return (
     <header>
@@ -67,23 +69,45 @@ export function AppSidebar() {
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="gap-0">
                 {navItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title} className="py-6">
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.title}
+                      className="h-12 px-2 py-8 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!py-8 group-data-[collapsible=icon]:!w-12"
+                    >
                       <a href={item.href}>
                         <item.icon
                           className={cn(
-                            "w-7 h-7 transition-all",
+                            "transition-all",
                             path === item.href ? "text-foreground" : "text-muted-foreground"
                           )}
                           strokeWidth={path === item.href ? 2.5 : 2}
                         />
-                        <span className={`text-xl ${ path === item.href ? "text-foreground" : "text-muted-foreground"}`}>{item.title}</span>
+                        <span className={`text-xl ${path === item.href ? "text-foreground" : "text-muted-foreground"}`}>{item.title}</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <CreateShout>
+                    <SidebarMenuButton className="h-12 px-2 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!w-12 
+                    bg-violet-500 text-white rounded-full [&>svg]:!size-7">
+                      <PencilLine className="w-6 h-6 group-[:not([data-collapsible=icon])]:hidden " />
+                      <span className="w-full text-xl  font-bold
+                      group-data-[collapsible=icon]:hidden group-[:not([data-collapsible=icon])]:text-center">Shout</span>
+                    </SidebarMenuButton>
+                  </CreateShout>
+                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -98,9 +122,7 @@ export function AppSidebar() {
                 tooltip="Account"
               >
 
-                <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0 flex items-center justify-center">
-
-                </div>
+                <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0 flex items-center justify-center"></div>
 
 
                 <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">

@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { Children, useState } from "react"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "@redux/store"
 import { addShout } from "@redux/slices/shoutsSlice"
@@ -34,7 +34,11 @@ const formSchema = z.object({
     .max(280, "Shouts sind auf 280 Zeichen begrenzt."),
 })
 
-export function CreateShout() {
+export function CreateShout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
 
   const [open, setOpen] = useState(false)
 
@@ -68,19 +72,12 @@ export function CreateShout() {
     setOpen(false)
   }
 
+
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          className={cn(
-            "fixed right-6 bottom-24 md:hidden",
-            "h-14 w-14 rounded-full shadow-lg shadow-violet-400/20",
-            "bg-violet-500 hover:bg-violet-600 active:scale-95 transition-all duration-200",
-            "flex items-center justify-center p-0"
-          )}
-        >
-          <PencilLine className="w-6 h-6 text-white" strokeWidth={2.5} />
-        </Button>
+       {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px] top-[15%] translate-y-0">
         <DialogHeader className="flex flex-row items-center justify-between border-b pb-2">
