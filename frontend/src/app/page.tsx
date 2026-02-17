@@ -20,11 +20,11 @@ import { SignInAccount } from "@/components/signin-account";
 export default function Home() {
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-violet-50 via-white to-purple-50 dark:from-[#1a1a1a] dark:via-[#262626] dark:to-[#1a1a1a]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50 dark:from-[#1a1a1a] dark:via-[#262626] dark:to-[#1a1a1a]">
       {/* Header */}
-      <header className="w-full border-b bg-white/50 backdrop-blur-sm dark:bg-[#262626]/80 dark:border-gray-700">
-        <div className="container mx-auto flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
-          <div className="flex items-center gap-2 sm:gap-3">
+      <header className="w-full border-b dark:border-gray-700 bg-white/50 backdrop-blur-sm dark:bg-[#262626]/80">
+        <div className="container flex justify-between items-center py-3 px-4 mx-auto sm:py-4 sm:px-6">
+          <div className="flex gap-2 items-center sm:gap-3">
             <Image
               src="/chatex2.png"
               width="32"
@@ -32,20 +32,20 @@ export default function Home() {
               alt="Chatex Logo"
               className="sm:w-10 sm:h-10"
             />
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+            <h1 className="text-xl font-bold text-gray-900 sm:text-2xl dark:text-white">
               Chatex
             </h1>
           </div>
-          <nav className="flex items-center gap-2 sm:gap-4">
+          <nav className="flex gap-2 items-center sm:gap-4">
             <Link
               href="/about"
-              className="hidden text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:inline"
+              className="hidden text-sm text-gray-600 sm:inline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               About
             </Link>
             <Link
               href="/features"
-              className="hidden text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:inline"
+              className="hidden text-sm text-gray-600 sm:inline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               Features
             </Link>
@@ -55,10 +55,10 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-1 flex-col items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
-        <div className="flex w-full max-w-5xl flex-col items-center gap-8 sm:gap-12">
+      <main className="flex flex-col flex-1 justify-center items-center py-8 px-4 sm:py-12 sm:px-6">
+        <div className="flex flex-col gap-8 items-center w-full max-w-5xl sm:gap-12">
           {/* Hero Section */}
-          <div className="flex flex-col items-center gap-4 text-center sm:gap-6">
+          <div className="flex flex-col gap-4 items-center text-center sm:gap-6">
             <Image
               src="/chatex2.png"
               width="80"
@@ -67,10 +67,10 @@ export default function Home() {
               className="sm:w-[120px] sm:h-[120px]"
             />
             <div>
-              <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:mb-4 sm:text-5xl md:text-6xl">
+              <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 sm:mb-4 sm:text-5xl md:text-6xl dark:text-white">
                 Chat Everywhere
               </h2>
-              <p className="px-4 text-base text-gray-600 dark:text-gray-300 sm:text-xl md:text-2xl">
+              <p className="px-4 text-base text-gray-600 sm:text-xl md:text-2xl dark:text-gray-300">
                 Connect with friends, share moments, and stay in touch wherever
                 you are
               </p>
@@ -78,7 +78,7 @@ export default function Home() {
           </div>
 
           {/* Action Cards */}
-          <div className="grid w-full max-w-3xl gap-4 sm:gap-6 md:grid-cols-2">
+          <div className="grid gap-4 w-full max-w-3xl sm:gap-6 md:grid-cols-2">
             {/* Sign Up Card */}
             <Card className="border-2 transition-all hover:border-violet-500 hover:shadow-xl dark:bg-[#262626] dark:border-violet-900/50 dark:hover:border-violet-500">
               <CardHeader>
@@ -92,8 +92,7 @@ export default function Home() {
               <CardContent>
                 <SignUpAccount>
                   <Button
-                    className="w-full bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
-                  dark:text-white"
+                    className="w-full bg-violet-600 dark:text-white dark:bg-violet-600 hover:bg-violet-700 dark:hover:bg-violet-700"
                     size="lg"
                    data-testid="sign-up-button"
                   >
@@ -114,7 +113,7 @@ export default function Home() {
               <CardContent>
                 <SignInAccount>
                   <Button
-                    className="w-full border-violet-600 text-violet-600 hover:bg-violet-50 dark:border-violet-500 dark:text-violet-400 dark:hover:bg-violet-950/30"
+                    className="w-full text-violet-600 border-violet-600 dark:text-violet-400 dark:border-violet-500 hover:bg-violet-50 dark:hover:bg-violet-950/30"
                     variant="outline"
                     size="lg"
                     data-testid="sign-in-button"
@@ -127,7 +126,7 @@ export default function Home() {
           </div>
 
           {/* Features Highlight */}
-          <div className="mt-4 grid w-full max-w-3xl gap-3 text-center sm:mt-8 sm:gap-4 md:grid-cols-3">
+          <div className="grid gap-3 mt-4 w-full max-w-3xl text-center sm:gap-4 sm:mt-8 md:grid-cols-3">
             <FeatureCard
               title="Instant Messaging"
               description="Chat with anyone, anywhere"
@@ -145,28 +144,28 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t bg-white/50 backdrop-blur-sm dark:bg-[#262626]/80 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="text-center text-xs text-gray-600 dark:text-gray-400 sm:text-sm md:text-left">
+      <footer className="w-full border-t dark:border-gray-700 bg-white/50 backdrop-blur-sm dark:bg-[#262626]/80">
+        <div className="container py-6 px-4 mx-auto sm:py-8 sm:px-6">
+          <div className="flex flex-col gap-4 justify-between items-center md:flex-row">
+            <div className="text-xs text-center text-gray-600 sm:text-sm md:text-left dark:text-gray-400">
               © 2026 Chatex. All rights reserved.
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs sm:gap-6 sm:text-sm">
+            <div className="flex flex-wrap gap-3 justify-center items-center text-xs sm:gap-6 sm:text-sm">
               <Link
                 href="/terms"
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
               >
                 Terms of Service
               </Link>
               <Link
                 href="/cookies"
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
               >
                 Cookies
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
               >
                 Contact Us
               </Link>

@@ -9,11 +9,11 @@ interface FeatureCardProps {
  */
 export function FeatureCard({ title, description }: FeatureCardProps) {
   return (
-    <div className="rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-transparent">
-      <h3 className="mb-2 text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+    <div className="p-4 rounded-lg dark:bg-transparent bg-white/50 backdrop-blur-sm">
+      <h3 className="mb-2 text-base font-semibold text-gray-900 sm:text-lg dark:text-white">
         {title}
       </h3>
-      <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+      <p className="text-xs text-gray-600 sm:text-sm dark:text-gray-400">
         {description}
       </p>
     </div>

@@ -101,7 +101,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+            <DialogContent className="overflow-y-auto max-h-[90vh] sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">
                         Sign In
@@ -113,7 +113,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-4 py-4"
+                        className="py-4 space-y-4"
                     >
                         <FormField
                             control={form.control}
@@ -161,9 +161,7 @@ export function SignInAccount({ children }: SignInAccountProps) {
                                 type="submit"
                                 disabled={!form.formState.isValid}
                                 data-testid="confirm-sign-in-button"
-                                className="flex-1 bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
-                disabled:opacity-50 disabled:cursor-not-allowed
-                dark:text-white"
+                                className="flex-1 bg-violet-600 dark:text-white dark:bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed dark:hover:bg-violet-700"
                             >
                                 Sign In
                             </Button>

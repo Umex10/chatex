@@ -17,7 +17,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/feed", request.url))
+    return NextResponse.redirect(new URL("/home", request.url))
   }
 
   return NextResponse.next();

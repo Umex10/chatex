@@ -128,7 +128,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                 data-testid="sign-up-button">
                 {children}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+            <DialogContent className="overflow-y-auto max-h-[90vh] sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">
                         Create Account
@@ -141,7 +141,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-4 py-4"
+                        className="py-4 space-y-4"
                     >
                         <FormField
                             control={form.control}
@@ -255,9 +255,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
                                 type="submit"
                                 data-testid="create-account-button"
                                 disabled={!form.formState.isValid}
-                                className="flex-1 bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700
-                disabled:opacity-50 disabled:cursor-not-allowed
-                dark:text-white"
+                                className="flex-1 bg-violet-600 dark:text-white dark:bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed dark:hover:bg-violet-700"
                             >
                                 Create Account
                             </Button>

@@ -47,7 +47,7 @@ export function AppSidebar() {
               toggleSidebar();
             }
           }}>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <Image
                 src="/chatex4.png"
                   width={50}
@@ -82,8 +82,8 @@ export function AppSidebar() {
 
         <SidebarFooter className="p-4 border-t">
           <SidebarMenuButton className="py-8" tooltip="Profil">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gray-200 shrink-0" />
+            <div className="flex gap-2 items-center">
+              <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0" />
               <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                 <span className="text-sm font-medium">Dein Name</span>
                 <span className="text-xs text-gray-500">@username</span>

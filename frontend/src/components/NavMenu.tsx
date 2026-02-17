@@ -28,8 +28,8 @@ const navItems = [
 
 const NavMenu = () => {
   return (
-    <NavigationMenu className="max-w-full w-full justify-center">
-      <NavigationMenuList className="flex w-screen justify-around items-center list-none">
+    <NavigationMenu className="justify-center w-full max-w-full">
+      <NavigationMenuList className="flex justify-around items-center w-screen list-none">
         {navItems.map((item, index) => (
           <NavigationMenuItem key={index}>
             <NavigationMenuLink asChild>
