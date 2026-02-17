@@ -51,7 +51,7 @@ const Shout = (data: ShoutData) => {
     // outer card container for one shout item
     <div className='py-3 px-2 w-full border-y'>
       {/* row layout: avatar column + content column */}
-      <div className='flex flex-row gap-1 max-w-[700px]'>
+      <div className='flex flex-row gap-1 max-w-[600px]'>
         {/* left column: account avatar */}
         <div className='w-1/8 flex justify-center'>
           <Image
@@ -59,13 +59,13 @@ const Shout = (data: ShoutData) => {
             width={50}
             height={70}
             alt="Chatex Logo"
-            className="w-10 h-10 rounded-full"
+            className="w-14 h-14 rounded-full"
           />
         </div>
         {/* right column: meta info, text, media, actions */}
         <div className='flex flex-col flex-1 gap-1 items-start'>
           {/* meta row: name, optional verified badge, username and time */}
-          <div className='flex flex-row gap-2 items-center text-sm'>
+          <div className='flex flex-row gap-2 items-center text-base'>
             <span className='font-bold max-w-[80px] truncate 
             md:max-w-none md:whitespace-normal'>{name}</span>
 
@@ -92,7 +92,7 @@ const Shout = (data: ShoutData) => {
           {/* body section: shout text, optional media, and engagement stats */}
           <div className='flex flex-col gap-2 items-start w-full'>
             {/* post text content */}
-            <p className='text-base'>{desc}</p>
+            <p className='text-lg'>{desc}</p>
             {/* post image/media preview */}
             <Image
               src={shoutImg}
@@ -106,8 +106,8 @@ const Shout = (data: ShoutData) => {
               {actions.map((action) => (
                 // one action item with icon + numeric count
                 <div key={action.value} className='flex flex-row gap-1 items-center'>
-                  <action.Icon className='w-4 h-4'></action.Icon>
-                  <span className='text-sm'>{action.value}</span>
+                  <action.Icon className='w-8 h-8'></action.Icon>
+                  <span className='text-base'>{action.value}</span>
                 </div>
               ))}
             </ul>

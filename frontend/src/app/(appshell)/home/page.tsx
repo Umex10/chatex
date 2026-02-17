@@ -22,7 +22,7 @@ const Home = () => {
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
 
   return (
-    <div className='text-3xl md:border'>
+    <div className='text-3xl sm:border'>
 
       <Tabs defaultValue="for-you" className="w-full"
         onValueChange={setActiveTab}>
@@ -32,18 +32,15 @@ const Home = () => {
           <TabsTrigger value="following" className={`flex-1 text-lg
             ${activeTab === "following" ? "underline decoration-2 underline-offset-20" : ""}`}>Following</TabsTrigger>
         </TabsList>
-        <TabsContent value="for-you" className='m-0 sm:min-w-[700px]'>
-
-        </TabsContent>
-        <TabsContent value="following" className='m-0 sm:min-w-[700px]'>Change your following here.</TabsContent>
-      </Tabs>
-
-
-
-      {shouts.map(shout => (
+        <TabsContent value="for-you" className='m-0'>
+               {shouts.map(shout => (
         <Shout {...shout} key={shout.name}></Shout>
       ))}
+        </TabsContent>
+        <TabsContent value="following" className='m-0'>Change your following here.</TabsContent>
+      </Tabs>
 
+   
       <CreateShout>
         <Button className="fixed right-6 bottom-24 h-12 w-12 rounded-full bg-violet-500 md:hidden [&_svg]:!size-6">
           <PencilLine className="w-8 h-8 text-white" />

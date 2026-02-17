@@ -45,7 +45,7 @@ export function AppSidebar() {
 
   return (
     <header>
-      <Sidebar collapsible="icon">
+      <Sidebar collapsible="icon" className="[&>[data-sidebar=sidebar]]:bg-transparent">
         <SidebarHeader className="p-4"
           onClick={() => {
             if (isMobile) {
@@ -113,21 +113,19 @@ export function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
 
-        <SidebarFooter className="p-2 border-t">
+        <SidebarFooter className="p-2">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
                 size="lg"
-                className="w-full justify-start gap-3 px-2"
+                className="h-14 px-2 group-data-[collapsible=icon]:!h-14 group-data-[collapsible=icon]:!w-14"
                 tooltip="Account"
               >
-
-                <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0 flex items-center justify-center"></div>
-
+                <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 flex items-center justify-center"></div>
 
                 <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
-                  <span className="text-sm font-medium truncate w-full">Dein Name</span>
-                  <span className="text-xs text-gray-500 truncate w-full">@username</span>
+                  <span className="text-lg font-medium truncate w-full">Dein Name</span>
+                  <span className="text-base text-gray-500 truncate w-full">@username</span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>

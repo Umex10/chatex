@@ -72,22 +72,20 @@ export function CreateShout({
     setOpen(false)
   }
 
-
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
        {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[525px] top-[15%] translate-y-0">
+      <DialogContent className="sm:max-w-[600px] top-[15%] translate-y-0">
         <DialogHeader className="flex flex-row items-center justify-between border-b pb-2">
           <DialogTitle className="text-xl font-bold">New Shout</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex gap-3 pt-4">
-              <div className="h-10 w-10 rounded-full bg-violet-100 shrink-0" />
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12">
+            <div className="w-full h-full flex flex-row items-start gap-3 pt-4">
+              <div className="w-12 h-12 rounded-full bg-violet-100 shrink-0" />
               <FormField
                 control={form.control}
                 name="content"
@@ -95,8 +93,8 @@ export function CreateShout({
                   <FormItem className="w-full">
                     <FormControl>
                       <Textarea
-                        placeholder="What will you shout?"
-                        className="min-h-[120px] resize-none border-none focus-visible:ring-0 text-lg p-0"
+                        placeholder="What will you shout out?"
+                        className="min-h-[120px] resize-none border-none focus-visible:ring-0 !text-xl placeholder:text-xl p-0"
                         {...field}
                       />
                     </FormControl>
@@ -106,16 +104,19 @@ export function CreateShout({
               />
             </div>
 
-            <div className="flex items-center justify-between border-t pt-4">
+            <div className="flex items-center justify-between border-t pt-2">
               <div className="flex gap-1 text-violet-500">
-                <Button variant="secondary" size="icon" className="rounded-full h-9 w-9">
-                  <ImageIcon className="h-5 w-5" />
+                <Button variant="secondary" size="icon" className="rounded-full h-14 w-14 text-white bg-transparent
+                [&_svg]:!size-8">
+                  <ImageIcon className="h-8 w-8" />
                 </Button>
-                <Button variant="secondary" size="icon" className="rounded-full h-9 w-9">
-                  <Smile className="h-5 w-5" />
+                <Button size="icon" className="rounded-full h-14 w-14 text-white bg-transparent
+                [&_svg]:!size-8">
+                  <Smile className="h-8 w-8" />
                 </Button>
-                <Button variant="secondary" size="icon" className="rounded-full h-9 w-9">
-                  <MapPin className="h-5 w-5" />
+                <Button variant="secondary" size="icon" className="rounded-full h-14 w-14 text-white bg-transparent
+                [&_svg]:!size-8">
+                  <MapPin className="h-8 w-8" />
                 </Button>
               </div>
 
