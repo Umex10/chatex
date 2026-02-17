@@ -3,6 +3,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import accessJwtSlice from "./slices/accessJwtSlice";
+import shoutsSlice from "./slices/shoutsSlice";
 
 /**
  * Configures and exports the Redux store for the application.
@@ -10,7 +11,8 @@ import accessJwtSlice from "./slices/accessJwtSlice";
  */
 export const store = configureStore({
     reducer: {
-        accessJwtState: accessJwtSlice
+        accessJwtState: accessJwtSlice,
+        shoutsState: shoutsSlice
     }
 })
 

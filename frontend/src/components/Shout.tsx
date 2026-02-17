@@ -1,14 +1,4 @@
 import React from 'react'
-import { StringFormatParams } from 'zod/v4/core'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import Image from 'next/image'
 import { Badge } from './ui/badge'
 import { BadgeCheck, icons, LucideIcon } from 'lucide-react'
@@ -16,7 +6,7 @@ import { BadgeCheck, icons, LucideIcon } from 'lucide-react'
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
 
 
-interface ShoutData {
+export interface ShoutData {
   accImg: string,
   name: string,
   hasBadge: boolean,
@@ -54,7 +44,6 @@ const Shout = (data: ShoutData) => {
     {
       Icon: Heart,
       value: likes
-
     }
   ]
 
@@ -70,7 +59,7 @@ const Shout = (data: ShoutData) => {
             width={50}
             height={70}
             alt="Chatex Logo"
-            className="w-10 h-10 rounded-xl"
+            className="w-10 h-10 rounded-full"
           />
         </div>
         {/* right column: meta info, text, media, actions */}
