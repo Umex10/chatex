@@ -27,6 +27,9 @@ const navItems = [
 ]
 
 const NavMenu = () => {
+
+  const path = "";
+
   return (
     <NavigationMenu className="justify-center w-full max-w-full">
       <NavigationMenuList className="flex justify-around items-center w-screen list-none">
@@ -36,10 +39,17 @@ const NavMenu = () => {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center transition-colors hover:text-primary focus:text-primary px-4 py-4"
+                  `flex flex-col items-center justify-center transition-colors 
+                    hover:text-violet focus:text-violet px-4 py-4`
                 )}
               >
-                <item.icon className="w-7 h-7 text-foreground" strokeWidth={2} />
+                <item.icon
+                  className={cn(
+                    "w-7 h-7 transition-all",
+                    path === item.href ? "text-foreground" : "text-muted-foreground"
+                  )}
+                  strokeWidth={path === item.href ? 2.5 : 2}
+                />
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
