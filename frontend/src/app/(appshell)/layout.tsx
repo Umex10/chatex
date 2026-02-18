@@ -44,7 +44,7 @@ export const Layout = ({
       <AccessJwtProvider>
         {/* controls desktop/tablet sidebar open/collapsed state */}
         <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
-            <div className='max-w-8xl flex mx-auto relative'>
+            <div className='w-full sm:w-auto max-w-8xl flex mx-auto relative'>
           <AppSidebar />
 
           {/* content area that sits next to the sidebar */}
@@ -80,7 +80,8 @@ export const Layout = ({
               </header>
 
               {/* main scroll container for page content */}
-              <main className='overflow-y-auto overflow-x-hidden flex-1 w-full min-h-0 pb-[61px] sm:pb-0'>
+              <main className='overflow-y-auto overflow-x-hidden flex-1 w-full min-h-0 pb-[61px] sm:pb-0
+              min-w-[300px] max-w-[700px] sm:border'>
                 {children}
               </main>
 

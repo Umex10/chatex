@@ -26,6 +26,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { CreateShout } from "./CreateShout"
+import { useRouter } from "next/navigation"
 
 const navItems = [
   { title: "Home", href: "/home", icon: Home },
@@ -40,6 +41,8 @@ export function AppSidebar() {
 
   const { toggleSidebar } = useSidebar()
   const isMobile = useIsMobile();
+
+  const router = useRouter();
 
   const path = "";
 
@@ -120,6 +123,7 @@ export function AppSidebar() {
                 size="lg"
                 className="h-14 px-2 group-data-[collapsible=icon]:!h-14 group-data-[collapsible=icon]:!w-14"
                 tooltip="Account"
+                onClick={() => router.push("/account")}
               >
                 <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 flex items-center justify-center"></div>
 
