@@ -6,9 +6,9 @@ export const CustomTrigger = () => {
   const { toggleSidebar } = useSidebar()
 
   return (
-    <Button onClick={toggleSidebar} className="p-2">
+    <Button onClick={toggleSidebar} className="p-2 bg-transparent">
       <Image
-        src="/next.svg"
+        src="/acc.png"
         width={32}
         height={32}
         alt="Chatex Logo"

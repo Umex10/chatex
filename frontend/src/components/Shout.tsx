@@ -49,7 +49,7 @@ const Shout = (data: ShoutData) => {
 
   return (
     // outer card container for one shout item
-    <div className='py-3 px-2 w-full border-y'>
+    <div className='py-3 px-3 w-full border-y'>
       {/* row layout: avatar column + content column */}
       <div className='flex flex-row gap-1 max-w-[600px]'>
         {/* left column: account avatar */}
