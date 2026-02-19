@@ -87,10 +87,10 @@ export function SignInAccount({ children }: SignInAccountProps) {
             return;
         }
 
-        const { accessJwt, expiresIn, name, username } = res.data;
+        const { accessJwt, expiresIn, name, username, avatar } = res.data;
 
         dispatch(setAccessJwtState({ accessJwt, expiresIn }));
-        dispatch(setUser({ name, username }))
+        dispatch(setUser({ name, username, avatar }))
 
         setOpen(false);
         form.reset();

@@ -29,6 +29,7 @@ import { CreateShout } from "./CreateShout"
 import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux/store"
+import { CldImage } from 'next-cloudinary';
 
 const navItems = [
   { title: "Home", href: "/home", icon: Home },
@@ -128,7 +129,19 @@ export function AppSidebar() {
                 tooltip="Account"
                 onClick={() => router.push("/account")}
               >
-                <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 flex items-center justify-center"></div>
+                <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
+                  <CldImage
+                    width="56"
+                    height="56"
+                    src={user.avatar ? user.avatar : "user-avatar_yr4qhg"}
+                    alt="User Avatar"
+                    crop="thumb"
+                    gravity="face"
+                    format="auto"
+                    quality="auto"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
                 <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
                   <span className="text-lg font-medium truncate w-full">{user.name ? user.name : "Fabrizio"}</span>

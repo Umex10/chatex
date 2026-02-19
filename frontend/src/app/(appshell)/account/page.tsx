@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { CldImage } from 'next-cloudinary';
 
 const Account = () => {
 
@@ -33,11 +34,16 @@ const Account = () => {
 
         <div className="absolute left-4 bottom-0 translate-y-1/2">
           <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900">
-            <Image
-              src="/avatar.png"
-              fill
-              alt="Profile"
-              className="object-cover"
+            <CldImage
+              width="56"
+              height="56"
+              src={user.avatar ? user.avatar : "user-avatar_yr4qhg"}
+              alt="User Avatar"
+              crop="thumb"
+              gravity="face"
+              format="auto"
+              quality="auto"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
