@@ -13,6 +13,7 @@ const Account = () => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
+  const user = useSelector((state: RootState) => state.userState);
 
   return (
 
@@ -45,8 +46,8 @@ const Account = () => {
       <div className='flex flex-row px-3'>
         <div className='flex-1 flex flex-col justify-center gap-2  pt-12'>
           <div>
-            <h2 className='text-xl font-bold'>Was seite</h2>
-            <h3 className='text-base'>@wasSeite10</h3>
+            <h2 className='text-xl font-bold'>{user.name ? user.name : "Was seite"}</h2>
+            <h3 className='text-base'>{user.username ? user.username : "@wasSeite10"}</h3>
           </div>
           <Link href="/account/about" className='flex flex-row gap-2 items-center opacity-50'>
             <CalendarDays className='w-4 h-5 -mt-1/2'></CalendarDays>

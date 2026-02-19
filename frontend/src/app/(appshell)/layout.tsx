@@ -1,6 +1,6 @@
 "use client"
 
-import AccessJwtProvider from '@/components/AccessJwtProvider'
+import AuthProvider from '@/components/AuthProvider'
 import React, { useEffect, useState } from 'react'
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
@@ -41,7 +41,7 @@ export const Layout = ({
 
   return (
       /* provides auth context for all app shell pages */
-      <AccessJwtProvider>
+      <AuthProvider>
         {/* controls desktop/tablet sidebar open/collapsed state */}
         <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
             <div className='w-full sm:w-auto max-w-8xl flex mx-auto relative'>
@@ -155,7 +155,7 @@ export const Layout = ({
           </SidebarInset>
               </div>
         </SidebarProvider>
-      </AccessJwtProvider>
+      </AuthProvider>
 
 
   )

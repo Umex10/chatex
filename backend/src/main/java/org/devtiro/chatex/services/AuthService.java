@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Service interface for handling user authentication operations.
  * Provides methods to authenticate users with their credentials.
  */
-public interface AuthenticationService {
+public interface AuthService {
 
     /**
      * Authenticates a user with the provided username and password.

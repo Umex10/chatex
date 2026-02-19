@@ -22,11 +22,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signInAccount } from "@/actions/auth"
+import { signInAccount } from "@/actions/auth-account-actions"
 import { AppDispatch } from "@redux/store";
 import { useDispatch } from "react-redux";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
+import { setUser } from "@redux/slices/userSlice";
 
 /**
  * Zod schema for validating sign-in form data.
@@ -86,15 +87,18 @@ export function SignInAccount({ children }: SignInAccountProps) {
             return;
         }
 
-        dispatch(setAccessJwtState(res.data));
+        const { accessJwt, expiresIn, name, username } = res.data;
+
+        dispatch(setAccessJwtState({ accessJwt, expiresIn }));
+        dispatch(setUser({ name, username }))
 
         setOpen(false);
         form.reset();
 
         router.refresh();
-    
+
         setTimeout(() => {
-            router.push("/feed");
+            router.push("/home");
         }, 100);
     };
 

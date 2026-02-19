@@ -10,7 +10,7 @@ import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.services.AuthenticationService;
+import org.devtiro.chatex.services.AuthService;
 import org.devtiro.chatex.services.JwtService;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -31,14 +31,15 @@ import jakarta.servlet.http.Cookie;
 public class AuthController {
 
         private final UserService userService;
-        private final AuthenticationService authenticationService;
+        private final AuthService authenticationService;
         private final JwtService jwtService;
 
         /**
          * Handles user sign-up requests.
          * Creates a new user account and returns authentication tokens.
          *
-         * @return ResponseEntity containing the authentication response with access token
+         * @return ResponseEntity containing the authentication response with access
+         *         token
          */
         @PostMapping(path = "/sign-up")
         public ResponseEntity<AuthResponseDto> signUpAccount(
@@ -57,7 +58,8 @@ public class AuthController {
          * Handles user sign-in requests.
          * Authenticates user credentials and returns authentication tokens.
          *
-         * @return ResponseEntity containing the authentication response with access token
+         * @return ResponseEntity containing the authentication response with access
+         *         token
          */
         @PostMapping(path = "/sign-in")
         public ResponseEntity<AuthResponseDto> signInAccount(
@@ -126,8 +128,12 @@ public class AuthController {
                         response.addCookie(refreshCookie);
                 }
 
+                User user = userService.findByUsername(username);
+
                 return AuthResponseDto.builder()
                                 .accessJwt(accessTk)
+                                .name(user.getName())
+                                .username(username)
                                 .expiresIn(15 * 60L)
                                 .build();
         }

@@ -27,6 +27,8 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { CreateShout } from "./CreateShout"
 import { useRouter } from "next/navigation"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux/store"
 
 const navItems = [
   { title: "Home", href: "/home", icon: Home },
@@ -43,6 +45,7 @@ export function AppSidebar() {
   const isMobile = useIsMobile();
 
   const router = useRouter();
+  const user = useSelector((state: RootState) => state.userState);
 
   const path = "";
 
@@ -128,8 +131,8 @@ export function AppSidebar() {
                 <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 flex items-center justify-center"></div>
 
                 <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
-                  <span className="text-lg font-medium truncate w-full">Dein Name</span>
-                  <span className="text-base text-gray-500 truncate w-full">@username</span>
+                  <span className="text-lg font-medium truncate w-full">{user.name ? user.name : "Fabrizio"}</span>
+                  <span className="text-base text-gray-500 truncate w-full">{user.username ? user.username : "@fabrizio"}</span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>

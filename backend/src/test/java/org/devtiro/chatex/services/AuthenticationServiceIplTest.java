@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.security.CustomUserDetails;
-import org.devtiro.chatex.services.ipl.AuthenticationServiceIpl;
+import org.devtiro.chatex.services.ipl.AuthServiceIpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
- * Unit tests for {@link AuthenticationServiceIpl}.
+ * Unit tests for {@link AuthServiceIpl}.
  * Validates that the authentication flow correctly delegates to the
  * {@link org.springframework.security.authentication.AuthenticationManager}
  * and returns the expected {@link org.springframework.security.core.userdetails.UserDetails}.
@@ -35,7 +35,7 @@ public class AuthenticationServiceIplTest {
   private UserDetailsService userDetailsService;
 
   @InjectMocks
-  private AuthenticationServiceIpl underTest;
+  private AuthServiceIpl underTest;
 
   /**
    * Verifies that a user is successfully authenticated and the correct

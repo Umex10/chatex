@@ -25,4 +25,6 @@ public interface UserService {
      */
     User findById(UUID userId);
 
+    User findByUsername(String username);
+
 }

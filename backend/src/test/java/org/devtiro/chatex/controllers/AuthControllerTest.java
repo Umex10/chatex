@@ -11,7 +11,7 @@ import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.security.CustomUserDetails;
-import org.devtiro.chatex.services.AuthenticationService;
+import org.devtiro.chatex.services.AuthService;
 import org.devtiro.chatex.services.JwtService;
 import org.devtiro.chatex.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ public class AuthControllerTest {
   private UserService userService;
 
   @Mock
-  private AuthenticationService authenticationService;
+  private AuthService authenticationService;
 
   @Mock
   private JwtService jwtService;

@@ -16,4 +16,6 @@ import lombok.NoArgsConstructor;
 public class AuthResponseDto {
     private String accessJwt;
     private Long expiresIn;
+    private String name; 
+    private String username;
 }

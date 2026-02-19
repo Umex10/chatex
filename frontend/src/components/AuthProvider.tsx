@@ -1,7 +1,8 @@
 "use client"
 
-import { fetchAccessJwt } from '@/actions/fetchAccessJwt'
+import { refreshAuthSession } from '@/actions/auth-session-actions'
 import { setAccessJwtState } from '@redux/slices/accessJwtSlice'
+import { setUser } from '@redux/slices/userSlice'
 import { AppDispatch, RootState } from '@redux/store'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
  * Provider component that manages access JWT token fetching and state.
  * Automatically fetches and stores the access token when the component mounts.
  */
-const AccessJwtProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const dispatch: AppDispatch = useDispatch();
   const accessJwtState = useSelector((state: RootState) => state.accessJwtState);
@@ -24,13 +25,15 @@ const AccessJwtProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const res = await fetchAccessJwt();
+      const res = await refreshAuthSession();
       if (!res.success) {
         return;
       }
 
-      console.warn(res.data);
-      dispatch(setAccessJwtState(res.data));
+      const { accessJwt, expiresIn, name, username } = res.data;
+
+      dispatch(setAccessJwtState({ accessJwt, expiresIn }));
+      dispatch(setUser({ name, username }))
     }
     init();
   }, [])
@@ -40,4 +43,4 @@ const AccessJwtProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export default AccessJwtProvider
+export default AuthProvider

@@ -26,7 +26,8 @@ public class UserServiceIpl implements UserService {
 
     /**
      * Creates a new user account with validation.
-     * Validates uniqueness of username, email, and phone before creating the account.
+     * Validates uniqueness of username, email, and phone before creating the
+     * account.
      * Encodes the user's password before storing.
      *
      * @return the created and persisted User entity
@@ -70,8 +71,15 @@ public class UserServiceIpl implements UserService {
      */
     @Override
     public User findById(UUID userId) {
-        return userRep.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("The user with the userid: " + userId +
+        return userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRep.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the username: " + username +
                         " was not found"));
     }
 }

@@ -22,11 +22,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signUpAccount } from "@/actions/auth"
+import { signUpAccount } from "@/actions/auth-account-actions"
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
+import { setUser } from "@redux/slices/userSlice";
 
 /**
  * Zod schema for validating sign-up form data.
@@ -109,8 +110,10 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
             return;
         }
 
-        dispatch(setAccessJwtState(res.data));
-        console.warn(res.data);
+        const {accessJwt, expiresIn, name, username} = res.data;
+
+        dispatch(setAccessJwtState({accessJwt, expiresIn}));
+        dispatch(setUser({name, username}))
 
         setOpen(false);
         form.reset();
@@ -118,7 +121,7 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
         router.refresh();
 
         setTimeout(() => {
-            router.push("/feed");
+            router.push("/home");
         }, 100);
     };
 

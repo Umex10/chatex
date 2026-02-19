@@ -1,7 +1,7 @@
 package org.devtiro.chatex.services.ipl;
 
 import lombok.RequiredArgsConstructor;
-import org.devtiro.chatex.services.AuthenticationService;
+import org.devtiro.chatex.services.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceIpl implements AuthenticationService {
+public class AuthServiceIpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
