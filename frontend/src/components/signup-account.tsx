@@ -28,6 +28,7 @@ import { AppDispatch } from "../../redux/store";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
 import { setUser } from "@redux/slices/userSlice";
+import { useSignUpMutation } from "@redux/api/apiSlice";
 
 /**
  * Zod schema for validating sign-up form data.
@@ -82,6 +83,8 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
+    const [signUp] = useSignUpMutation();
+
     const dispatch: AppDispatch = useDispatch();
 
 
@@ -104,25 +107,23 @@ export function SignUpAccount({ children }: SignUpAccountProps) {
      */
     const onSubmit = async (data: SignUpAccountValues) => {
         const { keyConfirm, ...freshData } = data;
-        const res = await signUpAccount(freshData);
 
-        if (!res.success) {
-            return;
+        try {
+
+            const res = await signUp(freshData).unwrap();
+
+            setOpen(false);
+            form.reset();
+
+            router.refresh();
+
+            setTimeout(() => {
+                router.push("/home");
+            }, 100);
+        } catch (error) {
+            console.error("An error occured while signing in:", error);
         }
 
-        const { accessJwt, expiresIn, name, username, avatar } = res.data;
-
-        dispatch(setAccessJwtState({ accessJwt, expiresIn }));
-        dispatch(setUser({ name, username, avatar }))
-
-        setOpen(false);
-        form.reset();
-
-        router.refresh();
-
-        setTimeout(() => {
-            router.push("/home");
-        }, 100);
     };
 
     return (

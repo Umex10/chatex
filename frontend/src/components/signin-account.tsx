@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
 import { setUser } from "@redux/slices/userSlice";
+import { useSignInMutation } from "@redux/api/apiSlice";
 
 /**
  * Zod schema for validating sign-in form data.
@@ -63,8 +64,7 @@ interface SignInAccountProps {
 export function SignInAccount({ children }: SignInAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
-
-    const dispatch: AppDispatch = useDispatch();
+    const [signIn] = useSignInMutation();
 
     const form = useForm<SignInAccountValues>({
         resolver: zodResolver(signInAccountSchema),
@@ -79,27 +79,23 @@ export function SignInAccount({ children }: SignInAccountProps) {
      * Handles form submission for user sign-in.
      * Authenticates the user, updates Redux state, and navigates to the feed page.
      */
-    const onSubmit = async (data: SignInAccountValues) => {
+    const onSubmit = async (freshData: SignInAccountValues) => {
 
-        const res = await signInAccount(data);
+        try {
+            const res = await signIn(freshData).unwrap();
 
-        if (!res.success) {
-            return;
+            setOpen(false);
+            form.reset();
+
+            router.refresh();
+
+            setTimeout(() => {
+                router.push("/home");
+            }, 100);
+        } catch (error) {
+            console.error("An error occured while signing in:", error);
         }
 
-        const { accessJwt, expiresIn, name, username, avatar } = res.data;
-
-        dispatch(setAccessJwtState({ accessJwt, expiresIn }));
-        dispatch(setUser({ name, username, avatar }))
-
-        setOpen(false);
-        form.reset();
-
-        router.refresh();
-
-        setTimeout(() => {
-            router.push("/home");
-        }, 100);
     };
 
     return (

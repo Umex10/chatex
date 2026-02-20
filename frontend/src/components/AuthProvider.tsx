@@ -1,11 +1,7 @@
 "use client"
 
-import { refreshAuthSession } from '@/actions/auth-session-actions'
-import { setAccessJwtState } from '@redux/slices/accessJwtSlice'
-import { setUser } from '@redux/slices/userSlice'
-import { AppDispatch, RootState } from '@redux/store'
+import { useRefreshAccesstokenQuery } from '@redux/api/apiSlice'
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 /**
  * Provider component that manages access JWT token fetching and state.
@@ -13,30 +9,11 @@ import { useDispatch, useSelector } from 'react-redux'
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
-  const dispatch: AppDispatch = useDispatch();
-  const accessJwtState = useSelector((state: RootState) => state.accessJwtState);
+  const { isLoading } = useRefreshAccesstokenQuery(undefined);
 
-  useEffect(() => {
-    async function init() {
-
-      // If an authentication was triggered earlier, we don't need to 
-      // fetch the accessJwt again
-      if (accessJwtState.accessJwt !== null) {
-        return;
-      }
-
-      const res = await refreshAuthSession();
-      if (!res.success) {
-        return;
-      }
-
-      const { accessJwt, expiresIn, name, username, avatar } = res.data;
-
-      dispatch(setAccessJwtState({ accessJwt, expiresIn }));
-      dispatch(setUser({ name, username, avatar }))
-    }
-    init();
-  }, [])
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>{children}</>
