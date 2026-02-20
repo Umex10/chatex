@@ -36,7 +36,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String phone;
 
-    @Column(name = "`key`",nullable = false)
+    @Column(name = "`key`", nullable = false)
     private String key;
+
+    @Column(name = "avatar")
+    private String avatar;
 
 }

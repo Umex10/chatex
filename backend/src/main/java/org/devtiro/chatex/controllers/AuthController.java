@@ -128,12 +128,8 @@ public class AuthController {
                         response.addCookie(refreshCookie);
                 }
 
-                User user = userService.findByUsername(username);
-
                 return AuthResponseDto.builder()
                                 .accessJwt(accessTk)
-                                .name(user.getName())
-                                .username(username)
                                 .expiresIn(15 * 60L)
                                 .build();
         }

@@ -58,6 +58,7 @@ public class UserServiceIpl implements UserService {
                 .email(email)
                 .phone(phone)
                 .key(encodedKey)
+                .avatar("")
                 .build();
 
         return userRep.save(user);
