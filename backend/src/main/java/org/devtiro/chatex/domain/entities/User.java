@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -27,7 +28,7 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String username;
 
     @Column(nullable = false, unique = true)
@@ -39,7 +40,19 @@ public class User {
     @Column(name = "`key`", nullable = false)
     private String key;
 
+    @Column(name = "createdAt", updatable = false)
+    private LocalDate createdAt;
+
     @Column(name = "avatar")
     private String avatar;
+
+    @Column(name = "bio")
+    private String bio;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "website")
+    private String website;
 
 }

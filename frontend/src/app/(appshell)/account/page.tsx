@@ -9,16 +9,35 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
+import { useGetUserQuery } from '@redux/api/apiSlice';
 
 const Account = () => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
-  const user = useSelector((state: RootState) => state.userState);
+  const { data: user, isLoading } = useGetUserQuery(undefined);
+
+  const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";
+  const name = user?.name ? user?.name : "Was seite";
+  const username = user?.username ? user?.username : "@wasSeite10";
+  const createdAt = user?.createdAt ? user?.createdAt : "Joined";
+
+  function joinedDate(createdAt: string) {
+
+    const date = new Date(createdAt);
+
+    // ("Month: f.e: February")
+    const month = date.toLocaleString('de-DE', { month: 'long' });
+
+    // ("Year: f.e: 2025")
+    const year = date.getFullYear();
+
+    return `Joined ${month} ${year}`
+  }
 
   return (
 
-    <div className='w-full flex flex-col gap-2'>
+    <div className='w-full flex-1 flex flex-col gap-2'>
 
       {/* Banner */}
       <div className='relative w-full'>
@@ -37,7 +56,7 @@ const Account = () => {
             <CldImage
               width="56"
               height="56"
-              src={user.avatar ? user.avatar : "user-avatar_yr4qhg"}
+              src={avatar}
               alt="User Avatar"
               crop="thumb"
               gravity="face"
@@ -52,12 +71,12 @@ const Account = () => {
       <div className='flex flex-row px-3'>
         <div className='flex-1 flex flex-col justify-center gap-2  pt-12'>
           <div>
-            <h2 className='text-xl font-bold'>{user.name ? user.name : "Was seite"}</h2>
-            <h3 className='text-base'>{user.username ? user.username : "@wasSeite10"}</h3>
+            <h2 className='text-xl font-bold'>{name}</h2>
+            <h3 className='text-base'>{username}</h3>
           </div>
           <Link href="/account/about" className='flex flex-row gap-2 items-center opacity-50'>
             <CalendarDays className='w-4 h-5 -mt-1/2'></CalendarDays>
-            <span>Beigetreten Mai 2025</span>
+            <span>{joinedDate(createdAt)}</span>
           </Link>
           <div className='flex flex-row gap-4'>
             <h4 className='flex gap-1'>

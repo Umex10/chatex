@@ -1,7 +1,6 @@
 package org.devtiro.chatex.config;
 
 import org.devtiro.chatex.security.JwtAuthenticationFilter;
-import org.devtiro.chatex.services.AuthService;
 import org.devtiro.chatex.services.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

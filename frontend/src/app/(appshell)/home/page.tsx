@@ -22,7 +22,7 @@ const Home = () => {
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
 
   return (
-    <div className='text-3xl'>
+    <div className='w-full text-3xl'>
 
       <Tabs defaultValue="for-you" className="w-full"
         onValueChange={setActiveTab}>

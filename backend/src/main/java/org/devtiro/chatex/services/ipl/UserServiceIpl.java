@@ -4,6 +4,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -58,7 +59,11 @@ public class UserServiceIpl implements UserService {
                 .email(email)
                 .phone(phone)
                 .key(encodedKey)
+                .createdAt(LocalDate.now())
                 .avatar("")
+                .bio("")
+                .location("")
+                .website("")
                 .build();
 
         return userRep.save(user);

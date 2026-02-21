@@ -18,6 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import ReturnHeader from '@/components/ReturnHeader';
+import { useGetUserQuery } from '@redux/api/apiSlice';
 
 export const editAccountSchema = z.object({
   name: z.string().min(2, "Name ist zu kurz").optional().or(z.literal("")),
@@ -33,14 +34,17 @@ export const editAccountSchema = z.object({
 export type AccountSchemaValues = z.infer<typeof editAccountSchema>;
 
 const Settings = () => {
+
+  const {data: user, isLoading} = useGetUserQuery(undefined);
+
   const form = useForm<AccountSchemaValues>({
     resolver: zodResolver(editAccountSchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      bio: "",
-      location: "",
-      website: ""
+      name: user?.name,
+      bio: user?.bio,
+      location: user?.location,
+      website: user?.website
     }
   });
 
@@ -49,7 +53,7 @@ const Settings = () => {
   }
 
   return (
-    <div className='w-full flex flex-col'>
+    <div className='w-full flex-1 flex flex-col'>
       <ReturnHeader>
         <Button variant="secondary"
           type="submit"

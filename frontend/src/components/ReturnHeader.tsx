@@ -14,7 +14,7 @@ const ReturnHeader = ({ children }: Readonly<{
 
   return (
     <div className='flex flex-row items-center 
-     fixed w-full z-50 left-0 top-0 bg-black p-4'>
+     sticky w-full z-50 left-0 top-0 bg-black p-4'>
       <div className='flex-1 flex flex-row items-center'>
         <div className='flex-1 flex flex-row items-center gap-10'>
           <Button
