@@ -3,6 +3,7 @@ package org.devtiro.chatex.services;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.entities.User;
 
 /**
@@ -26,5 +27,7 @@ public interface UserService {
     User findById(UUID userId);
 
     User findByUsername(String username);
+
+    User updateUser(User userToUpdate, UpdateUserDto updateUserDto);
 
 }

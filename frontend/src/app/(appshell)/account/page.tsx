@@ -21,6 +21,7 @@ const Account = () => {
   const name = user?.name ? user?.name : "Was seite";
   const username = user?.username ? user?.username : "@wasSeite10";
   const createdAt = user?.createdAt ? user?.createdAt : "Joined";
+  const bio = user?.bio ? user?.bio : "";
 
   function joinedDate(createdAt: string) {
 
@@ -74,6 +75,12 @@ const Account = () => {
             <h2 className='text-xl font-bold'>{name}</h2>
             <h3 className='text-base'>{username}</h3>
           </div>
+          {bio && (
+            <p className='text-base'>
+              {bio}
+            </p>
+          )}
+
           <Link href="/account/about" className='flex flex-row gap-2 items-center opacity-50'>
             <CalendarDays className='w-4 h-5 -mt-1/2'></CalendarDays>
             <span>{joinedDate(createdAt)}</span>

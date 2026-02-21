@@ -18,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import ReturnHeader from '@/components/ReturnHeader';
-import { useGetUserQuery } from '@redux/api/apiSlice';
+import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
 
 export const editAccountSchema = z.object({
   name: z.string().min(2, "Name ist zu kurz").optional().or(z.literal("")),
@@ -35,7 +35,8 @@ export type AccountSchemaValues = z.infer<typeof editAccountSchema>;
 
 const Settings = () => {
 
-  const {data: user, isLoading} = useGetUserQuery(undefined);
+  const { data: user, isLoading: isLoadingUser } = useGetUserQuery(undefined);
+  const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
 
   const form = useForm<AccountSchemaValues>({
     resolver: zodResolver(editAccountSchema),
@@ -48,8 +49,14 @@ const Settings = () => {
     }
   });
 
-  const onSubmit = async (data: AccountSchemaValues) => {
-    console.log(data);
+  const onSubmit = async (updatedData: AccountSchemaValues) => {
+    try {
+
+      await updateUser(updatedData).unwrap();
+
+    } catch (error) {
+      console.error("An error occured while updating the user:", error);
+    }
   }
 
   return (

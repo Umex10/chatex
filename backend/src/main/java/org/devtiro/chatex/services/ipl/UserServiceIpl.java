@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.UserService;
@@ -87,5 +88,17 @@ public class UserServiceIpl implements UserService {
         return userRep.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("The user with the username: " + username +
                         " was not found"));
+    }
+
+    @Override
+    public User updateUser(User userToUpdate, UpdateUserDto updateUserDto) {
+
+        userToUpdate.setName(updateUserDto.getName());
+        userToUpdate.setBio(updateUserDto.getBio());
+        userToUpdate.setLocation(updateUserDto.getLocation());
+        userToUpdate.setWebsite(updateUserDto.getWebsite());
+
+        return userRep.save(userToUpdate);
+
     }
 }
