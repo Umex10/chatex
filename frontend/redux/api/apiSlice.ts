@@ -1,7 +1,23 @@
 import { signInAccount, signUpAccount } from '@/actions/auth-account-actions';
 import { refreshAuthSession } from '@/actions/auth-session-actions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { User } from '../../constants/User';
 
+
+// This will update the cache of an other route, so refreshAccessToken will not request 
+// an accces token, if there is already one in the cache
+async function updateAuthCache(arg: any, { dispatch, queryFulfilled }: any) {
+  try {
+    const { data } = await queryFulfilled;
+    dispatch(
+      apiSlice.util.updateQueryData('refreshAccessTk', undefined, (draft) => {
+        Object.assign(draft, data);
+      })
+    )
+  } catch (err) {
+
+  }
+}
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -12,7 +28,7 @@ export const apiSlice = createApi({
       const state = getState() as any;
 
       // Is there already a token?
-      const token = state.api.queries['refreshAccesstoken(undefined)']?.data?.accessJwt;
+      const token = state.api.queries['refreshAccessTk(undefined)']?.data?.accessJwt;
 
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
@@ -23,7 +39,7 @@ export const apiSlice = createApi({
   }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
-    refreshAccesstoken: builder.query({
+    refreshAccessTk: builder.query({
       async queryFn() {
         const res = await refreshAuthSession();
 
@@ -40,8 +56,6 @@ export const apiSlice = createApi({
       async queryFn(freshData) {
         const res = await signUpAccount(freshData);
 
-        console.log("2. Server Action Antwort:", res);
-
         if (!res.success) return { error: res.error };
         return { data: res.data };
       },
@@ -52,31 +66,20 @@ export const apiSlice = createApi({
       async queryFn(freshData) {
         const res = await signInAccount(freshData);
 
-        console.log("2. Server Action Antwort:", res);
-
         if (!res.success) return { error: res.error };
         return { data: res.data };
       },
       onQueryStarted: updateAuthCache,
     }),
+
+    getUser: builder.query<User, void>({
+      query: () => "/user",
+      providesTags: ['User']
+    })
   }),
 });
 
-// This will update the cache of an other route, so refreshAccessToken will not request 
-// an accces token, if there is already one in the cache
-async function updateAuthCache(arg: any, { dispatch, queryFulfilled }: any) {
-  try {
-    const { data } = await queryFulfilled;
-    dispatch(
-      apiSlice.util.updateQueryData('refreshAccesstoken', undefined, (draft) => {
-        Object.assign(draft, data);
-      })
-    )
-  } catch (err) {
 
-  }
-}
-
-export const { useRefreshAccesstokenQuery, useSignUpMutation,
-  useSignInMutation
+export const { useRefreshAccessTkQuery, useSignUpMutation,
+  useSignInMutation, useGetUserQuery
 } = apiSlice;

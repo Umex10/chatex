@@ -22,12 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signUpAccount } from "@/actions/auth-account-actions"
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
-import { setAccessJwtState } from "@redux/slices/accessJwtSlice";
 import { useRouter } from "next/navigation";
-import { setUser } from "@redux/slices/userSlice";
 import { useSignUpMutation } from "@redux/api/apiSlice";
 
 /**
@@ -79,14 +74,11 @@ interface SignUpAccountProps {
  * Dialog component for user registration.
  * Displays a form modal for creating new user accounts.
  */
-export function SignUpAccount({ children }: SignUpAccountProps) {
+export function SignUpCc({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
     const [signUp] = useSignUpMutation();
-
-    const dispatch: AppDispatch = useDispatch();
-
 
     const form = useForm<SignUpAccountValues>({
         resolver: zodResolver(createAccountSchema),

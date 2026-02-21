@@ -8,11 +8,16 @@ export async function refreshAuthSession() {
     const cookieStore = await cookies();
     const refreshCookie = cookieStore.get("refresh_jwt");
 
+    if (!refreshCookie) {
+      return { success: false, error: "No refresh token found" };
+    }
+
     const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/access-jwt`, {
       headers: {
         "Content-Type": "application/json",
-        Cookie: `refresh_jwt=${refreshCookie?.value}`
-      }
+        Cookie: `refresh_jwt=${refreshCookie.value}`
+      },
+      withCredentials: true
     });
 
     return { success: true, data: res.data };

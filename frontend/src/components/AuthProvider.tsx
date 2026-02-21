@@ -1,18 +1,25 @@
 "use client"
 
-import { useRefreshAccesstokenQuery } from '@redux/api/apiSlice'
-import React, { useEffect } from 'react'
+import { useGetUserQuery, useRefreshAccessTkQuery } from '@redux/api/apiSlice'
+import React from 'react'
+import Loading from './Loading';
 
 /**
  * Provider component that manages access JWT token fetching and state.
- * Automatically fetches and stores the access token when the component mounts.
+ * Automatically fetches and stores the access token (via Query) into the redux store
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
-  const { isLoading } = useRefreshAccesstokenQuery(undefined);
+  const { isLoading: isLoadingTk,
+    isSuccess: hasTk
+  } = useRefreshAccessTkQuery(undefined);
 
-  if (isLoading) {
-    return <div>Loading...</div>
+  const {
+    isLoading: isLoadingUser
+  } = useGetUserQuery(undefined, { skip: !hasTk });
+
+  if (isLoadingTk || (hasTk && isLoadingUser) ) {
+    return <Loading></Loading>
   }
 
   return (

@@ -1,5 +1,8 @@
 package org.devtiro.chatex.config;
 
+import org.devtiro.chatex.security.JwtAuthenticationFilter;
+import org.devtiro.chatex.services.AuthService;
+import org.devtiro.chatex.services.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,6 +30,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
+     @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtService jwtService) {
+        return new JwtAuthenticationFilter(jwtService);
+    }
+
     /**
      * Configures the security filter chain with CORS, authorization rules,
      * CSRF protection, and session management.
@@ -34,23 +43,28 @@ public class SecurityConfig {
      * @throws Exception if an error occurs during configuration
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+        JwtAuthenticationFilter jwtAuthenticationFilter
+    ) throws Exception {
         http
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**").permitAll()
+                        .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter,  UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     /**
      * Provides a password encoder bean for encoding and validating passwords.
-     * Uses Spring Security's delegating password encoder which supports multiple encoding formats.
+     * Uses Spring Security's delegating password encoder which supports multiple
+     * encoding formats.
      *
      * @return the password encoder instance
      */
     @Bean
-    public PasswordEncoder  encoder() {
+    public PasswordEncoder encoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
@@ -59,7 +73,8 @@ public class SecurityConfig {
      * This is necessary because the default configuration would hide this instance.
      *
      * @return the authentication manager instance
-     * @throws Exception if an error occurs while retrieving the authentication manager
+     * @throws Exception if an error occurs while retrieving the authentication
+     *                   manager
      */
     // We have to register the authentication manager as a bean, since
     // the usual config would hide this instance from us
@@ -70,7 +85,8 @@ public class SecurityConfig {
 
     /**
      * Configures Cross-Origin Resource Sharing (CORS) settings.
-     * Allows requests from localhost:3000 with credentials and specified HTTP methods.
+     * Allows requests from localhost:3000 with credentials and specified HTTP
+     * methods.
      *
      * @return the CORS configuration source
      */
@@ -81,7 +97,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true); // WICHTIG für Cookies!
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

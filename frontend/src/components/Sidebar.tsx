@@ -27,9 +27,8 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { CreateShout } from "./CreateShout"
 import { useRouter } from "next/navigation"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux/store"
 import { CldImage } from 'next-cloudinary';
+import { useGetUserQuery } from "@redux/api/apiSlice"
 
 const navItems = [
   { title: "Home", href: "/home", icon: Home },
@@ -46,7 +45,7 @@ export function AppSidebar() {
   const isMobile = useIsMobile();
 
   const router = useRouter();
-  const user = useSelector((state: RootState) => state.userState);
+  const { data: user, isLoading } = useGetUserQuery(undefined);
 
   const path = "";
 
@@ -133,7 +132,7 @@ export function AppSidebar() {
                   <CldImage
                     width="56"
                     height="56"
-                    src={user.avatar ? user.avatar : "user-avatar_yr4qhg"}
+                    src={user?.avatar || "user-avatar_yr4qhg"}
                     alt="User Avatar"
                     crop="thumb"
                     gravity="face"
@@ -144,8 +143,12 @@ export function AppSidebar() {
                 </div>
 
                 <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
-                  <span className="text-lg font-medium truncate w-full">{user.name ? user.name : "Fabrizio"}</span>
-                  <span className="text-base text-gray-500 truncate w-full">{user.username ? user.username : "@fabrizio"}</span>
+                  <span className="text-lg font-medium truncate w-full">
+                    {user?.name ?? "Lade..."}
+                  </span>
+                  <span className="text-base text-gray-500 truncate w-full">
+                    {user?.username ? `@${user.username}` : "@..."}
+                  </span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
