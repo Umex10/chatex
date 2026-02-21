@@ -3,7 +3,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-export async function refreshAuthSession() {
+export async function refreshAuthSessionRequest() {
   try {
     const cookieStore = await cookies();
     const refreshCookie = cookieStore.get("refresh_jwt");

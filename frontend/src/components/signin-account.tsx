@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useSignInMutation } from "@redux/api/apiSlice";
+import { toast } from "sonner";
 
 /**
  * Zod schema for validating sign-in form data.
@@ -56,7 +57,7 @@ interface SignInAccountProps {
  * Dialog component for user sign-in.
  * Displays a form modal for authenticating existing users.
  */
-export function SignInAccountCc({ children }: SignInAccountProps) {
+export function SignInAcc({ children }: SignInAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const [signIn] = useSignInMutation();
@@ -76,8 +77,12 @@ export function SignInAccountCc({ children }: SignInAccountProps) {
      */
     const onSubmit = async (freshData: SignInAccountValues) => {
 
+        const toastId = toast.loading("Singing in...");
+
         try {
             const res = await signIn(freshData).unwrap();
+
+            toast.success("Welcome!", { id: toastId });
 
             setOpen(false);
             form.reset();
@@ -87,8 +92,10 @@ export function SignInAccountCc({ children }: SignInAccountProps) {
             setTimeout(() => {
                 router.push("/home");
             }, 100);
-        } catch (error) {
-            console.error("An error occured while signing in:", error);
+        } catch (error: any) {
+            const errorMessage = error?.data?.message || "An error occured while signing you in.";
+            toast.error(errorMessage, { id: toastId });
+            console.error(errorMessage, error);
         }
 
     };

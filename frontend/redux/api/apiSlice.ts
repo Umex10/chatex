@@ -1,5 +1,5 @@
-import { signInAccount, signUpAccount } from '@/actions/auth-account-actions';
-import { refreshAuthSession } from '@/actions/auth-session-actions';
+import { signInRequest, signUpRequest } from '@/actions/auth-account-actions';
+import { refreshAuthSessionRequest } from '@/actions/auth-session-actions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../../constants/User';
 import { AccountSchemaValues } from '@/app/(appshell)/account/settings/page';
@@ -42,7 +42,7 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     refreshAccessTk: builder.query({
       async queryFn() {
-        const res = await refreshAuthSession();
+        const res = await refreshAuthSessionRequest();
 
         if (!res.success) {
           return { error: res.error };
@@ -55,7 +55,7 @@ export const apiSlice = createApi({
 
     signUp: builder.mutation({
       async queryFn(freshData) {
-        const res = await signUpAccount(freshData);
+        const res = await signUpRequest(freshData);
 
         if (!res.success) return { error: res.error };
         return { data: res.data };
@@ -65,7 +65,7 @@ export const apiSlice = createApi({
 
     signIn: builder.mutation({
       async queryFn(freshData) {
-        const res = await signInAccount(freshData);
+        const res = await signInRequest(freshData);
 
         if (!res.success) return { error: res.error };
         return { data: res.data };

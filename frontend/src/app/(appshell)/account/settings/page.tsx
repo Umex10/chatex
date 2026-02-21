@@ -19,6 +19,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import ReturnHeader from '@/components/ReturnHeader';
 import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
+import { User } from '../../../../../constants/User';
+import { toast } from 'sonner';
 
 export const editAccountSchema = z.object({
   name: z.string().min(2, "Name ist zu kurz").optional().or(z.literal("")),
@@ -50,12 +52,22 @@ const Settings = () => {
   });
 
   const onSubmit = async (updatedData: AccountSchemaValues) => {
+
+    const isChanged = Object.keys(updatedData).some(
+      (key) => updatedData[key as keyof AccountSchemaValues] !== user?.[key as keyof User]
+    );
+
+    if (!isChanged) return;
+
+    const toastId = toast.loading('Saving...');
+
     try {
-
       await updateUser(updatedData).unwrap();
-
-    } catch (error) {
-      console.error("An error occured while updating the user:", error);
+      toast.success('Your Account was successfully updated!', { id: toastId });
+    } catch (error: any) {
+      const errorMessage = error?.data?.message || "An error occured while updating your account.";
+      console.error(errorMessage);
+      toast.error(errorMessage, { id: toastId });
     }
   }
 

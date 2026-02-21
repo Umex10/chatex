@@ -10,8 +10,8 @@ import {
 import Link from "next/link"
 import { ModeToggle } from "@/components/mode-toggle";
 import { FeatureCard } from "@/components/feature-card";
-import { SignUpCc } from "@/components/signup-account";
-import { SignInAccountCc } from "@/components/signin-account";
+import { SignUpAcc } from "@/components/signup-account";
+import { SignInAcc } from "@/components/signin-account";
 
 /**
  * Home page component displaying the landing page.
@@ -90,7 +90,7 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <SignUpCc>
+                <SignUpAcc>
                   <Button
                     className="w-full bg-violet-600 dark:text-white dark:bg-violet-600 hover:bg-violet-700 dark:hover:bg-violet-700"
                     size="lg"
@@ -98,7 +98,7 @@ export default function Home() {
                   >
                     Get Started
                   </Button>
-                </SignUpCc>
+                </SignUpAcc>
               </CardContent>
             </Card>
 
@@ -111,7 +111,7 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <SignInAccountCc>
+                <SignInAcc>
                   <Button
                     className="w-full text-violet-600 border-violet-600 dark:text-violet-400 dark:border-violet-500 hover:bg-violet-50 dark:hover:bg-violet-950/30"
                     variant="outline"
@@ -120,7 +120,7 @@ export default function Home() {
                   >
                     Start
                   </Button>
-                </SignInAccountCc>
+                </SignInAcc>
               </CardContent>
             </Card>
           </div>

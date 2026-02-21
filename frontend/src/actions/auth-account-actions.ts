@@ -12,7 +12,7 @@ const api = axios.create({
   }
 });
 
-export async function signUpAccount(formData: Omit<SignUpAccountValues, "keyConfirm">) {
+export async function signUpRequest(formData: Omit<SignUpAccountValues, "keyConfirm">) {
   try {
     const res = await api.post("/sign-up", formData);
 
@@ -26,13 +26,11 @@ export async function signUpAccount(formData: Omit<SignUpAccountValues, "keyConf
   } catch (error: any) {
     const errorMessage =
       error.response?.data?.message || "An error occurred while signing up the account";
-
-    console.error(errorMessage);
     return { success: false, error: errorMessage };
   }
 }
 
-export async function signInAccount(formData: SignInAccountValues) {
+export async function signInRequest(formData: SignInAccountValues) {
   try {
     const res = await api.post("/sign-in", formData);
 
@@ -45,10 +43,16 @@ export async function signInAccount(formData: SignInAccountValues) {
   } catch (error: any) {
     const errorMessage = error.response?.data?.message || "An error occurred while signing in the account";
 
-    console.error(errorMessage);
     return { success: false, error: errorMessage };
   }
 }
+
+export async function signOutRequest() {
+
+  const cookieStore = await cookies();
+  cookieStore.delete("refresh_jwt");
+}
+
 
 async function setRefreshCookie(setCookieHeader: string[]) {
   const cookieStore = await cookies();

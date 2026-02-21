@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button'
 import { Award, Search } from "lucide-react";
 import NavMenu from '@/components/NavMenu'
 import Image from 'next/image'
-
 const XL_BREAKPOINT = 1280
 
 /**
@@ -26,7 +25,7 @@ export const Layout = ({
   children: React.ReactNode
 }>) => {
 
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,11 +39,11 @@ export const Layout = ({
   }, [])
 
   return (
-      /* provides auth context for all app shell pages */
-      <AuthProvider>
-        {/* controls desktop/tablet sidebar open/collapsed state */}
-        <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
-            <div className='w-full max-w-7xl flex mx-auto relative'>
+    /* provides auth context for all app shell pages */
+    <AuthProvider>
+      {/* controls desktop/tablet sidebar open/collapsed state */}
+      <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
+        <div className='w-full max-w-7xl flex mx-auto relative'>
           <AppSidebar />
 
           {/* content area that sits next to the sidebar */}
@@ -57,7 +56,7 @@ export const Layout = ({
 
                 {/* left slot: opens/closes sidebar on mobile */}
                 <div className='flex justify-start w-1/5 sm:hidden'>
-                  <CustomTrigger />
+                  <CustomTrigger></CustomTrigger>
                 </div>
 
                 {/* center slot: brand logo */}
@@ -122,7 +121,7 @@ export const Layout = ({
                   </Button>
                 </section>
 
-                   <section className="overflow-hidden rounded-2xl bg-secondary/50">
+                <section className="overflow-hidden rounded-2xl bg-secondary/50">
                   <h2 className="py-3 px-4 text-xl font-extrabold">Trends für dich</h2>
 
                   <div className="flex flex-col">
@@ -153,9 +152,9 @@ export const Layout = ({
               </footer>
             </div>
           </SidebarInset>
-              </div>
-        </SidebarProvider>
-      </AuthProvider>
+        </div>
+      </SidebarProvider>
+    </AuthProvider>
 
 
   )

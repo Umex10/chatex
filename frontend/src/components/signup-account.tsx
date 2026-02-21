@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useSignUpMutation } from "@redux/api/apiSlice";
+import { toast } from "sonner";
 
 /**
  * Zod schema for validating sign-up form data.
@@ -74,7 +75,7 @@ interface SignUpAccountProps {
  * Dialog component for user registration.
  * Displays a form modal for creating new user accounts.
  */
-export function SignUpCc({ children }: SignUpAccountProps) {
+export function SignUpAcc({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
@@ -98,12 +99,16 @@ export function SignUpCc({ children }: SignUpAccountProps) {
      * Creates a new account, updates Redux state, and navigates to the feed page.
      */
     const onSubmit = async (data: SignUpAccountValues) => {
+
+        const toastId = toast.loading("Creating Account...");
+
         const { keyConfirm, ...freshData } = data;
 
         try {
 
             const res = await signUp(freshData).unwrap();
 
+            toast.success("Your account was created!", { id: toastId });
             setOpen(false);
             form.reset();
 
@@ -112,8 +117,10 @@ export function SignUpCc({ children }: SignUpAccountProps) {
             setTimeout(() => {
                 router.push("/home");
             }, 100);
-        } catch (error) {
-            console.error("An error occured while signing in:", error);
+        } catch (error: any) {
+            const errorMessage = error?.data?.message || "An error occured while creating your account.";
+            toast.error(errorMessage, { id: toastId });
+            console.error(errorMessage, error);
         }
 
     };
