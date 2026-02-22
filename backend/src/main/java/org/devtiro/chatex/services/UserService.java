@@ -26,8 +26,18 @@ public interface UserService {
      */
     User findById(UUID userId);
 
+    /**
+     * Finds a user by their username.
+     *
+     * @return the User entity
+     */
     User findByUsername(String username);
 
+    /**
+     * Updates a user's profile details with the provided data.
+     *
+     * @return the updated and persisted User entity
+     */
     User updateUser(User userToUpdate, UpdateUserDto updateUserDto);
 
 }

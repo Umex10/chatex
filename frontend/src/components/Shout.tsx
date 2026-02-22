@@ -6,6 +6,7 @@ import { BadgeCheck, icons, LucideIcon } from 'lucide-react'
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
 
 
+/** Data shape required to render a single shout card. */
 export interface ShoutData {
   accImg: string,
   name: string,
@@ -19,11 +20,16 @@ export interface ShoutData {
   likes: number
 }
 
+/** Represents one engagement action (comment, reshout, like) with its icon and count. */
 interface Action {
   Icon: LucideIcon,
   value: number
 }
 
+/**
+ * Renders a single shout card with the author's avatar, name, optional verified badge,
+ * username, timestamp, post text, media image and engagement action counters.
+ */
 const Shout = (data: ShoutData) => {
 
   const { accImg, name, hasBadge, username, createdAt,

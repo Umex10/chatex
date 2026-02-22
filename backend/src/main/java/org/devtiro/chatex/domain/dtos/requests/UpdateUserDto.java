@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for user profile update requests.
+ * Contains the updatable profile fields that a user can change.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

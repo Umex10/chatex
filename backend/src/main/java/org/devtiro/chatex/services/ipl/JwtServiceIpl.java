@@ -59,9 +59,10 @@ public class JwtServiceIpl implements JwtService {
   }
 
   /**
-   * Creates a refresh JWT token and sets it as an HTTP-only cookie.
+   * Creates a refresh JWT token.
+   * Delegates to {@link #createTk} using {@code TkName.REFRESH} as the expiry type.
    *
-   * @return void
+   * @return the generated refresh token string
    */
   @Override
   public String createRefreshTk(String username, TkName tkExpiry) {

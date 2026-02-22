@@ -15,8 +15,17 @@ import Image from 'next/image'
 const XL_BREAKPOINT = 1280
 
 /**
- * Layout component for authenticated pages.
- * Wraps children with the AccessJwtProvider to manage JWT token state.
+ * Responsive app-shell layout for all authenticated pages.
+ * Composes:
+ * - AuthProvider for session/token management
+ * - A collapsible sidebar (desktop) or slide-in drawer (mobile)
+ * - A sticky top header bar on mobile screens
+ * - A main content area that scrolls independently
+ * - A fixed desktop right rail with search input and trending topics
+ * - A fixed mobile bottom navigation bar
+ *
+ * The sidebar open state is driven by a breakpoint listener that collapses
+ * the sidebar below 1280 px and expands it above that threshold.
  */
 
 export const Layout = ({

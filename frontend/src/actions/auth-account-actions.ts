@@ -12,6 +12,14 @@ const api = axios.create({
   }
 });
 
+/**
+ * Server action that registers a new user account.
+ * Sends the form data to the backend sign-up endpoint and, on success,
+ * persists the returned refresh JWT as an HTTP-only cookie.
+ *
+ * @returns An object with `success: true` and the auth response data on success,
+ *          or `success: false` and the API error payload on failure.
+ */
 export async function signUpRequest(formData: Omit<SignUpAccountValues, "keyConfirm">) {
   try {
     const res = await api.post("/sign-up", formData);
@@ -30,6 +38,14 @@ export async function signUpRequest(formData: Omit<SignUpAccountValues, "keyConf
   }
 }
 
+/**
+ * Server action that signs an existing user in.
+ * Sends the credentials to the backend sign-in endpoint and, on success,
+ * persists the returned refresh JWT as an HTTP-only cookie.
+ *
+ * @returns An object with `success: true` and the auth response data on success,
+ *          or `success: false` and the API error payload on failure.
+ */
 export async function signInRequest(formData: SignInAccountValues) {
   try {
     const res = await api.post("/sign-in", formData);
@@ -47,6 +63,10 @@ export async function signInRequest(formData: SignInAccountValues) {
   }
 }
 
+/**
+ * Server action that signs the current user out.
+ * Deletes the refresh JWT cookie from the Next.js cookie store.
+ */
 export async function signOutRequest() {
 
   const cookieStore = await cookies();
@@ -54,6 +74,10 @@ export async function signOutRequest() {
 }
 
 
+/**
+ * Parses the `set-cookie` header returned by the backend and stores the
+ * `refresh_jwt` value as an HTTP-only cookie in the Next.js cookie store.
+ */
 async function setRefreshCookie(setCookieHeader: string[]) {
   const cookieStore = await cookies();
 

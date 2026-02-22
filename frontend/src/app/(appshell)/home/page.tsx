@@ -16,6 +16,11 @@ import { PencilLine } from 'lucide-react';
 /**
  * Home page component displaying the main content feed for authenticated users.
  */
+/**
+ * Home feed page for authenticated users.
+ * Displays a tabbed shout feed ("For you" / "Following") and a
+ * floating compose button on mobile screens.
+ */
 const Home = () => {
 
   const [activeTab, setActiveTab] = useState("for-you");

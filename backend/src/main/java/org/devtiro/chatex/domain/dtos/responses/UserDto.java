@@ -9,6 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object representing a user's public profile data.
+ * Used in API responses to expose user information to clients.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

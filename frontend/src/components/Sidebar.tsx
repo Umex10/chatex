@@ -38,6 +38,13 @@ import { Button } from "./ui/button"
 
 
 
+/**
+ * Main application sidebar component.
+ * On desktop it renders a collapsible icon/text sidebar with navigation links,
+ * a "Shout" compose button, and a footer with the user avatar and sign-out menu.
+ * On mobile it renders expanded as a slide-in drawer showing the user profile summary
+ * with a quick sign-out button.
+ */
 export function AppSidebar() {
 
   const { toggleSidebar } = useSidebar()
@@ -61,6 +68,10 @@ export function AppSidebar() {
   const name = user?.name ? user?.name : "Was seite";
   const username = user?.username ? user?.username : "@wasSeite10";
 
+  /**
+   * Signs the current user out by calling the server action, showing a toast,
+   * and redirecting to the landing page.
+   */
   function handleSignOut() {
     const toastId = toast.loading("Signing out...");
     signOutRequest();

@@ -6,6 +6,11 @@ import { Button } from "./ui/button"
 import { useGetUserQuery } from "@redux/api/apiSlice"
 import { CldImage } from "next-cloudinary"
 
+/**
+ * Sidebar trigger button displaying the current user's avatar.
+ * Clicking it toggles the sidebar open or closed.
+ * Only used on mobile screens inside the top header bar.
+ */
 export const CustomTrigger = () => {
 
   const { data: user, isLoading } = useGetUserQuery(undefined);

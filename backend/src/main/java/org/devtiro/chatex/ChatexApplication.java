@@ -11,9 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ChatexApplication {
 
     /**
-     * Main method that starts the Spring Boot application.
-     *
-     * @return void
+     * Main entry point that bootstraps and launches the Spring Boot application.
      */
     public static void main(String[] args) {
         SpringApplication.run(ChatexApplication.class, args);

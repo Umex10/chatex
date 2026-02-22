@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * REST controller handling user profile operations.
+ * Provides endpoints for retrieving and updating user account data.
+ */
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/v1/user")
@@ -29,6 +33,12 @@ public class UserController {
   private final UserService userService;
   private final UserMapper userMapper;
 
+  /**
+   * Retrieves the currently authenticated user's profile.
+   * The user ID is resolved from the JWT token via the request attribute set by the filter.
+   *
+   * @return ResponseEntity containing the user's profile data
+   */
   @GetMapping
   public ResponseEntity<UserDto> getUser(@RequestAttribute("userId") UUID userId) {
 
@@ -40,6 +50,11 @@ public class UserController {
 
   }
 
+  /**
+   * Retrieves a user's public profile by their username.
+   *
+   * @return ResponseEntity containing the user's profile data
+   */
   @GetMapping(path = "/{username}")
   public ResponseEntity<UserDto> getUser(@PathVariable String username) {
 
@@ -50,6 +65,12 @@ public class UserController {
     return new ResponseEntity<>(userDto, HttpStatus.OK);
   }
 
+  /**
+   * Updates the currently authenticated user's profile with the provided data.
+   * Only the fields name, bio, location, and website can be updated.
+   *
+   * @return ResponseEntity containing the updated user profile data
+   */
   @PatchMapping
   public ResponseEntity<UserDto> updateUser(@RequestAttribute("userId") UUID userId,
 @RequestBody UpdateUserDto updateUserDto) {

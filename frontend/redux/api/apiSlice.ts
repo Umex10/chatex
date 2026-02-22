@@ -5,8 +5,11 @@ import { User } from '../../constants/User';
 import { AccountSchemaValues } from '@/app/(appshell)/(account)/settings/page';
 
 
-// This will update the cache of an other route, so refreshAccessToken will not request 
-// an accces token, if there is already one in the cache
+/**
+ * After a sign-up or sign-in mutation succeeds, this helper updates the
+ * `refreshAccessTk` cache entry with the returned auth data so the access
+ * token is immediately available without triggering a separate request.
+ */
 async function updateAuthCache(arg: any, { dispatch, queryFulfilled }: any) {
   try {
     const { data } = await queryFulfilled;
@@ -20,6 +23,12 @@ async function updateAuthCache(arg: any, { dispatch, queryFulfilled }: any) {
   }
 }
 
+/**
+ * RTK Query API slice for the Chatex backend.
+ * Handles authentication (sign-up, sign-in, token refresh) and user profile operations.
+ * The `prepareHeaders` callback automatically injects the stored access JWT
+ * into every request that requires authentication.
+ */
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -40,6 +49,7 @@ export const apiSlice = createApi({
   }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
+    /** Fetches a new access token from the backend using the refresh_jwt cookie. */
     refreshAccessTk: builder.query({
       async queryFn() {
         const res = await refreshAuthSessionRequest();
@@ -53,6 +63,7 @@ export const apiSlice = createApi({
       keepUnusedDataFor: 900,
     }),
 
+    /** Creates a new user account via the sign-up server action and caches the returned auth data. */
     signUp: builder.mutation({
       async queryFn(freshData) {
         const res = await signUpRequest(freshData);
@@ -63,6 +74,7 @@ export const apiSlice = createApi({
       onQueryStarted: updateAuthCache,
     }),
 
+    /** Authenticates an existing user via the sign-in server action and caches the returned auth data. */
     signIn: builder.mutation({
       async queryFn(freshData) {
         const res = await signInRequest(freshData);
@@ -73,15 +85,18 @@ export const apiSlice = createApi({
       onQueryStarted: updateAuthCache,
     }),
 
+    /** Fetches the currently authenticated user's profile. Provides the 'User' cache tag. */
     getUser: builder.query<User, void>({
       query: () => "/user",
       providesTags: ['User']
     }),
 
+    /** Fetches a user's public profile by their username. */
     getUserByUsername: builder.query<User, string>({
       query: (username) => `/user/${username}`
     }),
 
+    /** Sends a PATCH request to update the authenticated user's profile and invalidates the 'User' cache tag. */
     updateUser: builder.mutation<User, AccountSchemaValues>({
       query: (updatedData) => ({
         url: "/user",

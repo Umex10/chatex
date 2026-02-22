@@ -4,11 +4,18 @@ import { LogOut } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Button } from "./ui/button"
 
+/** Props for the SignOutMenu component. */
 interface SignOutMenuProps {
   children: React.ReactNode
   onSignOut: () => void
 }
 
+/**
+ * Popover-style sign-out menu component.
+ * Wraps its children — typically the user avatar/name row in the sidebar footer —
+ * and shows a "Sign out" button in a floating panel above the trigger when clicked.
+ * Automatically closes when the user clicks outside.
+ */
 export function SignOutMenu({ children, onSignOut }: SignOutMenuProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)

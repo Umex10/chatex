@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import React from 'react';
 
+/**
+ * Full-screen loading animation component.
+ * Displays the Chatex logo alongside an orbital spinner animation
+ * while the application bootstraps (e.g. fetching the auth session).
+ */
 export default function Loading() {
   return (
     <>

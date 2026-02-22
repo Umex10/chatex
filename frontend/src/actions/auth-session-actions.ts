@@ -3,6 +3,14 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
+/**
+ * Server action that refreshes the access JWT by sending the stored refresh_jwt cookie
+ * to the backend `/auth/access-jwt` endpoint.
+ * Called on initial app load to restore the authenticated session without user interaction.
+ *
+ * @returns An object with `success: true` and the new auth data on success,
+ *          or `success: false` and an error message on failure.
+ */
 export async function refreshAuthSessionRequest() {
   try {
     const cookieStore = await cookies();

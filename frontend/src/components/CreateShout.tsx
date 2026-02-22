@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux"
 import { AppDispatch } from "@redux/store"
 import { addShout } from "@redux/slices/shoutsSlice"
 
+/** Zod schema that validates the shout content: must be between 1 and 280 characters. */
 const formSchema = z.object({
   content: z
     .string()
@@ -34,6 +35,11 @@ const formSchema = z.object({
     .max(280, "Shouts sind auf 280 Zeichen begrenzt."),
 })
 
+/**
+ * Dialog component for composing and submitting a new Shout.
+ * Opens a modal with a textarea, optional media/attachment buttons,
+ * and dispatches the new shout to the Redux store on submit.
+ */
 export function CreateShout({
   children,
 }: Readonly<{
@@ -51,6 +57,10 @@ export function CreateShout({
 
   const dispatch = useDispatch<AppDispatch>();
 
+  /**
+   * Handles form submission for creating a new shout.
+   * Builds a shout object, dispatches it to the Redux store, resets the form and closes the dialog.
+   */
   function onSubmit(values: z.infer<typeof formSchema>) {
 
     const newShout = {

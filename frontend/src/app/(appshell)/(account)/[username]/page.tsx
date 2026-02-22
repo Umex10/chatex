@@ -12,6 +12,14 @@ import { CldImage } from 'next-cloudinary';
 import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
 
+/**
+ * Dynamic user Account page.
+ * Renders the Account of either the currently authenticated user or any other user
+ * identified by the `username` route parameter.
+ * Fetches the "other" user's data only when the account does not belong to the current user.
+ * Displays the user's banner, avatar, bio, join date, follower stats,
+ * and a tabbed feed of their shouts, replies and media.
+ */
 const Account = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");

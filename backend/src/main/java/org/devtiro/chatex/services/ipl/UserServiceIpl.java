@@ -98,6 +98,12 @@ public class UserServiceIpl implements UserService {
                         " was not found"));
     }
 
+    /**
+     * Finds a user by their username.
+     *
+     * @return the User entity
+     * @throws EntityNotFoundException if no user exists with the given username
+     */
     @Override
     public User findByUsername(String username) {
         return userRep.findByUsername(username)
@@ -105,6 +111,11 @@ public class UserServiceIpl implements UserService {
                         " was not found"));
     }
 
+    /**
+     * Updates a user's profile fields (name, bio, location, website) and persists the changes.
+     *
+     * @return the updated and persisted User entity
+     */
     @Override
     public User updateUser(User userToUpdate, UpdateUserDto updateUserDto) {
 

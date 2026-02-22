@@ -22,6 +22,7 @@ import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
 import { User } from '../../../../../constants/User';
 import { toast } from 'sonner';
 
+/** Zod schema for validating the edit-account form fields. */
 export const editAccountSchema = z.object({
   name: z.string().min(2, "Name ist zu kurz").optional().or(z.literal("")),
   bio: z.string().max(160, "Bio ist zu lang").optional(),
@@ -33,8 +34,14 @@ export const editAccountSchema = z.object({
     .or(z.literal("")),
 });
 
+/** Type inferred from `editAccountSchema` representing validated form values. */
 export type AccountSchemaValues = z.infer<typeof editAccountSchema>;
 
+/**
+ * Account settings page.
+ * Allows the authenticated user to edit their display name, bio, location and website.
+ * Only sends the update request when at least one field has actually changed.
+ */
 const Settings = () => {
 
   const { data: user, isLoading: isLoadingUser } = useGetUserQuery(undefined);
@@ -51,6 +58,11 @@ const Settings = () => {
     }
   });
 
+  /**
+   * Handles the settings form submission.
+   * Compares the new values against the current user data and only calls
+   * `updateUser` when something has actually changed.
+   */
   const onSubmit = async (updatedData: AccountSchemaValues) => {
 
     const isChanged = Object.keys(updatedData).some(

@@ -1,10 +1,12 @@
 import { ShoutData } from "@/components/Shout";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+/** Shape of the shouts Redux slice state. */
 export interface ShoutsSlice {
   shouts: ShoutData[];
 }
 
+/** Initial demo shouts displayed before real data is loaded from the API. */
 const initialState: ShoutsSlice = {
   shouts: [
     {
@@ -34,6 +36,10 @@ const initialState: ShoutsSlice = {
   ]
 };
 
+/**
+ * Redux slice managing the list of shouts shown in the feed.
+ * `addShout` prepends a newly created shout to the top of the list.
+ */
 const shoutsSlice = createSlice({
   name: "shouts",
   initialState,

@@ -18,6 +18,11 @@ public interface JwtService {
      */
     String createAccessTk(String username, TkName tkExpiry);
     
+    /**
+     * Creates a refresh JWT token for the given username.
+     *
+     * @return the generated refresh token as a string
+     */
     String createRefreshTk(String username, TkName tkExpiry);
 
     /**

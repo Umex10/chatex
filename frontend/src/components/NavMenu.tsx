@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
 
+/** Navigation items displayed in the bottom mobile nav bar. */
 const navItems = [
   { icon: Home, href: "/home" },
   { icon: Search, href: "/search" },
@@ -26,6 +27,10 @@ const navItems = [
   { icon: User, href: "/account" },
 ]
 
+/**
+ * Bottom navigation bar component for mobile screens.
+ * Renders icon-only navigation links for the main app sections.
+ */
 const NavMenu = () => {
 
   const path = "";

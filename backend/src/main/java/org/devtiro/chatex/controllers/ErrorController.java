@@ -12,11 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Global exception handler for the REST API.
+ * Intercepts specific exceptions and returns appropriate HTTP error responses.
+ */
 @RestController
 @ControllerAdvice
 @Slf4j
 public class ErrorController {
 
+  /**
+   * Handles OwnException thrown when unique field validation fails during account creation.
+   *
+   * @return ResponseEntity with a 400 Bad Request status and the list of field errors
+   */
   @ExceptionHandler(OwnException.class)
   public ResponseEntity<ApiError> handleEntityExistsException(OwnException ex) {
     ApiError error = ApiError.builder()
@@ -28,6 +37,11 @@ public class ErrorController {
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
   
+  /**
+   * Handles AuthenticationException thrown when user credentials are invalid during sign-in.
+   *
+   * @return ResponseEntity with a 401 Unauthorized status and an error message
+   */
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex) {
     ApiError error = ApiError.builder()

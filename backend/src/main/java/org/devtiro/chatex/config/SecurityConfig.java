@@ -29,6 +29,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * Registers the JwtAuthenticationFilter as a Spring bean.
+     *
+     * @return the JwtAuthenticationFilter instance
+     */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(JwtService jwtService) {
         return new JwtAuthenticationFilter(jwtService);
