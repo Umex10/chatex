@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -37,6 +38,16 @@ public class UserController {
 
     return new ResponseEntity<>(userDto, HttpStatus.OK);
 
+  }
+
+  @GetMapping(path = "/{username}")
+  public ResponseEntity<UserDto> getUser(@PathVariable String username) {
+
+    User user = userService.findByUsername(username);
+
+    UserDto userDto = userMapper.toDto(user);
+
+    return new ResponseEntity<>(userDto, HttpStatus.OK);
   }
 
   @PatchMapping

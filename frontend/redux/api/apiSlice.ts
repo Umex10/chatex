@@ -2,7 +2,7 @@ import { signInRequest, signUpRequest } from '@/actions/auth-account-actions';
 import { refreshAuthSessionRequest } from '@/actions/auth-session-actions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../../constants/User';
-import { AccountSchemaValues } from '@/app/(appshell)/account/settings/page';
+import { AccountSchemaValues } from '@/app/(appshell)/(account)/settings/page';
 
 
 // This will update the cache of an other route, so refreshAccessToken will not request 
@@ -78,6 +78,10 @@ export const apiSlice = createApi({
       providesTags: ['User']
     }),
 
+    getUserByUsername: builder.query<User, string>({
+      query: (username) => `/user/${username}`
+    }),
+
     updateUser: builder.mutation<User, AccountSchemaValues>({
       query: (updatedData) => ({
         url: "/user",
@@ -91,5 +95,6 @@ export const apiSlice = createApi({
 
 
 export const { useRefreshAccessTkQuery, useSignUpMutation,
-  useSignInMutation, useGetUserQuery, useUpdateUserMutation
+  useSignInMutation, useGetUserQuery, useUpdateUserMutation,
+  useGetUserByUsernameQuery
 } = apiSlice;

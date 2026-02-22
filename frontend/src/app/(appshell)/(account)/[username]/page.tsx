@@ -9,31 +9,35 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetUserQuery } from '@redux/api/apiSlice';
+import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/apiSlice';
+import { joinedDate } from '@/utils/joinedDate';
 
-const Account = () => {
+const Account = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
-  const { data: user, isLoading } = useGetUserQuery(undefined);
+  let usertoShow;
+  const { data: meUser } = useGetUserQuery(undefined);
 
-  const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";
-  const name = user?.name ? user?.name : "Was seite";
-  const username = user?.username ? user?.username : "@wasSeite10";
-  const createdAt = user?.createdAt ? user?.createdAt : "Joined";
-  const bio = user?.bio ? user?.bio : "";
+  const resolvedUser = React.use(params);
+  const otherUsername = resolvedUser.username;
+  const isOwnAccount = meUser?.username === otherUsername
 
-  function joinedDate(createdAt: string) {
+  const { data: otherUser, isLoading, isError} = useGetUserByUsernameQuery(
+    otherUsername,
+    { skip: isOwnAccount }
+  );
 
-    const date = new Date(createdAt);
+  const userToShow = isOwnAccount ? meUser : otherUser;
 
-    // ("Month: f.e: February")
-    const month = date.toLocaleString('de-DE', { month: 'long' });
+  const avatar = userToShow?.avatar ? userToShow?.avatar : "user-avatar_yr4qhg";
+  const name = userToShow?.name ? userToShow?.name : "Was seite";
+  const username = userToShow?.username ? userToShow?.username : "@wasSeite10";
+  const createdAt = userToShow?.createdAt ? userToShow?.createdAt : "Joined";
+  const bio = userToShow?.bio ? userToShow?.bio : "";
 
-    // ("Year: f.e: 2025")
-    const year = date.getFullYear();
-
-    return `Joined ${month} ${year}`
+  if (isError && !isOwnAccount) {
+    return <div>User @{otherUsername} was not found.</div>;
   }
 
   return (
@@ -97,11 +101,14 @@ const Account = () => {
             </h5>
           </div>
         </div>
-        <div className='h-full flex justify-end items-start'>
-          <Link href="/account/settings" className='rounded-xl p-2 border text-base font-bold'>
-            Account bearbeiten
-          </Link>
-        </div>
+        {isOwnAccount && (
+          <div className='h-full flex justify-end items-start'>
+            <Link href="/settings" className='rounded-xl p-2 border text-base font-bold'>
+              Account bearbeiten
+            </Link>
+          </div>
+        )}
+
       </div>
 
       <Tabs defaultValue="shouts" className="w-full"

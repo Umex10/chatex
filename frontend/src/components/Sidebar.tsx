@@ -36,14 +36,7 @@ import { signOutRequest } from "@/actions/auth-account-actions"
 import { toast } from "sonner"
 import { Button } from "./ui/button"
 
-const navItems = [
-  { title: "Home", href: "/home", icon: Home },
-  { title: "Search", href: "#", icon: Search },
-  { title: "Notifications", href: "#", icon: Bell },
-  { title: "Messages", href: "#", icon: Mail },
-  { title: "Account", href: "/account", icon: User },
-  { title: "More", href: "#", icon: MoreHorizontal },
-]
+
 
 export function AppSidebar() {
 
@@ -52,6 +45,15 @@ export function AppSidebar() {
 
   const router = useRouter();
   const { data: user, isLoading } = useGetUserQuery(undefined);
+
+  const navItems = [
+  { title: "Home", href: "/home", icon: Home },
+  { title: "Search", href: "#", icon: Search },
+  { title: "Notifications", href: "#", icon: Bell },
+  { title: "Messages", href: "#", icon: Mail },
+  { title: "Account", href: `/${user?.username}`, icon: User },
+  { title: "More", href: "#", icon: MoreHorizontal },
+]
 
   const path = "";
 
