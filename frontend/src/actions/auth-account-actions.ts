@@ -24,9 +24,9 @@ export async function signUpRequest(formData: Omit<SignUpAccountValues, "keyConf
 
     return { success: true, data: res.data };
   } catch (error: any) {
-    const errorMessage =
-      error.response?.data?.message || "An error occurred while signing up the account";
-    return { success: false, error: errorMessage };
+    const errorRes =
+      error.response?.data || {message: "An error occurred while signing up the account"};
+    return { success: false, error: errorRes };
   }
 }
 
@@ -41,9 +41,9 @@ export async function signInRequest(formData: SignInAccountValues) {
 
     return { success: true, data: res.data };
   } catch (error: any) {
-    const errorMessage = error.response?.data?.message || "An error occurred while signing in the account";
-
-    return { success: false, error: errorMessage };
+    const errorRes = 
+    error.response?.data || {message: "An error occurred while signing in the account"};
+    return { success: false, error: errorRes };
   }
 }
 

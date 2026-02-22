@@ -118,11 +118,16 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                 router.push("/home");
             }, 100);
         } catch (error: any) {
-            const errorMessage = error?.data?.message || "An error occured while creating your account.";
+            const errorMessage = error?.message || "An error occurred while signing up your account.";
             toast.error(errorMessage, { id: toastId });
             console.error(errorMessage, error);
-        }
 
+            if (error?.errors) {
+                error.errors.forEach((fieldErr: any) => {
+                    form.setError(fieldErr.field, {message: fieldErr.message})
+                })
+            }
+        }
     };
 
     return (

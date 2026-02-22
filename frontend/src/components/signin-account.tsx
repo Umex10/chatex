@@ -93,11 +93,10 @@ export function SignInAcc({ children }: SignInAccountProps) {
                 router.push("/home");
             }, 100);
         } catch (error: any) {
-            const errorMessage = error?.data?.message || "An error occured while signing you in.";
+            const errorMessage = error?.message || "An error occured while signing you in.";
             toast.error(errorMessage, { id: toastId });
             console.error(errorMessage, error);
         }
-
     };
 
     return (

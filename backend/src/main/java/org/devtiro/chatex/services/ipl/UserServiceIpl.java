@@ -5,11 +5,15 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
+import org.devtiro.chatex.domain.dtos.responses.ApiError;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.exceptions.OwnException;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,13 +46,24 @@ public class UserServiceIpl implements UserService {
         String email = signUpAccountRequestDto.getEmail();
         String phone = signUpAccountRequestDto.getPhone();
 
+        List<ApiError.FieldError> errors = new ArrayList<>();
+
         // Needed Checks, since these field have to be unique
         if (userRep.existsUserByUsername(username)) {
-            throw new EntityExistsException("An user already exists with the username: " + username);
-        } else if (userRep.existsUserByEmail(email)) {
-            throw new EntityExistsException("An user already exists with the email: " + email);
-        } else if (userRep.existsUserByPhone(phone)) {
-            throw new EntityExistsException("An user already exists with the phone-number: " + phone);
+            errors.add(ApiError.FieldError.builder().field("username")
+                    .message("Username already taken").build());
+        } 
+        if (userRep.existsUserByEmail(email)) {
+            errors.add(ApiError.FieldError.builder().field("email").message("Email already taken")
+                    .build());
+        }
+        if (userRep.existsUserByPhone(phone)) {
+            errors.add(ApiError.FieldError.builder().field("phone")
+                    .message("Phone-number already taken").build());
+        }
+
+        if (!errors.isEmpty()) {
+            throw new OwnException(errors);
         }
 
         // Using our bean from SecurityConfig
