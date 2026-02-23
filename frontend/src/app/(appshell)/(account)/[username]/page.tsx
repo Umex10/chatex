@@ -20,7 +20,7 @@ import { joinedDate } from '@/utils/joinedDate';
  * Displays the user's banner, avatar, bio, join date, follower stats,
  * and a tabbed feed of their shouts, replies and media.
  */
-const Account = ({ params }: { params: Promise<{ username: string }> }) => {
+const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
@@ -157,4 +157,4 @@ const Account = ({ params }: { params: Promise<{ username: string }> }) => {
   )
 }
 
-export default Account
+export default Page

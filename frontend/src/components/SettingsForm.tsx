@@ -21,6 +21,7 @@ import ReturnHeader from '@/components/ReturnHeader';
 import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
 import { User } from '../../constants/User';
 import { toast } from 'sonner';
+import { CldImage } from 'next-cloudinary';
 
 /** Zod schema for validating the edit-account form fields. */
 export const editAccountSchema = z.object({
@@ -46,6 +47,8 @@ const Settings = () => {
 
   const { data: user, isLoading: isLoadingUser } = useGetUserQuery(undefined);
   const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
+  const { data: meUser } = useGetUserQuery(undefined);
+   const avatar = meUser?.avatar ? meUser?.avatar : "user-avatar_yr4qhg";
 
   const form = useForm<AccountSchemaValues>({
     resolver: zodResolver(editAccountSchema),
@@ -96,23 +99,31 @@ const Settings = () => {
       {/* Banner & Avatar */}
       <div className='relative w-full'>
         <div className="bg-zinc-800 w-full h-40">
-          <Image
-            src="/stadion.jpg"
-            width={800}
-            height={200}
-            alt='Account Banner'
-            className='w-full h-40 object-cover'
-            priority
-          />
+          <CldImage
+              width={800}
+              height={400}
+              src="stadion_x556pn"
+              alt="User Avatar"
+              crop="thumb"
+              gravity="face"
+              format="auto"
+              quality="auto"
+              className="w-full h-40 object-cover"
+            />
         </div>
 
         <div className="absolute left-4 bottom-0 translate-y-1/2">
-          <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900 shadow-xl">
-            <Image
-              src="/avatar.png"
-              fill
-              alt="Profile"
-              className="object-cover"
+          <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900">
+            <CldImage
+              width="56"
+              height="56"
+              src={avatar}
+              alt="User Avatar"
+              crop="thumb"
+              gravity="face"
+              format="auto"
+              quality="auto"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>

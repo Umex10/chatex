@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 public class UpdateUserDto {
 
   private String name;
+  private String avatar;
+  private String banner;
   private String bio;
   private String location;
   private String website;

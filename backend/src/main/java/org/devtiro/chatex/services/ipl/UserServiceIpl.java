@@ -52,7 +52,7 @@ public class UserServiceIpl implements UserService {
         if (userRep.existsUserByUsername(username)) {
             errors.add(ApiError.FieldError.builder().field("username")
                     .message("Username already taken").build());
-        } 
+        }
         if (userRep.existsUserByEmail(email)) {
             errors.add(ApiError.FieldError.builder().field("email").message("Email already taken")
                     .build());
@@ -77,6 +77,7 @@ public class UserServiceIpl implements UserService {
                 .key(encodedKey)
                 .createdAt(LocalDate.now())
                 .avatar("")
+                .banner("")
                 .bio("")
                 .location("")
                 .website("")
@@ -112,7 +113,8 @@ public class UserServiceIpl implements UserService {
     }
 
     /**
-     * Updates a user's profile fields (name, bio, location, website) and persists the changes.
+     * Updates a user's profile fields (name, bio, location, website) and persists
+     * the changes.
      *
      * @return the updated and persisted User entity
      */
@@ -120,6 +122,8 @@ public class UserServiceIpl implements UserService {
     public User updateUser(User userToUpdate, UpdateUserDto updateUserDto) {
 
         userToUpdate.setName(updateUserDto.getName());
+        userToUpdate.setAvatar(updateUserDto.getAvatar());
+        userToUpdate.setBanner(updateUserDto.getBanner());
         userToUpdate.setBio(updateUserDto.getBio());
         userToUpdate.setLocation(updateUserDto.getLocation());
         userToUpdate.setWebsite(updateUserDto.getWebsite());

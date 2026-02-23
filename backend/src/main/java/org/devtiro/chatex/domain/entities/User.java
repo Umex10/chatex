@@ -46,6 +46,9 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
+    @Column(name = "banner")
+    private String banner;
+
     @Column(name = "bio")
     private String bio;
 
