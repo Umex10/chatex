@@ -55,13 +55,17 @@ const Account = ({ params }: { params: Promise<{ username: string }> }) => {
       {/* Banner */}
       <div className='relative w-full'>
         <div className="bg-zinc-800 w-full h-40">
-          <Image
-            src="/stadion.jpg"
-            width={800}
-            height={200}
-            alt='Account Banner'
-            className='w-full h-40 object-cover'
-          />
+          <CldImage
+              width={800}
+              height={400}
+              src="stadion_x556pn"
+              alt="User Avatar"
+              crop="thumb"
+              gravity="face"
+              format="auto"
+              quality="auto"
+              className="w-full h-40 object-cover"
+            />
         </div>
 
         <div className="absolute left-4 bottom-0 translate-y-1/2">
@@ -114,6 +118,7 @@ const Account = ({ params }: { params: Promise<{ username: string }> }) => {
             <Link href="/settings" className='rounded-xl p-2 border text-base font-bold'>
               Account bearbeiten
             </Link>
+            
           </div>
         )}
 

@@ -7,6 +7,7 @@ export interface User {
   username: string,
   createdAt: string,
   avatar: string,
+  banner: string,
   bio: string,
   location: string,
   website: string
