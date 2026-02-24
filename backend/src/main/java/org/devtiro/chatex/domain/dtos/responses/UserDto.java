@@ -24,6 +24,7 @@ public class UserDto {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate createdAt;
   private String avatar;
+  private String banner;
   private String bio;
   private String location;
   private String website;

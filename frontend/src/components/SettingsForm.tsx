@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import * as z from "zod";
 
@@ -22,17 +22,20 @@ import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
 import { User } from '../../constants/User';
 import { toast } from 'sonner';
 import { CldImage } from 'next-cloudinary';
+import axios from 'axios';
 
 /** Zod schema for validating the edit-account form fields. */
 export const editAccountSchema = z.object({
-  name: z.string().min(2, "Name ist zu kurz").optional().or(z.literal("")),
-  bio: z.string().max(160, "Bio ist zu lang").optional(),
-  location: z.string().optional(),
+  name: z.string().min(2, "Name is to short").or(z.literal("")),
+  bio: z.string().max(160, "Bio is to long").optional().or(z.literal("")),
+  location: z.string().optional().or(z.literal("")),
   website: z
     .string()
     .url({ message: "That is not a valid url..." })
     .optional()
     .or(z.literal("")),
+  avatar: z.any().optional(),
+  banner: z.any().optional(),
 });
 
 /** Type inferred from `editAccountSchema` representing validated form values. */
@@ -48,18 +51,43 @@ const Settings = () => {
   const { data: user, isLoading: isLoadingUser } = useGetUserQuery(undefined);
   const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
   const { data: meUser } = useGetUserQuery(undefined);
-   const avatar = meUser?.avatar ? meUser?.avatar : "user-avatar_yr4qhg";
+  const avatar = meUser?.avatar ? meUser?.avatar : "user-avatar_yr4qhg";
+  const banner = meUser?.banner ? meUser?.banner : "stadion_x556pn";
+
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
+
+  const [avatarView, setAvatarView] = useState<string | null>(null);
+  const [bannerView, setBannerView] = useState<string | null>(null);
 
   const form = useForm<AccountSchemaValues>({
     resolver: zodResolver(editAccountSchema),
     mode: "onChange",
     defaultValues: {
       name: user?.name,
-      bio: user?.bio,
-      location: user?.location,
-      website: user?.website
+      bio: user?.bio || "",
+      location: user?.location || "",
+      website: user?.website || "",
+      avatar: user?.avatar,
+      banner: user?.banner
     }
   });
+
+  useEffect(() => {
+
+    if (user) {
+      form.reset({
+        name: user.name || "",
+        bio: user.bio || "",
+        location: user.location || "",
+        website: user.website || "",
+        avatar: user.avatar,
+        banner: user.banner
+      });
+
+    }
+
+  }, [user, form]);
 
   /**
    * Handles the settings form submission.
@@ -68,23 +96,79 @@ const Settings = () => {
    */
   const onSubmit = async (updatedData: AccountSchemaValues) => {
 
-    const isChanged = Object.keys(updatedData).some(
-      (key) => updatedData[key as keyof AccountSchemaValues] !== user?.[key as keyof User]
+    // We will not change the formData directly
+    const payload = { ...updatedData };
+
+    // Look if there is any change to an attribute to the user, if not return
+    const isChanged = Object.keys(payload).some(
+      key => payload[key as keyof AccountSchemaValues] !== user?.[key as keyof User]
     );
 
     if (!isChanged) return;
 
     const toastId = toast.loading('Saving...');
 
+    if (updatedData.avatar !== user?.avatar) {
+      const res = await generateSecureUrl(updatedData.avatar);
+      if (!res.success) return;
+      payload.avatar = res.data.secure_url;
+    }
+    if (updatedData.banner !== user?.banner) {
+      const res = await generateSecureUrl(updatedData.banner);
+      if (!res.success) return;
+      payload.banner = res.data.secure_url;
+    }
+
     try {
-      await updateUser(updatedData).unwrap();
+      await updateUser(payload).unwrap();
       toast.success('Your Account was successfully updated!', { id: toastId });
+
+      setAvatarView(null);
+      setBannerView(null);
     } catch (error: any) {
       const errorMessage = error?.data?.message || "An error occured while updating your account.";
       console.error(errorMessage);
       toast.error(errorMessage, { id: toastId });
     }
+
   }
+
+  const generateSecureUrl = async (file: File) => {
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    // Unsigned key so we can actually send from the frontend
+    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        formData
+      );
+
+      return { success: true, data: res.data };
+    } catch (err: any) {
+      console.error("An error occured while uploading the file:", err);
+
+      return { success: false, error: err }
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner') => {
+    const file = e.target.files?.[0];
+    if (file) {
+      form.setValue(type, file, { shouldDirty: true });
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (type === 'avatar') setAvatarView(reader.result as string);
+        if (type === 'banner') setBannerView(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className='w-full flex-1 flex flex-col'>
@@ -97,36 +181,67 @@ const Settings = () => {
         </Button>
       </ReturnHeader>
       {/* Banner & Avatar */}
-      <div className='relative w-full'>
+      <div
+        className='relative w-full cursor-pointer group'
+        onClick={() => bannerInputRef.current?.click()}
+      >
         <div className="bg-zinc-800 w-full h-40">
           <CldImage
-              width={800}
-              height={400}
-              src="stadion_x556pn"
-              alt="User Avatar"
-              crop="thumb"
-              gravity="face"
-              format="auto"
-              quality="auto"
-              className="w-full h-40 object-cover"
-            />
+            width={800}
+            height={400}
+            src={bannerView || banner}
+            alt="User Banner"
+            crop="thumb"
+            gravity="face"
+            format="auto"
+            quality="auto"
+            loading='eager'
+            className="w-full h-40 object-cover hover:opacity-80 transition-opacity"
+          />
         </div>
 
-        <div className="absolute left-4 bottom-0 translate-y-1/2">
+        <input
+          type="file"
+          ref={bannerInputRef}
+          className="hidden"
+          accept="image/*"
+          form='edit-account-form'
+          onChange={(e) => handleFileChange(e, 'banner')}
+        />
+
+        <div
+          className="absolute left-4 bottom-0 translate-y-1/2"
+          onClick={(e) => {
+            e.stopPropagation();
+            avatarInputRef.current?.click();
+          }}
+        >
           <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900">
             <CldImage
               width="56"
               height="56"
-              src={avatar}
+              src={avatarView || avatar}
               alt="User Avatar"
               crop="thumb"
               gravity="face"
               format="auto"
               quality="auto"
-              className="w-full h-full object-cover"
+              loading='eager'
+              className="w-full h-full object-cover hover:opacity-80 transition-opacity"
             />
           </div>
+
+          <input
+            type="file"
+            ref={avatarInputRef}
+            className="hidden"
+            accept="image/*"
+            form='edit-account-form'
+            onChange={(e) => handleFileChange(e, 'avatar')}
+          />
         </div>
+
+
       </div>
 
       {/* Form Section */}

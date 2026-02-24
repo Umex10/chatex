@@ -2,7 +2,7 @@ import { signInRequest, signUpRequest } from '@/actions/auth-account-actions';
 import { refreshAuthSessionRequest } from '@/actions/auth-session-actions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../../constants/User';
-import { AccountSchemaValues } from '@/app/(appshell)/(account)/settings/page';
+import { AccountSchemaValues } from '@/components/SettingsForm';
 
 
 /**

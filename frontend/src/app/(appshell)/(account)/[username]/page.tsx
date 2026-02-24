@@ -3,7 +3,7 @@
 import Shout from '@/components/Shout';
 import { RootState } from '@redux/store';
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
@@ -27,19 +27,20 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   let usertoShow;
   const { data: meUser } = useGetUserQuery(undefined);
 
-  const resolvedUser = React.use(params);
+  const resolvedUser = use(params);
   const otherUsername = resolvedUser.username;
   const isOwnAccount = meUser?.username === otherUsername
 
-  const { data: otherUser, isLoading, isError} = useGetUserByUsernameQuery(
+  const { data: otherUser, isLoading, isError } = useGetUserByUsernameQuery(
     otherUsername,
     { skip: isOwnAccount }
   );
 
   const userToShow = isOwnAccount ? meUser : otherUser;
 
-  const avatar = userToShow?.avatar ? userToShow?.avatar : "user-avatar_yr4qhg";
   const name = userToShow?.name ? userToShow?.name : "Was seite";
+  const avatar = userToShow?.avatar ? userToShow?.avatar : "user-avatar_yr4qhg";
+  const banner = meUser?.banner ? meUser?.banner : "stadion_x556pn";
   const username = userToShow?.username ? userToShow?.username : "@wasSeite10";
   const createdAt = userToShow?.createdAt ? userToShow?.createdAt : "Joined";
   const bio = userToShow?.bio ? userToShow?.bio : "";
@@ -56,16 +57,16 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
       <div className='relative w-full'>
         <div className="bg-zinc-800 w-full h-40">
           <CldImage
-              width={800}
-              height={400}
-              src="stadion_x556pn"
-              alt="User Avatar"
-              crop="thumb"
-              gravity="face"
-              format="auto"
-              quality="auto"
-              className="w-full h-40 object-cover"
-            />
+            width={800}
+            height={400}
+            src={banner}
+            alt="User Banner"
+            crop="thumb"
+            gravity="face"
+            format="auto"
+            quality="auto"
+            className="w-full h-40 object-cover"
+          />
         </div>
 
         <div className="absolute left-4 bottom-0 translate-y-1/2">
@@ -118,7 +119,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
             <Link href="/settings" className='rounded-xl p-2 border text-base font-bold'>
               Account bearbeiten
             </Link>
-            
+
           </div>
         )}
 

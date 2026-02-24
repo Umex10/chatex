@@ -30,8 +30,8 @@ test('Sign-up', async ({ page, baseURL }) => {
   await expect(createAccountButton).not.toBeDisabled({ timeout: 5000 });
   await createAccountButton.click();
 
-  await page.waitForURL(`${baseURL}/feed`, { timeout: 10000 });
-  await expect(page).toHaveURL(`${baseURL}/feed`);
+  await page.waitForURL(`${baseURL}/home`, { timeout: 10000 });
+  await expect(page).toHaveURL(`${baseURL}/home`);
 
   const cookies = await page.context().cookies();
 
@@ -42,7 +42,7 @@ test('Sign-up', async ({ page, baseURL }) => {
 
   await page.goto("/");
 
-  await expect(page).toHaveURL(`${baseURL}/feed`);
+  await expect(page).toHaveURL(`${baseURL}/home`);
 
 })
 
@@ -63,8 +63,8 @@ test('Sign-in', async ({ page, baseURL }) => {
   await expect(confirmSignInButton).not.toBeDisabled({ timeout: 5000 });
   await confirmSignInButton.click();
 
-  await page.waitForURL(`${baseURL}/feed`, { timeout: 10000 });
-  await expect(page).toHaveURL(`${baseURL}/feed`);
+  await page.waitForURL(`${baseURL}/home`, { timeout: 10000 });
+  await expect(page).toHaveURL(`${baseURL}/home`);
 
   const cookies = await page.context().cookies();
 
@@ -75,6 +75,6 @@ test('Sign-in', async ({ page, baseURL }) => {
 
   await page.goto("/");
 
-  await expect(page).toHaveURL(`${baseURL}/feed`);
+  await expect(page).toHaveURL(`${baseURL}/home`);
 
 })
