@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import * as z from "zod";

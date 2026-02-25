@@ -1,5 +1,6 @@
 package org.devtiro.chatex.services;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -39,5 +40,11 @@ public interface UserService {
      * @return the updated and persisted User entity
      */
     User updateUser(User userToUpdate, UpdateUserDto updateUserDto);
+
+    Set<User> getFollowers(UUID userId);
+
+    Set<User> getFollowing(UUID userId);
+
+    void follow(UUID userId, UUID userIdToFollow);
 
 }

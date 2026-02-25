@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -130,5 +132,33 @@ public class UserServiceIpl implements UserService {
 
         return userRep.save(userToUpdate);
 
+    }
+
+    @Override
+    public Set<User> getFollowers(UUID userId) {
+        User user = userRep.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+
+        return user.getFollowers();
+    }
+
+    @Override
+    public Set<User> getFollowing(UUID userId) {
+        User user = userRep.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+
+        return user.getFollowing();
+    }
+
+    @Override
+    public void follow(UUID userId, UUID userIdToFollow) {
+        User user = userRep.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+
+        User userToFollow = userRep.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+
+        user.getFollowing().add(userToFollow);
+        userToFollow.getFollowers().add(user);
     }
 }

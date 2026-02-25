@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
 import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
+import { Button } from '@/components/ui/button';
 
 /**
  * Dynamic user Account page.
@@ -114,14 +115,21 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
             </h5>
           </div>
         </div>
-        {isOwnAccount && (
+   
           <div className='h-full flex justify-end items-start'>
-            <Link href="/settings" className='rounded-xl p-2 border text-base font-bold'>
+
+            <Link href="/settings" className={`${!isOwnAccount ? "hidden" : ""}
+              rounded-xl px-3 py-2 border text-base font-bold`}>
               Account bearbeiten
             </Link>
 
+            <Button variant="secondary" className={`${!isOwnAccount ? "" : "hidden"}
+              rounded-xl px-3 py-2 border text-base font-bold`}>
+              Follow
+            </Button>
+
           </div>
-        )}
+
 
       </div>
 

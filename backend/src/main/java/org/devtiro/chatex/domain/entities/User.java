@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -58,4 +60,14 @@ public class User {
     @Column(name = "website")
     private String website;
 
+    @ManyToMany
+    @JoinTable(name = "user_follows",
+     joinColumns = @JoinColumn(name = "follower_id"), 
+     inverseJoinColumns = @JoinColumn(name = "following_id"))
+    @Builder.Default
+    private Set<User> following = new HashSet<>();
+
+    @Builder.Default
+    @ManyToMany(mappedBy = "following")
+    private Set<User> followers = new HashSet<>();
 }
