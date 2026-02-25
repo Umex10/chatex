@@ -9,7 +9,7 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/apiSlice';
+import { useFollowUserMutation, useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 
@@ -27,6 +27,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
   let usertoShow;
   const { data: meUser } = useGetUserQuery(undefined);
+  const [followUser] = useFollowUserMutation();
 
   const resolvedUser = use(params);
   const otherUsername = resolvedUser.username;
@@ -45,9 +46,24 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const username = userToShow?.username ? userToShow?.username : "@wasSeite10";
   const createdAt = userToShow?.createdAt ? userToShow?.createdAt : "Joined";
   const bio = userToShow?.bio ? userToShow?.bio : "";
+  const followersCount = userToShow?.followersCount ? userToShow?.followersCount : 0;
+  const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
 
   if (isError && !isOwnAccount) {
     return <div>User @{otherUsername} was not found.</div>;
+  }
+
+  async function handleFollow() {
+
+    try {
+
+      await followUser(username).unwrap();
+
+    } catch (error: any) {
+      const errorMessage = error?.message || "An error occurred while following the user.";
+
+      console.error(errorMessage, error);
+    }
   }
 
   return (
@@ -105,30 +121,31 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           </Link>
           <div className='flex flex-row gap-4'>
             <h4 className='flex gap-1'>
-              <span className='font-bold'>83</span>
+              <span className='font-bold'>{followingCount}</span>
               <span className='opacity-50'>Following</span>
             </h4>
 
             <h5 className='flex gap-1'>
-              <span className='font-bold'>8</span>
+              <span className='font-bold'>{followersCount}</span>
               <span className='opacity-50'>Follower</span>
             </h5>
           </div>
         </div>
-   
-          <div className='h-full flex justify-end items-start'>
 
-            <Link href="/settings" className={`${!isOwnAccount ? "hidden" : ""}
+        <div className='h-full flex justify-end items-start'>
+
+          <Link href="/settings" className={`${!isOwnAccount ? "hidden" : ""}
               rounded-xl px-3 py-2 border text-base font-bold`}>
-              Account bearbeiten
-            </Link>
+            Account bearbeiten
+          </Link>
 
-            <Button variant="secondary" className={`${!isOwnAccount ? "" : "hidden"}
-              rounded-xl px-3 py-2 border text-base font-bold`}>
-              Follow
-            </Button>
+          <Button variant="secondary" className={`${!isOwnAccount ? "" : "hidden"}
+              rounded-xl px-3 py-2 border text-base font-bold`}
+              onClick={handleFollow}>
+            Follow
+          </Button>
 
-          </div>
+        </div>
 
 
       </div>

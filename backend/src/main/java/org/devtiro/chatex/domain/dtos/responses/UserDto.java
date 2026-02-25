@@ -23,6 +23,8 @@ public class UserDto {
   private String username;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate createdAt;
+  private int followersCount; 
+  private int followingCount;
   private String avatar;
   private String banner;
   private String bio;

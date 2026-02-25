@@ -2,12 +2,12 @@ package org.devtiro.chatex.services.ipl;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -151,12 +151,14 @@ public class UserServiceIpl implements UserService {
     }
 
     @Override
-    public void follow(UUID userId, UUID userIdToFollow) {
+    @Transactional
+    public void follow(UUID userId, String usernameToFollow) {
+
         User user = userRep.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
 
-        User userToFollow = userRep.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+        User userToFollow = userRep.findByUsername(usernameToFollow).orElseThrow(
+                () -> new EntityNotFoundException("The user with the username: " + usernameToFollow + " was not found"));
 
         user.getFollowing().add(userToFollow);
         userToFollow.getFollowers().add(user);

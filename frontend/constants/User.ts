@@ -6,6 +6,8 @@ export interface User {
   name: string,
   username: string,
   createdAt: string,
+  followersCount: number,
+  followingCount: number,
   avatar: string,
   banner: string,
   bio: string,

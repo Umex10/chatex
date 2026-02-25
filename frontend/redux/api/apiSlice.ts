@@ -3,6 +3,7 @@ import { refreshAuthSessionRequest } from '@/actions/auth-session-actions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../../constants/User';
 import { AccountSchemaValues } from '@/components/SettingsForm';
+import { followUserRequest } from '@/actions/follow-user';
 
 
 /**
@@ -49,7 +50,7 @@ export const apiSlice = createApi({
   }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
-    /** Fetches a new access token from the backend using the refresh_jwt cookie. */
+    /** Fetches a new access and refresh token from the backend using the refresh_jwt cookie. */
     refreshAccessTk: builder.query({
       async queryFn() {
         const res = await refreshAuthSessionRequest();
@@ -93,7 +94,8 @@ export const apiSlice = createApi({
 
     /** Fetches a user's public profile by their username. */
     getUserByUsername: builder.query<User, string>({
-      query: (username) => `/user/${username}`
+      query: (username) => `/user/${username}`,
+      providesTags: ['User']
     }),
 
     /** Sends a PATCH request to update the authenticated user's profile and invalidates the 'User' cache tag. */
@@ -104,6 +106,25 @@ export const apiSlice = createApi({
         body: updatedData
       }),
       invalidatesTags: ['User']
+    }),
+
+    followUser: builder.mutation<void, string>({
+
+      async queryFn(usernameToFollow, { getState }) {
+
+        const state = getState() as any;
+        const token = state.api.queries['refreshAccessTk(undefined)']?.data?.accessJwt;
+
+        if (!token) {
+          return { error: { message: "No access token found" } };
+        }
+
+        const res = await followUserRequest(usernameToFollow, token);
+
+        if (!res.success) return { error: res.error };
+        return { data: res.data };
+      },
+      invalidatesTags: ['User']
     })
   }),
 });
@@ -111,5 +132,5 @@ export const apiSlice = createApi({
 
 export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
-  useGetUserByUsernameQuery
+  useGetUserByUsernameQuery, useFollowUserMutation
 } = apiSlice;

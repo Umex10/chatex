@@ -45,6 +45,6 @@ public interface UserService {
 
     Set<User> getFollowing(UUID userId);
 
-    void follow(UUID userId, UUID userIdToFollow);
+    void follow(UUID userId, String usernameToFollow);
 
 }
