@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
  * Used at the top of detail/settings pages so the user can return to the previous route.
  */
 const ReturnHeader = ({ children }: Readonly<{
-  children: React.ReactNode
+  children?: React.ReactNode
 }>) => {
 
   const router = useRouter();

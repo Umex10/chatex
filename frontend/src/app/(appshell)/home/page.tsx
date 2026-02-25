@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { CreateShout } from '@/components/CreateShout';
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux/store';

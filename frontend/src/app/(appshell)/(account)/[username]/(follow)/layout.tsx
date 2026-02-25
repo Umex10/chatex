@@ -1,0 +1,49 @@
+"use client"
+
+import ReturnHeader from '@/components/ReturnHeader'
+import React, { useState } from 'react'
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { usePathname, useRouter } from 'next/navigation'
+import { useGetUserQuery } from '@redux/api/apiSlice'
+
+const Layout = ({ children }: Readonly<{
+  children?: React.ReactNode
+}>) => {
+
+  const [activeTab, setActiveTab] = useState("followers");
+  const router = useRouter();
+
+  const {data: user} = useGetUserQuery();
+  const username = user?.username;
+
+  return (
+    <div className='flex flex-col'>
+
+      <ReturnHeader></ReturnHeader>
+
+      <Tabs defaultValue="account" className="w-full md:w-[400px]"
+       onValueChange={setActiveTab}>
+        <TabsList className='bg-background w-full gap-1 h-14 p-0'>
+          <TabsTrigger value="verified-followers"
+            className={`flex-1 text-lg
+                  ${activeTab === "verified-followers" ? "underline decoration-2 underline-offset-20" : ""}`}
+                  onClick={() => router.push(`/${username}/verifiedFollowers`)}>Verified Followers</TabsTrigger>
+          <TabsTrigger value="followers"
+            className={`flex-1 text-lg
+                  ${activeTab === "followers" ? "underline decoration-2 underline-offset-20" : ""}`}
+                  onClick={() => router.push(`/${username}/followers`)}>Followers</TabsTrigger>
+          <TabsTrigger value="following"
+            className={`flex-1 text-lg
+                  ${activeTab === "following" ? "underline decoration-2 underline-offset-20" : ""}`}
+                  onClick={() => router.push(`/${username}/following`)}>Following</TabsTrigger>
+        </TabsList>
+        <TabsContent value="verified-followers" className='m-0'>{children}</TabsContent>
+        <TabsContent value="followers" className='m-0'>{children}</TabsContent>
+        <TabsContent value="following" className='m-0'>{children}</TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+
+export default Layout
