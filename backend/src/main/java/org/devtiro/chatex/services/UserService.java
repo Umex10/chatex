@@ -41,9 +41,9 @@ public interface UserService {
      */
     User updateUser(User userToUpdate, UpdateUserDto updateUserDto);
 
-    Set<User> getFollowers(UUID userId);
+    Set<User> getFollowers(String username);
 
-    Set<User> getFollowing(UUID userId);
+    Set<User> getFollowing(String username);
 
     void follow(UUID userId, String usernameToFollow);
 

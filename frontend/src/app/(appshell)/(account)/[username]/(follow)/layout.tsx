@@ -10,19 +10,16 @@ import { useGetUserQuery } from '@redux/api/apiSlice'
 const Layout = ({ children }: Readonly<{
   children?: React.ReactNode
 }>) => {
-
-  const [activeTab, setActiveTab] = useState("followers");
+  const path = usePathname().split("/")
+  const tab = path[2];
+  const username = path[1];
+  const [activeTab, setActiveTab] = useState(tab);
   const router = useRouter();
-
-  const {data: user} = useGetUserQuery();
-  const username = user?.username;
 
   return (
     <div className='flex flex-col'>
 
-      <ReturnHeader></ReturnHeader>
-
-      <Tabs defaultValue="account" className="w-full md:w-[400px]"
+      <Tabs defaultValue={activeTab} className="w-full md:w-[400px]"
        onValueChange={setActiveTab}>
         <TabsList className='bg-background w-full gap-1 h-14 p-0'>
           <TabsTrigger value="verified-followers"
@@ -38,9 +35,9 @@ const Layout = ({ children }: Readonly<{
                   ${activeTab === "following" ? "underline decoration-2 underline-offset-20" : ""}`}
                   onClick={() => router.push(`/${username}/following`)}>Following</TabsTrigger>
         </TabsList>
-        <TabsContent value="verified-followers" className='m-0'>{children}</TabsContent>
-        <TabsContent value="followers" className='m-0'>{children}</TabsContent>
-        <TabsContent value="following" className='m-0'>{children}</TabsContent>
+        <TabsContent value="verified-followers" className='m-0 flex-1 sm:border'>{children}</TabsContent>
+        <TabsContent value="followers" className='m-0 flex-1 sm:border'>{children}</TabsContent>
+        <TabsContent value="following" className='m-0 flex-1 sm:border'>{children}</TabsContent>
       </Tabs>
     </div>
   )

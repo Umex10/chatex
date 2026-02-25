@@ -2,6 +2,8 @@ package org.devtiro.chatex.reps;
 
 import org.devtiro.chatex.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -41,4 +43,10 @@ public interface UserRep extends JpaRepository<User, UUID> {
      * @return true if user exists, false otherwise
      */
     boolean existsUserByPhone(String phone);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.followers WHERE u.username = :username")
+    Optional<User> findByUsernameWithFollowers(@Param("username") String username);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.following WHERE u.username = :username")
+    Optional<User> findByUsernameWithFollowing(@Param("username") String username);
 }

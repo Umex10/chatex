@@ -4,6 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../../constants/User';
 import { AccountSchemaValues } from '@/components/SettingsForm';
 import { followUserRequest } from '@/actions/follow-user';
+import { Follow } from '../../constants/Follow';
 
 
 /**
@@ -125,6 +126,14 @@ export const apiSlice = createApi({
         return { data: res.data };
       },
       invalidatesTags: ['User']
+    }),
+
+    getFollowers: builder.query<Follow[], string>({
+        query: (username) => `/user/followers/${username}`
+    }),
+
+    getFollowing: builder.query<Follow[], string>({
+        query: (username) => `/user/following/${username}`
     })
   }),
 });
@@ -132,5 +141,6 @@ export const apiSlice = createApi({
 
 export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
-  useGetUserByUsernameQuery, useFollowUserMutation
+  useGetUserByUsernameQuery, useFollowUserMutation,
+  useGetFollowersQuery, useGetFollowingQuery
 } = apiSlice;

@@ -5,8 +5,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
+import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,7 @@ public class UserController {
 
   private final UserService userService;
   private final UserMapper userMapper;
+  private final FollowMapper followMapper;
 
   /**
    * Retrieves the currently authenticated user's profile.
@@ -89,21 +92,20 @@ public class UserController {
 
   }
 
-  @GetMapping(path = "/followers")
-  public ResponseEntity<List<UserDto>> getFollowers(@RequestAttribute UUID userId) {
-    Set<User> followers = userService.getFollowers(userId);
+  @GetMapping(path = "/followers/{username}")
+  public ResponseEntity<List<FollowDto>> getFollowers(@PathVariable String username) {
+    Set<User> followers = userService.getFollowers(username);
 
-    List<UserDto> followersDto = followers.stream().map(
-        userMapper::toDto).toList();
+    List<FollowDto> followersDto = followMapper.toDtoList(followers);
 
     return ResponseEntity.ok(followersDto);
   }
 
-  @GetMapping(path = "/following")
-  public ResponseEntity<List<UserDto>> getFollowing(@RequestAttribute UUID userId) {
-    Set<User> following = userService.getFollowing(userId);
+  @GetMapping(path = "/following/{username}")
+  public ResponseEntity<List<FollowDto>> getFollowing(@PathVariable String username) {
+    Set<User> following = userService.getFollowing(username);
 
-    List<UserDto> followingDto = following.stream().map(userMapper::toDto).toList();
+    List<FollowDto> followingDto = followMapper.toDtoList(following);
 
     return ResponseEntity.ok(followingDto);
   }

@@ -44,7 +44,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const name = userToShow?.name ? userToShow?.name : "Was seite";
   const avatar = userToShow?.avatar ? userToShow?.avatar : "user-avatar_yr4qhg";
-  const banner = meUser?.banner ? meUser?.banner : "stadion_x556pn";
+  const banner = userToShow?.banner ? userToShow?.banner : "stadion_x556pn";
   const username = userToShow?.username ? userToShow?.username : "@wasSeite10";
   const createdAt = userToShow?.createdAt ? userToShow?.createdAt : "Joined";
   const bio = userToShow?.bio ? userToShow?.bio : "";
@@ -123,13 +123,13 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           </Link>
           <div className='flex flex-row gap-4'>
             <h4 className='flex gap-1' 
-            onClick={() => router.push(`${username}/followers`)}>
+            onClick={() => router.push(`${username}/following`)}>
               <span className='font-bold'>{followingCount}</span>
               <span className='opacity-50'>Following</span>
             </h4>
 
             <h4 className='flex gap-1'
-            onClick={() => router.push(`${username}/following`)}>
+            onClick={() => router.push(`${username}/followers`)}>
               <span className='font-bold'>{followersCount}</span>
               <span className='opacity-50'>Follower</span>
             </h4>

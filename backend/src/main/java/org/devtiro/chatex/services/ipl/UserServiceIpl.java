@@ -135,17 +135,17 @@ public class UserServiceIpl implements UserService {
     }
 
     @Override
-    public Set<User> getFollowers(UUID userId) {
-        User user = userRep.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+    public Set<User> getFollowers(String username) {
+        User user = userRep.findByUsernameWithFollowers(username).orElseThrow(
+                () -> new EntityNotFoundException("The user with the username: " + username + " was not found"));
 
         return user.getFollowers();
     }
 
     @Override
-    public Set<User> getFollowing(UUID userId) {
-        User user = userRep.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+    public Set<User> getFollowing(String username) {
+        User user = userRep.findByUsernameWithFollowing(username).orElseThrow(
+                () -> new EntityNotFoundException("The user with the username: " + username + " was not found"));
 
         return user.getFollowing();
     }
