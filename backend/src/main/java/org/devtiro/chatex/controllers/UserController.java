@@ -63,11 +63,15 @@ public class UserController {
    * @return ResponseEntity containing the user's profile data
    */
   @GetMapping(path = "/{username}")
-  public ResponseEntity<UserDto> getUser(@PathVariable String username) {
+  public ResponseEntity<UserDto> getUser(@RequestAttribute UUID userId,
+      @PathVariable String username) {
 
     User user = userService.findByUsername(username);
 
     UserDto userDto = userMapper.toDto(user);
+
+    boolean isUserFollowingTarget = userService.isUserFollowingTarget(username, userId);
+    userDto.setUserFollowingTarget(isUserFollowingTarget);
 
     return new ResponseEntity<>(userDto, HttpStatus.OK);
   }
@@ -115,6 +119,15 @@ public class UserController {
 
     String cleanUsername = usernameToFollow.replace("\"", "").trim();
     userService.follow(userId, cleanUsername);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/unfollow")
+  public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @RequestBody String usernameToUnfollow) {
+
+    String cleanUsername = usernameToUnfollow.replace("\"", "").trim();
+    userService.unfollow(userId, cleanUsername);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }

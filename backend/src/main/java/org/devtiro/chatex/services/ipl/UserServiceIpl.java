@@ -158,9 +158,30 @@ public class UserServiceIpl implements UserService {
                 () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
 
         User userToFollow = userRep.findByUsername(usernameToFollow).orElseThrow(
-                () -> new EntityNotFoundException("The user with the username: " + usernameToFollow + " was not found"));
+                () -> new EntityNotFoundException(
+                        "The user with the username: " + usernameToFollow + " was not found"));
 
         user.getFollowing().add(userToFollow);
         userToFollow.getFollowers().add(user);
     }
+
+    @Override
+    @Transactional
+    public void unfollow(UUID userId, String usernameToFollow) {
+        User user = userRep.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("The user with the userId: " + userId + " was not found"));
+
+        User userToUnfollow = userRep.findByUsername(usernameToFollow).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "The user with the username: " + usernameToFollow + " was not found"));
+
+        user.getFollowing().remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(user);
+    }
+
+    @Override
+    public boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId) {
+        return userRep.isUserFollowingTarget(targetUsername, requestingUserId);
+    }
+
 }

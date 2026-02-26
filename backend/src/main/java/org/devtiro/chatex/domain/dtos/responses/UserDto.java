@@ -25,6 +25,7 @@ public class UserDto {
   private LocalDate createdAt;
   private int followersCount; 
   private int followingCount;
+  private boolean userFollowingTarget;
   private String avatar;
   private String banner;
   private String bio;

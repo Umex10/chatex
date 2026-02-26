@@ -3,7 +3,7 @@ import { refreshAuthSessionRequest } from '@/actions/auth-session-actions';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../../constants/User';
 import { AccountSchemaValues } from '@/components/SettingsForm';
-import { followUserRequest } from '@/actions/follow-user';
+import { followUserRequest, unfollowUserRequest } from '@/actions/follow-system-user';
 import { Follow } from '../../constants/Follow';
 
 
@@ -128,12 +128,29 @@ export const apiSlice = createApi({
       invalidatesTags: ['User']
     }),
 
+    unfollowUser: builder.mutation<User, string>({
+      async queryFn(usernameToUnfollow, { getState }) {
+        const state = getState() as any;
+        const token = state.api.queries['refreshAccessTk(undefined)']?.data?.accessJwt;
+
+        if (!token) {
+          return { error: { message: "No access token found" } };
+        }
+
+        const res = await unfollowUserRequest(usernameToUnfollow, token);
+
+        if (!res.success) return { error: res.error };
+        return { data: res.data };
+      },
+      invalidatesTags: ['User']
+    }),
+
     getFollowers: builder.query<Follow[], string>({
-        query: (username) => `/user/followers/${username}`
+      query: (username) => `/user/followers/${username}`
     }),
 
     getFollowing: builder.query<Follow[], string>({
-        query: (username) => `/user/following/${username}`
+      query: (username) => `/user/following/${username}`
     })
   }),
 });
@@ -141,6 +158,6 @@ export const apiSlice = createApi({
 
 export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
-  useGetUserByUsernameQuery, useFollowUserMutation,
+  useGetUserByUsernameQuery, useFollowUserMutation, useUnfollowUserMutation,
   useGetFollowersQuery, useGetFollowingQuery
 } = apiSlice;

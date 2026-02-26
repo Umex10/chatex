@@ -47,4 +47,8 @@ public interface UserService {
 
     void follow(UUID userId, String usernameToFollow);
 
+    void unfollow(UUID userId, String usernameToFollow);
+
+    boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId);
+
 }

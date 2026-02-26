@@ -3,13 +3,13 @@
 import Shout from '@/components/Shout';
 import { RootState } from '@redux/store';
 import Image from 'next/image'
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useFollowUserMutation, useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/apiSlice';
+import { useFollowUserMutation, useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -26,9 +26,9 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
-  let usertoShow;
   const { data: meUser } = useGetUserQuery(undefined);
   const [followUser] = useFollowUserMutation();
+  const [unfollowUser] = useUnfollowUserMutation();
   const router = useRouter();
 
   const resolvedUser = use(params);
@@ -50,19 +50,57 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const bio = userToShow?.bio ? userToShow?.bio : "";
   const followersCount = userToShow?.followersCount ? userToShow?.followersCount : 0;
   const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
+  const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
+
+  const [followText, setFollowText] = useState("Follow");
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFollowText(isRequestingUserFollowing ? "Following" : "Follow");
+  }, [isRequestingUserFollowing]);
 
   if (isError && !isOwnAccount) {
     return <div>User @{otherUsername} was not found.</div>;
   }
 
+  const onToggleFollow = async () => {
+    if (isRequestingUserFollowing) {
+      await handleUnfollow();
+    } else {
+      await handleFollow();
+    }
+  };
+
   async function handleFollow() {
+
+    setFollowText("Following");
 
     try {
 
       await followUser(username).unwrap();
 
     } catch (error: any) {
+
+      setFollowText("Follow");
       const errorMessage = error?.message || "An error occurred while following the user.";
+
+      console.error(errorMessage, error);
+    }
+  }
+
+
+  async function handleUnfollow() {
+
+    setFollowText("Follow");
+
+    try {
+
+      await unfollowUser(username).unwrap();
+
+    } catch (error: any) {
+
+      setFollowText("Following");
+      const errorMessage = error?.message || "An error occurred while unfollowing the user.";
 
       console.error(errorMessage, error);
     }
@@ -122,14 +160,14 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
             <span>{joinedDate(createdAt)}</span>
           </Link>
           <div className='flex flex-row gap-4'>
-            <h4 className='flex gap-1' 
-            onClick={() => router.push(`${username}/following`)}>
+            <h4 className='flex gap-1'
+              onClick={() => router.push(`${username}/following`)}>
               <span className='font-bold'>{followingCount}</span>
               <span className='opacity-50'>Following</span>
             </h4>
 
             <h4 className='flex gap-1'
-            onClick={() => router.push(`${username}/followers`)}>
+              onClick={() => router.push(`${username}/followers`)}>
               <span className='font-bold'>{followersCount}</span>
               <span className='opacity-50'>Follower</span>
             </h4>
@@ -138,19 +176,19 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
         <div className='h-full flex justify-end items-start'>
 
-          <Link href="/settings" className={`${!isOwnAccount ? "hidden" : ""}
+          <Link href="/settings" className={`${isOwnAccount ? "" : "hidden"}
               rounded-xl px-3 py-2 border text-base font-bold`}>
             Account bearbeiten
           </Link>
 
-          <Button variant="secondary" className={`${!isOwnAccount ? "" : "hidden"}
+          <Button variant={!isRequestingUserFollowing ? "outline" : "secondary"}
+            className={`${isOwnAccount ? "hidden" : ""}
               rounded-xl px-3 py-2 border text-base font-bold`}
-              onClick={handleFollow}>
-            Follow
+            onClick={onToggleFollow}>
+            {followText}
           </Button>
 
         </div>
-
 
       </div>
 
