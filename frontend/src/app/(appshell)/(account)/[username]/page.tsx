@@ -12,7 +12,7 @@ import { CldImage } from 'next-cloudinary';
 import { useFollowUserMutation, useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import {  useRouter } from 'next/navigation';
 import { useFollow } from '@/hooks/use-follow';
 
 /**
@@ -27,7 +27,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
-  const { data: meUser } = useGetUserQuery(undefined);
+  const { data: meUser } = useGetUserQuery();
   const router = useRouter();
 
   const resolvedUser = use(params);
@@ -54,7 +54,9 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const { followText, onToggleFollow } = useFollow({username, userFollowingTarget: isRequestingUserFollowing});
 
   if (isError && !isOwnAccount) {
-    return <div>User @{otherUsername} was not found.</div>;
+    return <div className='w-full h-full flex-1 text-center'>
+      User @{otherUsername} was not found.
+    </div>;
   }
 
   return (

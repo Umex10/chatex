@@ -1,11 +1,10 @@
 "use client"
 
-import ReturnHeader from '@/components/ReturnHeader'
 import React, { useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { usePathname, useRouter } from 'next/navigation'
-import { useGetUserQuery } from '@redux/api/apiSlice'
+import ReturnHeader from '@/components/ReturnHeader'
 
 const Layout = ({ children }: Readonly<{
   children?: React.ReactNode
@@ -19,7 +18,9 @@ const Layout = ({ children }: Readonly<{
   return (
     <div className='flex flex-col'>
 
-      <Tabs defaultValue={activeTab} className="w-full md:w-[400px]"
+      <ReturnHeader></ReturnHeader>
+
+      <Tabs defaultValue={activeTab} className="w-full"
        onValueChange={setActiveTab}>
         <TabsList className='bg-background w-full gap-1 h-14 p-0'>
           <TabsTrigger value="verified-followers"

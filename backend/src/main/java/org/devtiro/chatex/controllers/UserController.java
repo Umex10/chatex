@@ -101,13 +101,8 @@ public class UserController {
   public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
     Set<User> followers = userService.getFollowers(username);
-    Set<UUID> idsInList = followers.stream().map(User::getId).collect(Collectors.toSet());
 
-    Set<UUID> followedMe = userService.findFollowersIdsIn(userId, idsInList);
-
-    List<FollowDto> followersDto = followMapper.toDtoList(followers);
-
-    followersDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
+    List<FollowDto> followersDto = handleFollowBadges(userId, followers);
 
     return ResponseEntity.ok(followersDto);
   }
@@ -117,33 +112,39 @@ public class UserController {
       @PathVariable String username) {
     Set<User> following = userService.getFollowing(username);
 
-    Set<UUID> idsInList = following.stream().map(User::getId).collect(Collectors.toSet());
-
-    Set<UUID> followedByMe = userService.findFollowingIdsIn(userId, idsInList);
-
-    List<FollowDto> followingDto = followMapper.toDtoList(following);
-
-    followingDto.forEach(dto -> dto.setUserFollowingTarget(followedByMe.contains(dto.getId())));
+    List<FollowDto> followingDto = handleFollowBadges(userId, following);
 
     return ResponseEntity.ok(followingDto);
   }
 
-  @PostMapping(path = "/follow")
-  public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @RequestBody String usernameToFollow) {
+  @PostMapping(path = "/follow/{username}")
+  public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @PathVariable String username) {
 
-    String cleanUsername = usernameToFollow.replace("\"", "").trim();
-    userService.follow(userId, cleanUsername);
+    userService.follow(userId, username);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
-  @PostMapping(path = "/unfollow")
-  public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @RequestBody String usernameToUnfollow) {
+  @PostMapping(path = "/unfollow/{username}")
+  public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @PathVariable String username) {
 
-    String cleanUsername = usernameToUnfollow.replace("\"", "").trim();
-    userService.unfollow(userId, cleanUsername);
+    userService.unfollow(userId, username);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  private List<FollowDto> handleFollowBadges(UUID userId, Set<User> users) {
+    Set<UUID> idsInList = users.stream().map(User::getId).collect(Collectors.toSet());
+
+    Set<UUID> followedMe = userService.findFollowersIdsIn(userId, idsInList);
+    Set<UUID> followedByMe = userService.findFollowingIdsIn(userId, idsInList);
+
+    List<FollowDto> followingDto = followMapper.toDtoList(users);
+
+    followingDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
+    followingDto.forEach(dto -> dto.setUserFollowingTarget(followedByMe.contains(dto.getId())));
+
+    return followingDto;
   }
 
 }

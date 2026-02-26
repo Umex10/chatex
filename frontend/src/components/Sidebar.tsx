@@ -29,7 +29,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { CreateShout } from "./CreateShout"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { CldImage } from 'next-cloudinary';
 import { useGetUserQuery } from "@redux/api/apiSlice"
 import { signOutRequest } from "@/actions/auth-account-actions"
@@ -51,18 +51,17 @@ export function AppSidebar() {
   const isMobile = useIsMobile();
 
   const router = useRouter();
+  const path = usePathname();
   const { data: user, isLoading } = useGetUserQuery(undefined);
 
   const navItems = [
-  { title: "Home", href: "/home", icon: Home },
-  { title: "Search", href: "#", icon: Search },
-  { title: "Notifications", href: "#", icon: Bell },
-  { title: "Messages", href: "#", icon: Mail },
-  { title: "Account", href: `/${user?.username}`, icon: User },
-  { title: "More", href: "#", icon: MoreHorizontal },
-]
-
-  const path = "";
+    { title: "Home", href: "/home", icon: Home },
+    { title: "Search", href: "#", icon: Search },
+    { title: "Notifications", href: "#", icon: Bell },
+    { title: "Messages", href: "#", icon: Mail },
+    { title: "Account", href: `/${user?.username}`, icon: User },
+    { title: "More", href: "#", icon: MoreHorizontal },
+  ]
 
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";
   const name = user?.name ? user?.name : "Was seite";
@@ -166,7 +165,12 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className="h-12 px-2 py-8 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!py-8 group-data-[collapsible=icon]:!w-12"
                     >
-                      <a href={item.href}>
+                      <a href={item.href}
+                        onClick={(e) => {
+                          if (`${path}` === item.href) {
+                            e.preventDefault();
+                          }
+                        }}>
                         <item.icon
                           className={cn(
                             "transition-all",

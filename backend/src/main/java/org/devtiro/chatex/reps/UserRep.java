@@ -52,10 +52,10 @@ public interface UserRep extends JpaRepository<User, UUID> {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.following WHERE u.username = :username")
     Optional<User> findByUsernameWithFollowing(@Param("username") String username);
 
-    @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.followers f WHERE u.username = :targetUsername AND f.id = :requestingUserId")
+    @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.followers f WHERE u.username = :targetUsername AND f.id = :userId")
     boolean isUserFollowingTarget(
             @Param("targetUsername") String targetUsername,
-            @Param("requestingUserId") UUID requestingUserId);
+            @Param("userId") UUID userId);
 
     @Query("SELECT f.id FROM User u JOIN u.following f WHERE u.id = :myId AND f.id IN :targetIds")
     Set<UUID> findFollowingIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
