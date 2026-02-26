@@ -3,6 +3,7 @@ package org.devtiro.chatex.controllers;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
@@ -97,19 +98,32 @@ public class UserController {
   }
 
   @GetMapping(path = "/followers/{username}")
-  public ResponseEntity<List<FollowDto>> getFollowers(@PathVariable String username) {
+  public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
+      @PathVariable String username) {
     Set<User> followers = userService.getFollowers(username);
+    Set<UUID> idsInList = followers.stream().map(User::getId).collect(Collectors.toSet());
+
+    Set<UUID> followedMe = userService.findFollowersIdsIn(userId, idsInList);
 
     List<FollowDto> followersDto = followMapper.toDtoList(followers);
+
+    followersDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
 
     return ResponseEntity.ok(followersDto);
   }
 
   @GetMapping(path = "/following/{username}")
-  public ResponseEntity<List<FollowDto>> getFollowing(@PathVariable String username) {
+  public ResponseEntity<List<FollowDto>> getFollowing(@RequestAttribute("userId") UUID userId,
+      @PathVariable String username) {
     Set<User> following = userService.getFollowing(username);
 
+    Set<UUID> idsInList = following.stream().map(User::getId).collect(Collectors.toSet());
+
+    Set<UUID> followedByMe = userService.findFollowingIdsIn(userId, idsInList);
+
     List<FollowDto> followingDto = followMapper.toDtoList(following);
+
+    followingDto.forEach(dto -> dto.setUserFollowingTarget(followedByMe.contains(dto.getId())));
 
     return ResponseEntity.ok(followingDto);
   }

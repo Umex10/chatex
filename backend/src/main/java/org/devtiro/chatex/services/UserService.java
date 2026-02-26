@@ -51,4 +51,8 @@ public interface UserService {
 
     boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId);
 
+    Set<UUID> findFollowingIdsIn(UUID userId, Set<UUID> idsInList);
+
+    Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList);
+
 }

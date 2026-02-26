@@ -184,4 +184,14 @@ public class UserServiceIpl implements UserService {
         return userRep.isUserFollowingTarget(targetUsername, requestingUserId);
     }
 
+    @Override
+    public Set<UUID> findFollowingIdsIn(UUID userId, Set<UUID> idsInList) {
+      return userRep.findFollowingIdsIn(userId, idsInList);
+    }
+
+    @Override
+    public Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList) {
+        return userRep.findFollowersIdsIn(userId, idsInList);
+    }
+
 }

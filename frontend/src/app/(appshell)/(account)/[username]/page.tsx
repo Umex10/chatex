@@ -13,6 +13,7 @@ import { useFollowUserMutation, useGetUserByUsernameQuery, useGetUserQuery, useU
 import { joinedDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { useFollow } from '@/hooks/use-follow';
 
 /**
  * Dynamic user Account page.
@@ -27,8 +28,6 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const [activeTab, setActiveTab] = useState("shouts");
   const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
   const { data: meUser } = useGetUserQuery(undefined);
-  const [followUser] = useFollowUserMutation();
-  const [unfollowUser] = useUnfollowUserMutation();
   const router = useRouter();
 
   const resolvedUser = use(params);
@@ -52,58 +51,10 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
   const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
 
-  const [followText, setFollowText] = useState("Follow");
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFollowText(isRequestingUserFollowing ? "Following" : "Follow");
-  }, [isRequestingUserFollowing]);
+  const { followText, onToggleFollow } = useFollow({username, userFollowingTarget: isRequestingUserFollowing});
 
   if (isError && !isOwnAccount) {
     return <div>User @{otherUsername} was not found.</div>;
-  }
-
-  const onToggleFollow = async () => {
-    if (isRequestingUserFollowing) {
-      await handleUnfollow();
-    } else {
-      await handleFollow();
-    }
-  };
-
-  async function handleFollow() {
-
-    setFollowText("Following");
-
-    try {
-
-      await followUser(username).unwrap();
-
-    } catch (error: any) {
-
-      setFollowText("Follow");
-      const errorMessage = error?.message || "An error occurred while following the user.";
-
-      console.error(errorMessage, error);
-    }
-  }
-
-
-  async function handleUnfollow() {
-
-    setFollowText("Follow");
-
-    try {
-
-      await unfollowUser(username).unwrap();
-
-    } catch (error: any) {
-
-      setFollowText("Following");
-      const errorMessage = error?.message || "An error occurred while unfollowing the user.";
-
-      console.error(errorMessage, error);
-    }
   }
 
   return (

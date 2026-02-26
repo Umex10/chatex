@@ -7,11 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Repository interface for User entity database operations.
- * Provides methods for querying and checking user existence by various criteria.
+ * Provides methods for querying and checking user existence by various
+ * criteria.
  */
 @Repository
 public interface UserRep extends JpaRepository<User, UUID> {
@@ -52,7 +54,13 @@ public interface UserRep extends JpaRepository<User, UUID> {
 
     @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.followers f WHERE u.username = :targetUsername AND f.id = :requestingUserId")
     boolean isUserFollowingTarget(
-        @Param("targetUsername") String targetUsername, 
-        @Param("requestingUserId") UUID requestingUserId
-    );
+            @Param("targetUsername") String targetUsername,
+            @Param("requestingUserId") UUID requestingUserId);
+
+    @Query("SELECT f.id FROM User u JOIN u.following f WHERE u.id = :myId AND f.id IN :targetIds")
+    Set<UUID> findFollowingIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
+
+    @Query("SELECT f.id FROM User u JOIN u.followers f WHERE u.id = :myId AND f.id IN :targetIds")
+    Set<UUID> findFollowersIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
+
 }
