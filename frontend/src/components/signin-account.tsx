@@ -77,12 +77,17 @@ export function SignInAcc({ children }: SignInAccountProps) {
      */
     const onSubmit = async (freshData: SignInAccountValues) => {
 
-        const toastId = toast.loading("Singing in...");
+        const toastId = toast.loading("Signing in...", {
+                    className: "toast-loading",
+                });
 
         try {
             const res = await signIn(freshData).unwrap();
 
-            toast.success("Welcome!", { id: toastId });
+            toast.success("Welcome back!", {
+                id: toastId,
+                className: "toast-success"
+            });
 
             setOpen(false);
             form.reset();
@@ -94,7 +99,10 @@ export function SignInAcc({ children }: SignInAccountProps) {
             }, 100);
         } catch (error: any) {
             const errorMessage = error?.message || "An error occured while signing you in.";
-            toast.error(errorMessage, { id: toastId });
+            toast.error(errorMessage, {
+                id: toastId,
+                className: "toast-error"
+            });
             console.error(errorMessage, error);
         }
     };

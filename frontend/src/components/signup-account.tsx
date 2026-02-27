@@ -100,7 +100,9 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
      */
     const onSubmit = async (data: SignUpAccountValues) => {
 
-        const toastId = toast.loading("Creating Account...");
+        const toastId = toast.loading("Creating Account...", {
+            className: "toast-loading",
+        });
 
         const { keyConfirm, ...freshData } = data;
 
@@ -108,7 +110,10 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
 
             const res = await signUp(freshData).unwrap();
 
-            toast.success("Your account was created!", { id: toastId });
+            toast.success("Your account was created!", {
+                id: toastId,
+                className: "toast-success"
+            });
             setOpen(false);
             form.reset();
 
@@ -119,12 +124,15 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
             }, 100);
         } catch (error: any) {
             const errorMessage = error?.message || "An error occurred while signing up your account.";
-            toast.error(errorMessage, { id: toastId });
+            toast.error(errorMessage, {
+                id: toastId,
+                className: "toast-error"
+            });
             console.error(errorMessage, error);
 
             if (error?.errors) {
                 error.errors.forEach((fieldErr: any) => {
-                    form.setError(fieldErr.field, {message: fieldErr.message})
+                    form.setError(fieldErr.field, { message: fieldErr.message })
                 })
             }
         }
@@ -174,7 +182,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                                     <FormControl>
                                         <Input data-testid="username" placeholder="johndoe123" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage data-testid="username-error" />
                                 </FormItem>
                             )}
                         />
@@ -193,7 +201,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage data-testid="email-error" />
                                 </FormItem>
                             )}
                         />
@@ -207,7 +215,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                                     <FormControl>
                                         <Input data-testid="phone" type="tel" placeholder="+1234567890" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage data-testid="phone-error" />
                                 </FormItem>
                             )}
                         />
