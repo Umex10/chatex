@@ -9,6 +9,10 @@ export function joinedDate(createdAt: string) {
 
   const date = new Date(createdAt);
 
+  if (isNaN(date.getTime())) {
+    return "Date unkown"; // Oder ein leerer String
+  }
+
   // ("Month: f.e: February")
   const month = date.toLocaleString('de-DE', { month: 'long' });
 
