@@ -35,6 +35,7 @@ import { useGetUserQuery } from "@redux/api/apiSlice"
 import { signOutRequest } from "@/actions/auth-account-actions"
 import { toast } from "sonner"
 import { Button } from "./ui/button"
+import Link from "next/link"
 
 
 
@@ -66,6 +67,8 @@ export function AppSidebar() {
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";
   const name = user?.name ? user?.name : "Was seite";
   const username = user?.username ? user?.username : "@wasSeite10";
+  const followersCount = user?.followersCount ? user?.followersCount : 0;
+  const followingCount = user?.followingCount ? user?.followingCount : 0;
 
   /**
    * Signs the current user out by calling the server action, showing a toast,
@@ -128,12 +131,12 @@ export function AppSidebar() {
 
                 <div className='flex flex-row gap-4'>
                   <h4 className='flex gap-1'>
-                    <span className='font-bold'>83</span>
+                    <span className='font-bold'>{followingCount}</span>
                     <span className='opacity-50'>Following</span>
                   </h4>
 
                   <h5 className='flex gap-1'>
-                    <span className='font-bold'>8</span>
+                    <span className='font-bold'>{followersCount}</span>
                     <span className='opacity-50'>Follower</span>
                   </h5>
                 </div>
@@ -165,7 +168,7 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className="h-12 px-2 py-8 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!py-8 group-data-[collapsible=icon]:!w-12"
                     >
-                      <a href={item.href}
+                      <Link href={item.href}
                         onClick={(e) => {
                           if (`${path}` === item.href) {
                             e.preventDefault();
@@ -179,7 +182,7 @@ export function AppSidebar() {
                           strokeWidth={path === item.href ? 2.5 : 2}
                         />
                         <span className={`text-xl ${path === item.href ? "text-foreground" : "text-muted-foreground"}`}>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

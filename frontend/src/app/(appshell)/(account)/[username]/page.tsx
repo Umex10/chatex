@@ -2,14 +2,13 @@
 
 import Shout from '@/components/Shout';
 import { RootState } from '@redux/store';
-import Image from 'next/image'
-import React, { use, useEffect, useState } from 'react'
+import React, { use, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useFollowUserMutation, useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
+import { useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import {  useRouter } from 'next/navigation';

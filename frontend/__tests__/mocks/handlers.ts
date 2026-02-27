@@ -14,7 +14,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:808
  * and setting a refresh token cookie.
  */
 export const handlers = [
-  http.post(`${BACKEND_URL}/api/v1/auth/**`, async ({ request }) => {
+  http.post(`${BACKEND_URL}/api/v2/auth/**`, async ({ request }) => {
     return HttpResponse.json({
       success: true,
       data: {

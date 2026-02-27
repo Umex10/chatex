@@ -81,7 +81,7 @@ export const Layout = ({
 
                 {/* right slot: quick action button */}
                 <div className='flex justify-end w-1/5'>
-                  <Button variant="default" className='p-2'>
+                  <Button variant="secondary" className='p-2'>
                     Subscribe
                   </Button>
                 </div>

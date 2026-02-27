@@ -1,0 +1,10 @@
+services:
+  db-e2e:
+    image: 'postgres:latest'
+    container_name: chatex-db-e2e
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: chatex_test
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
