@@ -21,7 +21,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
              <StoreProvider>
-              <Toaster position="top-center" richColors />
+              <Toaster closeButton position="top-center" richColors />
             {children}
             </StoreProvider>
           </ThemeProvider>

@@ -102,7 +102,7 @@ export function AppSidebar() {
               alt="Chatex Logo"
               className="w-14 h-14"
             />
-            <h2 className="font-bold text-xl">Chatex</h2>
+            <h2 className="font-bold text-xl group-data-[collapsible=icon]:hidden">Chatex</h2>
           </div>
 
           <div className="flex flex-row items-start">

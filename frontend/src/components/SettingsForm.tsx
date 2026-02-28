@@ -22,6 +22,8 @@ import { User } from '../../constants/User';
 import { toast } from 'sonner';
 import { CldImage } from 'next-cloudinary';
 import axios from 'axios';
+import { SwitchCamera } from 'lucide-react';
+
 
 /** Zod schema for validating the edit-account form fields. */
 export const editAccountSchema = z.object({
@@ -181,10 +183,10 @@ const Settings = () => {
       </ReturnHeader>
       {/* Banner & Avatar */}
       <div
-        className='relative w-full cursor-pointer group'
+        className='relative w-full cursor-pointer'
         onClick={() => bannerInputRef.current?.click()}
       >
-        <div className="bg-zinc-800 w-full h-40">
+        <div className="relative bg-zinc-800 w-full h-40 group">
           <CldImage
             width={800}
             height={400}
@@ -195,8 +197,12 @@ const Settings = () => {
             format="auto"
             quality="auto"
             loading='eager'
-            className="w-full h-40 object-cover hover:opacity-80 transition-opacity"
+            className="w-full h-40 object-cover group-hover:opacity-70 transition-opacity"
           />
+
+          <div className='invisible absolute inset-0 flex items-center justify-center group-hover:visible'>
+            <SwitchCamera className='w-16 h-16'></SwitchCamera>
+          </div>
         </div>
 
         <input
@@ -215,7 +221,7 @@ const Settings = () => {
             avatarInputRef.current?.click();
           }}
         >
-          <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900">
+          <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900 group">
             <CldImage
               width="56"
               height="56"
@@ -226,8 +232,12 @@ const Settings = () => {
               format="auto"
               quality="auto"
               loading='eager'
-              className="w-full h-full object-cover hover:opacity-80 transition-opacity"
+              className="w-full h-full object-cover group-hover:opacity-60 transition-opacity"
             />
+
+            <div className='invisible absolute inset-0 flex items-center justify-center group-hover:visible'>
+              <SwitchCamera className='w-8 h-8'></SwitchCamera>
+            </div>
           </div>
 
           <input
@@ -239,7 +249,6 @@ const Settings = () => {
             onChange={(e) => handleFileChange(e, 'avatar')}
           />
         </div>
-
 
       </div>
 

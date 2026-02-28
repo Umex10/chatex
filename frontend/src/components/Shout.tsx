@@ -57,7 +57,7 @@ const Shout = (data: ShoutData) => {
     // outer card container for one shout item
     <div className='p-3 w-full border-y'>
       {/* row layout: avatar column + content column */}
-      <div className='flex flex-row gap-1 max-w-[600px]'>
+      <div className='flex flex-row gap-1'>
         {/* left column: account avatar */}
         <div className='w-1/8 flex justify-center'>
           <Image

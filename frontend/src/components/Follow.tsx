@@ -6,16 +6,19 @@ import { Ellipsis } from 'lucide-react'
 import { CldImage } from 'next-cloudinary'
 import type { Follow } from '../../constants/Follow'
 import { useFollow } from '@/hooks/use-follow'
+import { useRouter } from 'next/navigation'
 
 const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollowingUser }: Omit<Follow, "id">) => {
 
   // src must be defined
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
   const { followText, onToggleFollow } = useFollow({username, userFollowingTarget});
+  const router = useRouter();
 
   return (
-    <div className='w-full flex flex-row items-start gap-2 hover:bg-gray-800 
-    transition ease-out duration-400'>
+    <div className='w-full px-3 py-5 flex flex-row items-start gap-2 hover:bg-gray-800 
+    transition ease-out duration-400'
+    onClick={() => router.push(`/${username}`)}>
 
       <div className="relative w-13 h-13 rounded-full border-4 border-black 
       overflow-hidden bg-zinc-900">
