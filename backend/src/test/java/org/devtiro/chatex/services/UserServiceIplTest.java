@@ -8,12 +8,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
+import org.devtiro.chatex.domain.dtos.responses.ApiError.FieldError;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.exceptions.OwnException;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.ipl.UserServiceIpl;
 import org.junit.jupiter.api.Test;
@@ -23,12 +28,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Unit tests for {@link UserServiceIpl}.
- * Validates account creation logic, duplicate detection, and user lookup operations
+ * Validates account creation logic, duplicate detection, and user lookup
+ * operations
  * using mocked dependencies.
  */
 @ExtendWith(MockitoExtension.class)
@@ -76,7 +81,8 @@ public class UserServiceIplTest {
   }
 
   /**
-   * Verifies that account creation fails with an {@link jakarta.persistence.EntityExistsException}
+   * Verifies that account creation fails with an
+   * {@link jakarta.persistence.EntityExistsException}
    * when the username is already taken.
    */
   @Test
@@ -87,11 +93,12 @@ public class UserServiceIplTest {
     assertAccountCreationFails(
         dto,
         () -> when(userRep.existsUserByUsername(dto.getUsername())).thenReturn(true),
-        "username");
+        new ArrayList<String>(Arrays.asList("username")));
   }
 
   /**
-   * Verifies that account creation fails with an {@link jakarta.persistence.EntityExistsException}
+   * Verifies that account creation fails with an
+   * {@link jakarta.persistence.EntityExistsException}
    * when the email is already registered.
    */
   @Test
@@ -102,12 +109,13 @@ public class UserServiceIplTest {
     assertAccountCreationFails(
         dto,
         () -> when(userRep.existsUserByEmail(dto.getEmail())).thenReturn(true),
-        "email");
+        new ArrayList<String>(Arrays.asList("email")));
 
   }
 
   /**
-   * Verifies that account creation fails with an {@link jakarta.persistence.EntityExistsException}
+   * Verifies that account creation fails with an
+   * {@link jakarta.persistence.EntityExistsException}
    * when the phone number is already registered.
    */
   @Test
@@ -118,7 +126,23 @@ public class UserServiceIplTest {
     assertAccountCreationFails(
         dto,
         () -> when(userRep.existsUserByPhone(dto.getPhone())).thenReturn(true),
-        "phone");
+        new ArrayList<String>(Arrays.asList("phone")));
+
+  }
+
+  @Test
+  void itShouldNotCreateAccountWithCombinedErrors() {
+
+    SignUpAccountRequestDto dto = TestData.createSignUpAccountRequestDto();
+
+    assertAccountCreationFails(
+        dto,
+        () -> {
+          when(userRep.existsUserByUsername(dto.getUsername())).thenReturn(true);
+          when(userRep.existsUserByEmail(dto.getEmail())).thenReturn(true);
+          when(userRep.existsUserByPhone(dto.getPhone())).thenReturn(true);
+        },
+        new ArrayList<String>(Arrays.asList("username", "email", "phone")));
 
   }
 
@@ -144,7 +168,8 @@ public class UserServiceIplTest {
   }
 
   /**
-   * Verifies that an {@link jakarta.persistence.EntityNotFoundException} is thrown
+   * Verifies that an {@link jakarta.persistence.EntityNotFoundException} is
+   * thrown
    * when no user exists with the given ID.
    */
   @Test
@@ -157,9 +182,8 @@ public class UserServiceIplTest {
     when(userRep.findById(userId))
         .thenReturn(Optional.empty());
 
-   EntityNotFoundException exception =
-            assertThrows(EntityNotFoundException.class,
-                    () -> underTest.findById(userId));
+    EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+        () -> underTest.findById(userId));
 
     assertTrue(exception.getMessage().toLowerCase().contains(userId.toString()));
 
@@ -169,21 +193,32 @@ public class UserServiceIplTest {
 
   /**
    * Helper method that asserts account creation fails with an
-   * {@link jakarta.persistence.EntityExistsException} containing the expected field name.
+   * {@link jakarta.persistence.EntityExistsException} containing the expected
+   * field name.
    * Also verifies that no user is persisted.
    */
   private void assertAccountCreationFails(
       SignUpAccountRequestDto signUpAccountRequestDto,
       Runnable setup,
-      String expectedField) {
+      List<String> expectedFields) {
 
     setup.run();
 
-    EntityExistsException exception = assertThrows(
-        EntityExistsException.class,
+    OwnException ex = assertThrows(
+        OwnException.class,
         () -> underTest.createAccount(signUpAccountRequestDto));
 
-    assertTrue(exception.getMessage().toLowerCase().contains(expectedField));
+    List<FieldError> errors = ex.getErrors();
+
+    // For a single field
+    if (errors.size() == 1) {
+      assertTrue(ex.getErrors().getFirst().getField().contains(expectedFields.getFirst()));
+    } else {
+      // For 3 fields: username, email and Phone
+      for (int i = 0; i < errors.size(); i++) {
+        assertTrue(errors.get(i).getField().contains(expectedFields.get(i)));
+      }
+    }
 
     verify(userRep, never()).save(any());
 

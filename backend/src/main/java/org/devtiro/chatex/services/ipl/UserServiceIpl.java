@@ -56,8 +56,8 @@ public class UserServiceIpl implements UserService {
                     .message("Username already taken").build());
         }
         if (userRep.existsUserByEmail(email)) {
-            errors.add(ApiError.FieldError.builder().field("email").message("Email already taken")
-                    .build());
+            errors.add(ApiError.FieldError.builder().field("email")
+            .message("Email already taken").build());
         }
         if (userRep.existsUserByPhone(phone)) {
             errors.add(ApiError.FieldError.builder().field("phone")

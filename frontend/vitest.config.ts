@@ -15,12 +15,22 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
+      '**/.next/**',
+      '**/coverage/**',
+      '**/test-results/**',
       '__tests__/e2e/**',
+      'src/components/ui/**',
     ],
 
     coverage: {
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['**/__tests__/**'],
+      exclude: [
+        '**/__tests__/**',
+        '**/.next/**',
+        '**/coverage/**',
+        '**/test-results/**',
+        'src/components/ui/**',
+      ],
       reporter: ['text', 'html'],
     },
   },

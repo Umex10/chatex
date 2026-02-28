@@ -43,6 +43,15 @@ describe("SignUpAcc", () => {
     vi.clearAllMocks();
     testStore = createTestStore();
     user = userEvent.setup();
+
+    render(
+      <Provider store={testStore}>
+        <Toaster />
+        <SignUpAcc>
+          <button data-testid="sign-up-button">Open</button>
+        </SignUpAcc>
+      </Provider>
+    );
   });
 
   afterEach(() => {
@@ -56,15 +65,6 @@ describe("SignUpAcc", () => {
 
   it("should successfully register a user and redirect to home", async () => {
 
-    render(
-      <Provider store={testStore}>
-        <Toaster />
-        <SignUpAcc>
-          <button data-testid="sign-up-button">Open</button>
-        </SignUpAcc>
-      </Provider>
-    );
-
     await user.click(screen.getByTestId("sign-up-button"));
 
     await user.type(screen.getByTestId("name"), "John Doe");
@@ -73,10 +73,10 @@ describe("SignUpAcc", () => {
     await user.type(screen.getByTestId("phone"), "12345678901");
     await user.type(screen.getByTestId("key"), "password123");
     await user.type(screen.getByTestId("keyConfirm"), "password123");
-   
+
     const submitBtn = screen.getByTestId("create-account-button");
     await user.click(submitBtn);
-  
+
     await waitFor(() => {
       const successToast = document.querySelector(".toast-success");
 
