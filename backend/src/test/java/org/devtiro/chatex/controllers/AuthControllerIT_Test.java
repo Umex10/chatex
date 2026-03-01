@@ -10,11 +10,11 @@ import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.JwtService;
 import org.devtiro.chatex.services.UserService;
-import org.junit.jupiter.api.BeforeEach; // WICHTIG
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort; // WICHTIG
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;

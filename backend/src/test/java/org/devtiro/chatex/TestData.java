@@ -1,5 +1,7 @@
 package org.devtiro.chatex;
 
+import java.time.LocalDate;
+
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
@@ -15,6 +17,13 @@ public class TestData {
     static String email = "max@mail.com";
     static String phone = "+43 333 22222";
     static String key = "max+1234";
+    static LocalDate createdAt = LocalDate.now();
+    static String avatar =  "avatar";
+    static String banner = "banner";
+    static String bio = "bio";
+    static String location = "location";
+    static String website = "website";
+
 
     /**
      * Creates a test {@link User} entity with predefined values.
@@ -28,6 +37,12 @@ public class TestData {
                 .email(email)
                 .phone(phone)
                 .key(key)
+                .createdAt(LocalDate.now())
+                .avatar(avatar)
+                .banner(banner)
+                .bio(bio)
+                .location(location)
+                .website(website)
                 .build();
     }
 

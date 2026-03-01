@@ -20,8 +20,6 @@ public class UserRepTest {
   @Autowired
   private UserRep underTest;
 
-  
-
   /**
    * Verifies that {@link UserRep#findByUsername(String)} returns an empty Optional
    * when the user does not exist, and a present Optional after the user is persisted.

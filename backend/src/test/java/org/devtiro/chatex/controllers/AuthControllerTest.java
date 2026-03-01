@@ -140,7 +140,7 @@ public class AuthControllerTest {
 
   /**
    * Verifies that a {@code 401 UNAUTHORIZED} response is returned when no
-   * refresh token is present in the request.
+   * refresh token is in the request.
    */
   @Test
   void itShouldNotReturnAccessJwt() throws Exception {

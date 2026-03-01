@@ -43,8 +43,8 @@ public class JwtServiceIplTest {
 
   @BeforeEach
   void setUp() {
-    // Hier setzt du den Secret Key manuell für den Test
-    // "secretKey" muss exakt so heißen wie der Variablenname in deiner Klasse
+    // Since we are writing unit tests in this class, we need to fill the secret_key manually
+    // Normally, boot would do this for us.
     ReflectionTestUtils.setField(underTest, "secretKey", "meinSehrLangesTestSecretDasMindestens32ZeichenHat123!");
   }
 
