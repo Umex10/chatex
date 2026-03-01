@@ -58,26 +58,26 @@ public class UserServiceIplTest {
   @Test
   void itShouldCreateAccount() {
 
-    SignUpAccountRequestDto dto = TestData.createSignUpAccountRequestDto();
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
 
-    when(encoder.encode(dto.getKey())).thenReturn("Encoded Key");
+    when(encoder.encode(requestDto.getKey())).thenReturn("Encoded Key");
 
-    String encodedKey = encoder.encode(dto.getKey());
+    String encodedKey = encoder.encode(requestDto.getKey());
 
     User editedUser = User.builder()
-        .name(dto.getName())
-        .username(dto.getUsername())
-        .email(dto.getEmail())
-        .phone(dto.getPhone())
+      .name(requestDto.getName())
+      .username(requestDto.getUsername())
+      .email(requestDto.getEmail())
+      .phone(requestDto.getPhone())
         .key(encodedKey)
         .build();
 
-    when(userRep.existsUserByUsername(dto.getUsername())).thenReturn(false);
-    when(userRep.existsUserByEmail(dto.getEmail())).thenReturn(false);
-    when(userRep.existsUserByPhone(dto.getPhone())).thenReturn(false);
+    when(userRep.existsUserByUsername(requestDto.getUsername())).thenReturn(false);
+    when(userRep.existsUserByEmail(requestDto.getEmail())).thenReturn(false);
+    when(userRep.existsUserByPhone(requestDto.getPhone())).thenReturn(false);
     when(userRep.save(editedUser)).thenReturn(editedUser);
 
-    User createUser = underTest.createAccount(dto);
+    User createUser = underTest.createAccount(requestDto);
 
     assertEquals(editedUser.getKey(), createUser.getKey());
 
@@ -94,11 +94,11 @@ public class UserServiceIplTest {
   @Test
   void itShouldNotCreateAccountWhenUsernameExists() {
 
-    SignUpAccountRequestDto dto = TestData.createSignUpAccountRequestDto();
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
 
     assertAccountCreationFails(
-        dto,
-        () -> when(userRep.existsUserByUsername(dto.getUsername())).thenReturn(true),
+      requestDto,
+      () -> when(userRep.existsUserByUsername(requestDto.getUsername())).thenReturn(true),
         new ArrayList<String>(Arrays.asList("username")));
   }
 
@@ -110,11 +110,11 @@ public class UserServiceIplTest {
   @Test
   void itShouldNotCreateAccountWhenEmailExists() {
 
-    SignUpAccountRequestDto dto = TestData.createSignUpAccountRequestDto();
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
 
     assertAccountCreationFails(
-        dto,
-        () -> when(userRep.existsUserByEmail(dto.getEmail())).thenReturn(true),
+      requestDto,
+      () -> when(userRep.existsUserByEmail(requestDto.getEmail())).thenReturn(true),
         new ArrayList<String>(Arrays.asList("email")));
 
   }
@@ -127,11 +127,11 @@ public class UserServiceIplTest {
   @Test
   void itShouldNotCreateAccountWhenPhoneExists() {
 
-    SignUpAccountRequestDto dto = TestData.createSignUpAccountRequestDto();
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
 
     assertAccountCreationFails(
-        dto,
-        () -> when(userRep.existsUserByPhone(dto.getPhone())).thenReturn(true),
+      requestDto,
+      () -> when(userRep.existsUserByPhone(requestDto.getPhone())).thenReturn(true),
         new ArrayList<String>(Arrays.asList("phone")));
 
   }
@@ -142,14 +142,14 @@ public class UserServiceIplTest {
   @Test
   void itShouldNotCreateAccountWithCombinedErrors() {
 
-    SignUpAccountRequestDto dto = TestData.createSignUpAccountRequestDto();
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
 
     assertAccountCreationFails(
-        dto,
+        requestDto,
         () -> {
-          when(userRep.existsUserByUsername(dto.getUsername())).thenReturn(true);
-          when(userRep.existsUserByEmail(dto.getEmail())).thenReturn(true);
-          when(userRep.existsUserByPhone(dto.getPhone())).thenReturn(true);
+          when(userRep.existsUserByUsername(requestDto.getUsername())).thenReturn(true);
+          when(userRep.existsUserByEmail(requestDto.getEmail())).thenReturn(true);
+          when(userRep.existsUserByPhone(requestDto.getPhone())).thenReturn(true);
         },
         new ArrayList<String>(Arrays.asList("username", "email", "phone")));
 
@@ -463,7 +463,7 @@ public class UserServiceIplTest {
    * Also verifies that no user is persisted.
    */
   private void assertAccountCreationFails(
-      SignUpAccountRequestDto signUpAccountRequestDto,
+      SignUpAccountRequestDto requestDto,
       Runnable setup,
       List<String> expectedFields) {
 
@@ -471,7 +471,7 @@ public class UserServiceIplTest {
 
     OwnException ex = assertThrows(
         OwnException.class,
-        () -> underTest.createAccount(signUpAccountRequestDto));
+        () -> underTest.createAccount(requestDto));
 
     List<FieldError> errors = ex.getErrors();
 

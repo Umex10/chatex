@@ -1,6 +1,7 @@
 package org.devtiro.chatex;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -11,7 +12,7 @@ import org.devtiro.chatex.domain.entities.User;
  * Contains factory methods for creating consistent test entities and DTOs.
  */
 public class TestData {
-
+    
     static String name = "max";
     static String username = "max123";
     static String email = "max@mail.com";

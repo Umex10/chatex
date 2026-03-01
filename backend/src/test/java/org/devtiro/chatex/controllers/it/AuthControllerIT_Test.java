@@ -1,8 +1,9 @@
-package org.devtiro.chatex.controllers;
+package org.devtiro.chatex.controllers.it;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.devtiro.chatex.TestData;
+import org.devtiro.chatex.controllers.AuthController;
 import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -59,15 +60,8 @@ public class AuthControllerIT_Test {
    */
   @Test
   void bootTest_shouldSignUpUser() {
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
     User user = TestData.createTestUser();
-
-    SignUpAccountRequestDto requestDto = SignUpAccountRequestDto.builder()
-        .name(user.getName())
-        .username(user.getUsername())
-        .email(user.getEmail())
-        .phone(user.getPhone())
-        .key(user.getKey())
-        .build();
 
     webTestClient.post()
         .uri("/api/v1/auth/sign-up")
@@ -100,29 +94,17 @@ public class AuthControllerIT_Test {
    */
   @Test
   void bootTest_shouldSignInUser() {
+    SignUpAccountRequestDto signUpRequestDto = TestData.createSignUpAccountRequestDto();
     User user = TestData.createTestUser();
 
-    // We need a user for this request, so we are accessing the service directly,
-    // instead via request in the sign up test
-    SignUpAccountRequestDto signUpRequest = SignUpAccountRequestDto.builder()
-        .name(user.getName())
-        .username(user.getUsername())
-        .email(user.getEmail())
-        .phone(user.getPhone())
-        .key(user.getKey())
-        .build();
+    userService.createAccount(signUpRequestDto);
 
-    userService.createAccount(signUpRequest);
-
-    SignInAccountRequestDto requestDto = SignInAccountRequestDto.builder()
-        .username(user.getUsername())
-        .key(user.getKey())
-        .build();
+    SignInAccountRequestDto signInRequestDto = TestData.createSignInAccountRequestDto();
 
     webTestClient.post()
         .uri("/api/v1/auth/sign-in")
         .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(requestDto)
+      .bodyValue(signInRequestDto)
         .exchange()
         // STATUS
         .expectStatus().isOk()
@@ -150,19 +132,10 @@ public class AuthControllerIT_Test {
   @Test
   void bootTest_shouldCreateAccessJwt() {
 
+    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
     User user = TestData.createTestUser();
 
-    // We need a user for this request, so we are accessing the service directly,
-    // instead via request in the sign up test
-    SignUpAccountRequestDto signUpRequest = SignUpAccountRequestDto.builder()
-        .name(user.getName())
-        .username(user.getUsername())
-        .email(user.getEmail())
-        .phone(user.getPhone())
-        .key(user.getKey())
-        .build();
-
-    userService.createAccount(signUpRequest);
+    userService.createAccount(requestDto);
 
     // Since a refresh tk is essential to create an access tk
     String refreshTk = jwtService.createRefreshTk(user.getUsername(),

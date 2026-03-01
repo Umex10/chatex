@@ -27,7 +27,7 @@ public class ErrorController {
    * @return ResponseEntity with a 400 Bad Request status and the list of field errors
    */
   @ExceptionHandler(OwnException.class)
-  public ResponseEntity<ApiError> handleEntityExistsException(OwnException ex) {
+  public ResponseEntity<ApiError> handleEntityOwnException(OwnException ex) {
     ApiError error = ApiError.builder()
     .status(HttpStatus.BAD_REQUEST.value())
     .message("There are details that are already taken by others.")
