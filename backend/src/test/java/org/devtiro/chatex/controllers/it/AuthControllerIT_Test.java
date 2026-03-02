@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -46,6 +47,9 @@ public class AuthControllerIT_Test {
   @Autowired
   private JwtService jwtService;
 
+  @Autowired
+  private PasswordEncoder encoder;
+
   @BeforeEach
   void setUp() {
     userRep.deleteAll();
@@ -62,6 +66,7 @@ public class AuthControllerIT_Test {
    */
   @Test
   void bootTest_shouldSignUpUser() {
+
     SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
     User user = TestData.createTestUser();
 
@@ -97,10 +102,12 @@ public class AuthControllerIT_Test {
   @Test
   void bootTest_shouldSignInUser() {
 
+    // create account with custom encoder, since the controller tests every element
+    // If we wouldn't encode it, it would throw an error
+    String key = encoder.encode(TestData.createTestUser().getKey());
     User user = TestData.createTestUser();
-
-    // create account
-    userRep.save(TestData.createTestUser());
+    user.setKey(key);
+    userRep.save(user);
 
     SignInAccountRequestDto signInRequestDto = TestData.createSignInAccountRequestDto();
 

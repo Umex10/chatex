@@ -3,9 +3,14 @@ package org.devtiro.chatex.controllers.it;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
+import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.domain.mappers.UserMapper;
@@ -179,6 +184,53 @@ public class UserControllerIT_Test {
         .expectStatus().isOk()
         .expectBody()
         .jsonPath("$.length()").isEqualTo(0);
+  }
+
+  /**
+   * Verifies that the follow labels are correctly set in the FollowDto responses
+   * when retrieving followers and following lists. Creates a bidirectional follow
+   * relationship between two users and confirms that the flags isUserFollowingTarget
+   * and isTargetFollowingUser are properly populated.
+   */
+  @Test
+  void bootTest_shouldSetFollowLabel() {
+
+    User user1 = userRep.save(TestData.createTestUser());
+    User user2 = userRep.save(TestData.createTestUser("unique"));
+
+
+    // Since it is an biderectional relation
+    user1.setFollowers(new HashSet<>(Set.of(user2)));
+    user1.setFollowing(new HashSet<>(Set.of(user2)));
+    
+    user2.setFollowing(new HashSet<>(Set.of(user1)));
+    user2.setFollowers(new HashSet<>(Set.of(user1)));
+
+    userRep.save(user1);
+    userRep.save(user2);
+
+    String accessTk = jwtService.createAccessTk(user1.getUsername(), TkName.ACCESS);
+
+    List<FollowDto> followers = webTestClient.get()
+        .uri("/api/v1/user/followers/" + user1.getUsername())
+        .headers(headers -> headers.setBearerAuth(accessTk))
+        .exchange()
+        .expectStatus().isOk()
+        .expectBodyList(FollowDto.class)
+        .returnResult()
+        .getResponseBody();
+
+    List<FollowDto> following = webTestClient.get()
+        .uri("/api/v1/user/following/" + user1.getUsername())
+        .headers(headers -> headers.setBearerAuth(accessTk))
+        .exchange()
+        .expectStatus().isOk()
+        .expectBodyList(FollowDto.class)
+        .returnResult()
+        .getResponseBody();
+
+    assertTrue(followers.getFirst().isUserFollowingTarget());
+    assertTrue(following.getFirst().isTargetFollowingUser());
   }
 
   /**
