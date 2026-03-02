@@ -1,7 +1,6 @@
 package org.devtiro.chatex;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -12,19 +11,18 @@ import org.devtiro.chatex.domain.entities.User;
  * Contains factory methods for creating consistent test entities and DTOs.
  */
 public class TestData {
-    
+
     static String name = "max";
     static String username = "max123";
     static String email = "max@mail.com";
     static String phone = "+43 333 22222";
     static String key = "max+1234";
     static LocalDate createdAt = LocalDate.now();
-    static String avatar =  "avatar";
+    static String avatar = "avatar";
     static String banner = "banner";
     static String bio = "bio";
     static String location = "location";
     static String website = "website";
-
 
     /**
      * Creates a test {@link User} entity with predefined values.
@@ -44,6 +42,23 @@ public class TestData {
                 .bio(bio)
                 .location(location)
                 .website(website)
+                .build();
+    }
+
+    public static User createTestUser(String unique) {
+
+        return User.builder()
+                .name(name + unique)
+                .username(username + unique)
+                .email(email + unique)
+                .phone(phone + unique)
+                .key(key + unique)
+                .createdAt(LocalDate.now())
+                .avatar(avatar + unique)
+                .banner(banner + unique)
+                .bio(bio + unique)
+                .location(location + unique)
+                .website(website + unique)
                 .build();
     }
 

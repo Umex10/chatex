@@ -23,7 +23,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Integration tests for {@link AuthController}.
  * Boots the full Spring application context with a random port and uses
- * {@link WebTestClient} to perform real HTTP requests against the authentication endpoints.
+ * {@link WebTestClient} to perform real HTTP requests against the
+ * authentication endpoints.
  *
  * @see AuthController
  */
@@ -54,7 +55,8 @@ public class AuthControllerIT_Test {
   }
 
   /**
-   * Verifies that the sign-up endpoint creates a new user, returns an access token
+   * Verifies that the sign-up endpoint creates a new user, returns an access
+   * token
    * with expiration info, and sets a refresh JWT cookie.
    * Also asserts that the user is persisted in the database.
    */
@@ -94,17 +96,18 @@ public class AuthControllerIT_Test {
    */
   @Test
   void bootTest_shouldSignInUser() {
-    SignUpAccountRequestDto signUpRequestDto = TestData.createSignUpAccountRequestDto();
+
     User user = TestData.createTestUser();
 
-    userService.createAccount(signUpRequestDto);
+    // create account
+    userRep.save(TestData.createTestUser());
 
     SignInAccountRequestDto signInRequestDto = TestData.createSignInAccountRequestDto();
 
     webTestClient.post()
         .uri("/api/v1/auth/sign-in")
         .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(signInRequestDto)
+        .bodyValue(signInRequestDto)
         .exchange()
         // STATUS
         .expectStatus().isOk()
@@ -132,10 +135,10 @@ public class AuthControllerIT_Test {
   @Test
   void bootTest_shouldCreateAccessJwt() {
 
-    SignUpAccountRequestDto requestDto = TestData.createSignUpAccountRequestDto();
     User user = TestData.createTestUser();
 
-    userService.createAccount(requestDto);
+    // create account
+    userRep.save(TestData.createTestUser());
 
     // Since a refresh tk is essential to create an access tk
     String refreshTk = jwtService.createRefreshTk(user.getUsername(),

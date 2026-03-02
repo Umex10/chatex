@@ -1,15 +1,9 @@
 package org.devtiro.chatex.controllers.it;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.UUID;
-
 import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
-import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.UserRep;
-import org.devtiro.chatex.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +23,6 @@ public class ErrorControllerIT_Test {
   private int port;
 
   @Autowired
-  private UserService userService;
-
-  @Autowired
   private UserRep userRep;
 
   @BeforeEach
@@ -47,8 +38,8 @@ public class ErrorControllerIT_Test {
 
     SignUpAccountRequestDto duplicateDto = TestData.createSignUpAccountRequestDto();
 
-    // create account
-    userService.createAccount(duplicateDto);
+     // create account
+    userRep.save(TestData.createTestUser());
 
     // Create account but the account already exists
     webTestClient.post()

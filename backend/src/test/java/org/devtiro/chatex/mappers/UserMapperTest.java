@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 
 public class UserMapperTest {
 
-  private UserMapper mapper = spy(new UserMapperImpl());
+  // We will watch this class
+  private UserMapper mapper = spy(new UserMapperImpl()); 
 
   @Test
   void shouldCalculateFollowersCount() {
