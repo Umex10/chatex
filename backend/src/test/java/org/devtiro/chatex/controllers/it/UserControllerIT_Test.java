@@ -20,6 +20,12 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+/**
+ * Integration tests for {@link org.devtiro.chatex.controllers.UserController}.
+ * Boots the full Spring application context with a random pt and uses
+ * {@link WebTestClient} to conduct real HTTP requests against the
+ * user management endpoints.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class UserControllerIT_Test {
@@ -49,6 +55,10 @@ public class UserControllerIT_Test {
         .build();
   }
 
+  /**
+   * Verifies that an authenticated user can retrieve their own profile data
+   * by making a GET request to the /user endpoint.
+   */
   @Test
   void bootTest_ShouldGetUser() {
 
@@ -71,6 +81,10 @@ public class UserControllerIT_Test {
 
   }
 
+  /**
+   * Verifies that an authenticated user can retrieve another user's profile
+   * by username by making a GET request to /user/{username}.
+   */
   @Test
   void bootTest_ShouldGetUserByUsername() {
 
@@ -91,6 +105,10 @@ public class UserControllerIT_Test {
 
   }
 
+  /**
+   * Verifies that an authenticated user can successfully update their own profile
+   * by making a PATCH request with updated field values.
+   */
   @Test
   void bootTest_ShouldUpdateUser() {
 
@@ -119,6 +137,11 @@ public class UserControllerIT_Test {
         .jsonPath("$.bio").isEqualTo(updateUserDto.getBio());
   }
 
+  /**
+   * Verifies that an authenticated user can retrieve a user's followers list
+   * by making a GET request to /user/followers/{username}.
+   * Expects an empty list for a new user with no followers.
+   */
   @Test
   void bootTest_ShouldGetFollowersList() {
     // create account
@@ -136,6 +159,11 @@ public class UserControllerIT_Test {
         .jsonPath("$.length()").isEqualTo(0);
   }
 
+  /**
+   * Verifies that an authenticated user can retrieve a user's following list
+   * by making a GET request to /user/following/{username}.
+   * Expects an empty list for a new user who is not following anyone.
+   */
   @Test
   void bootTest_ShouldGetFollowingList() {
     // create account
@@ -153,6 +181,11 @@ public class UserControllerIT_Test {
         .jsonPath("$.length()").isEqualTo(0);
   }
 
+  /**
+   * Verifies that an authenticated user can successfully follow another user
+   * by making a POST request to /user/follow/{username}.
+   * Confirms the follow relationship is persisted in the database.
+   */
   @Test
   void bootTest_UserShouldFollowTarget() {
     User targetUser = userRep.save(TestData.createTestUser());
@@ -172,6 +205,11 @@ public class UserControllerIT_Test {
     assertTrue(userRep.isUserFollowingTarget(targetUser.getUsername(), requestingUser.getId()));
   }
 
+  /**
+   * Verifies that an authenticated user can successfully unfollow another user
+   * by making a POST request to /user/unfollow/{username}.
+   * Confirms the follow relationship is removed from the database.
+   */
   @Test
   void bootTest_UserShouldUnfollowTarget() {
     User targetUser = userRep.save(TestData.createTestUser());

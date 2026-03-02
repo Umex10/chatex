@@ -13,6 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+/**
+ * Integration tests for {@link org.devtiro.chatex.controllers.ErrorController}.
+ * Boots the full Spring application context with a random pt and uses
+ * {@link WebTestClient} to verify that custom exceptions are properly handled
+ * and return the expected error responses.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class ErrorControllerIT_Test {
@@ -33,6 +39,11 @@ public class ErrorControllerIT_Test {
         .build();
   }
 
+  /**
+   * Verifies that when attempting to sign up with details that already exist,
+   * an {@link org.devtiro.chatex.domain.exceptions.OwnException} is handled and
+   * returned as a 400 Bad Request with appropriate field errors.
+   */
   @Test
   void bootTest_shouldHandleOwnException() {
 
@@ -60,6 +71,11 @@ public class ErrorControllerIT_Test {
         .jsonPath("$.errors").isArray();
   }
 
+  /**
+   * Verifies that when attempting to sign in with incorrect credentials,
+   * an {@link org.springframework.security.core.AuthenticationException} is handled
+   * and returned as a 401 Unauthorized with an appropriate error message.
+   */
   @Test
   void bootTest_shouldHandleAuthenticationException() {
 

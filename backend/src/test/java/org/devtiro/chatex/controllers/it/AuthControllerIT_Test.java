@@ -23,7 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Integration tests for {@link AuthController}.
  * Boots the full Spring application context with a random port and uses
- * {@link WebTestClient} to perform real HTTP requests against the
+ * {@link WebTestClient} to conduct real HTTP requests against the
  * authentication endpoints.
  *
  * @see AuthController

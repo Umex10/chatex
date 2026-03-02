@@ -45,6 +45,13 @@ public class TestData {
                 .build();
     }
 
+    /**
+     * Creates a test {@link User} entity with predefined values plus a unique suffix.
+     * Useful for creating multiple distinct users in a single test.
+     *
+     * @param unique a suffix to append to each field to ensure uniqueness
+     * @return a new User instance populated with test data plus the unique suffix
+     */
     public static User createTestUser(String unique) {
 
         return User.builder()

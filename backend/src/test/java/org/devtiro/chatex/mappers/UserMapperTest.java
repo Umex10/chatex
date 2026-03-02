@@ -13,11 +13,22 @@ import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.domain.mappers.UserMapperImpl;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for {@link UserMapper}.
+ * Uses a spy of {@link UserMapperImpl} to verify that helper methods
+ * are invoked correctly during entity-to-DTO mapping and that
+ * follower/following counts are calculated as expected.
+ */
 public class UserMapperTest {
 
   // We will watch this class
   private UserMapper mapper = spy(new UserMapperImpl()); 
 
+  /**
+   * Verifies that the mapper correctly calculates the followers count
+   * and invokes the {@link UserMapper#calculateFollowersCount(Set)} method
+   * when mapping a user with one follower.
+   */
   @Test
   void shouldCalculateFollowersCount() {
 
@@ -35,6 +46,10 @@ public class UserMapperTest {
 
   }
 
+  /**
+   * Verifies that the mapper correctly calculates the followers count as zero
+   * when the user has no followers (null followers set).
+   */
   @Test
   void shouldCalculateFollowersCountToZero() {
 
@@ -50,6 +65,11 @@ public class UserMapperTest {
 
   }
 
+  /**
+   * Verifies that the mapper correctly calculates the following count
+   * and invokes the {@link UserMapper#calculateFollowingCount(Set)} method
+   * when mapping a user who is following one other user.
+   */
   @Test
   void shouldCalculateFollowingCount() {
 
@@ -67,6 +87,10 @@ public class UserMapperTest {
 
   }
 
+  /**
+   * Verifies that the mapper correctly calculates the following count as zero
+   * when the user is not following anyone (null following set).
+   */
   @Test
   void shouldCalculateFollowingCountToZero() {
 
