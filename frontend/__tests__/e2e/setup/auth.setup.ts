@@ -10,33 +10,44 @@ import { getTestData } from '../utils/getTestData';
 const authFile = (browserName: string) => `playwright/.auth/${browserName}.json`;
 
 setup('authenticate', async ({ page, baseURL, browserName }) => {
-  const { username, email, phone, key } = getTestData(browserName, "");
 
-  await page.goto('/');
+  const mainUser = getTestData(browserName, "main");
+  const userToFollow1 = getTestData(browserName, "target1");
 
-  await expect(page).toHaveURL(`${baseURL}/`);
-  const signUpButton = page.getByTestId("sign-up-button");
-  await signUpButton.click();
+  const usersToCreate = [userToFollow1, mainUser]; // Set mainuser at the end
 
-  await page.waitForSelector('[role="dialog"]');
+  for (const user of usersToCreate) {
+    await page.goto('/');
 
-  // Fill using shared credentials
-  await page.getByTestId("name").fill("Test User");
-  await page.getByTestId("username").fill(username);
-  await page.getByTestId("email").fill(email);
-  await page.getByTestId("phone").fill(phone);
-  await page.getByTestId("key").fill(key);
-  await page.getByTestId("keyConfirm").fill(key);
+    await page.getByTestId("sign-up-button").click();
+    await page.waitForSelector('[role="dialog"]');
 
-  const createAccountButton = page.getByTestId("create-account-button");
-  await expect(createAccountButton).not.toBeDisabled({ timeout: 7000 });
-  await createAccountButton.click();
+    await page.getByTestId("name").fill(user.username);
+    await page.getByTestId("username").fill(user.username);
+    await page.getByTestId("email").fill(user.email);
+    await page.getByTestId("phone").fill(user.phone);
+    await page.getByTestId("key").fill(user.key);
+    await page.getByTestId("keyConfirm").fill(user.key);
 
-  await page.waitForURL(`${baseURL}/home`, { timeout: 15000 });
-  await expect(page).toHaveURL(`${baseURL}/home`);
+    await page.getByTestId("create-account-button").click();
 
-  const successToast = page.locator('.toast-success');
-  await expect(successToast).toBeVisible({ timeout: 5000 });
+    await page.waitForURL(`${baseURL}/home`);
+    await expect(page.locator('.toast-success')).toBeVisible();
 
+    // If it is not the main user, then clear the storae as well as cookies, so we only have
+    // one refresh tk at the end for the tests
+    if (user !== mainUser) {
+
+      await page.context().clearCookies();
+      await page.evaluate(() => localStorage.clear());
+    }
+
+    // Now save them into the localstorae so we have still access to them
+    await page.evaluate(({ user1}) => {
+      localStorage.setItem('test_user_1', user1);
+    }, { user1: userToFollow1.username });
+  }
+
+  // Only save the authFile if it is the mainUser 
   await page.context().storageState({ path: authFile(browserName) });
 });

@@ -26,15 +26,18 @@ const Layout = ({ children }: Readonly<{
           <TabsTrigger value="verified-followers"
             className={`flex-1 text-lg
                   ${activeTab === "verified-followers" ? "underline decoration-2 underline-offset-20" : ""}`}
-                  onClick={() => router.push(`/${username}/verifiedFollowers`)}>Verified Followers</TabsTrigger>
+                  onClick={() => router.push(`/${username}/verifiedFollowers`)}
+                  data-testid="verified-followers-label">Verified Followers</TabsTrigger>
           <TabsTrigger value="followers"
             className={`flex-1 text-lg
                   ${activeTab === "followers" ? "underline decoration-2 underline-offset-20" : ""}`}
-                  onClick={() => router.push(`/${username}/followers`)}>Followers</TabsTrigger>
+                  onClick={() => router.push(`/${username}/followers`)}
+                  data-testid="followers-label">Followers</TabsTrigger>
           <TabsTrigger value="following"
             className={`flex-1 text-lg
                   ${activeTab === "following" ? "underline decoration-2 underline-offset-20" : ""}`}
-                  onClick={() => router.push(`/${username}/following`)}>Following</TabsTrigger>
+                  onClick={() => router.push(`/${username}/following`)}
+                  data-testid="following-label">Following</TabsTrigger>
         </TabsList>
         <TabsContent value="verified-followers" className='m-0 flex-1 sm:border'>{children}</TabsContent>
         <TabsContent value="followers" className='m-0 flex-1 sm:border'>{children}</TabsContent>

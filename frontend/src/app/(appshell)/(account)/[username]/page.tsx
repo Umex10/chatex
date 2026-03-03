@@ -113,13 +113,15 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           </Link>
           <div className='flex flex-row gap-4'>
             <h4 className='flex gap-1'
-              onClick={() => router.push(`${username}/following`)}>
+              onClick={() => router.push(`${username}/following`)}
+              data-testid="following-list">
               <span className='font-bold'>{followingCount}</span>
               <span className='opacity-50'>Following</span>
             </h4>
 
             <h4 className='flex gap-1'
-              onClick={() => router.push(`${username}/followers`)}>
+              onClick={() => router.push(`${username}/followers`)}
+              data-testid="followers-list">
               <span className='font-bold'>{followersCount}</span>
               <span className='opacity-50'>Follower</span>
             </h4>
@@ -136,6 +138,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           <Button variant={!isRequestingUserFollowing ? "outline" : "secondary"}
             className={`${isOwnAccount ? "hidden" : ""}
               rounded-xl px-3 py-2 border text-base font-bold`}
+              data-testid="follow-btn"
             onClick={onToggleFollow}>
             {followText}
           </Button>

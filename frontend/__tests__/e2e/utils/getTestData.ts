@@ -6,12 +6,11 @@
  */
 export const getTestData = (browserName: string, uniqueIdentifier: string) => {
   const uniqueId = `${browserName}`; // Unique ID per browser run
-  console.log(browserName)
   const uniqueLength = browserName.toLowerCase() === "webkit" ? 4 : 5;
   const unique = uniqueLength.toString() + uniqueIdentifier.length;
   return {
     username: `${uniqueId + uniqueIdentifier}`,
-    email: `${uniqueId}@example.com${uniqueIdentifier}`,
+    email: `${uniqueId}@${uniqueIdentifier}.com`,
     phone: `+4912345${unique}6789${unique}`,
     key: "testKey123"
   };

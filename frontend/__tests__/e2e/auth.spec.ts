@@ -2,7 +2,6 @@ import page from "@/app/(appshell)/(account)/[username]/(follow)/verifiedFollowe
 import { test, expect } from "@playwright/test";
 import { getTestData } from "./utils/getTestData";
 
-
 test.describe.configure({ mode: 'serial' });
 
 test.beforeEach(async ({ page }) => {
