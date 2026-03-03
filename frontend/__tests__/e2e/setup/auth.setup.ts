@@ -12,9 +12,9 @@ const authFile = (browserName: string) => `playwright/.auth/${browserName}.json`
 setup('authenticate', async ({ page, baseURL, browserName }) => {
 
   const mainUser = getTestData(browserName, "main");
-  const userToFollow1 = getTestData(browserName, "target1");
+  const userToFollow = getTestData(browserName, "target1");
 
-  const usersToCreate = [userToFollow1, mainUser]; // Set mainuser at the end
+  const usersToCreate = [userToFollow, mainUser]; // Set mainuser at the end
 
   for (const user of usersToCreate) {
     await page.goto('/');
@@ -43,9 +43,9 @@ setup('authenticate', async ({ page, baseURL, browserName }) => {
     }
 
     // Now save them into the localstorae so we have still access to them
-    await page.evaluate(({ user1}) => {
-      localStorage.setItem('test_user_1', user1);
-    }, { user1: userToFollow1.username });
+    await page.evaluate(({user}) => {
+      localStorage.setItem('test_user', user);
+    }, { user: userToFollow.username });
   }
 
   // Only save the authFile if it is the mainUser 

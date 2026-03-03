@@ -122,7 +122,10 @@ const Settings = () => {
 
     try {
       await updateUser(payload).unwrap();
-      toast.success('Your Account was successfully updated!', { id: toastId });
+      toast.success("Your Account was successfully updated!", {
+        id: toastId,
+        className: "toast-success"
+      });
 
       setAvatarView(null);
       setBannerView(null);
@@ -177,7 +180,8 @@ const Settings = () => {
         <Button variant="secondary"
           type="submit"
           form="edit-account-form"
-          className='rounded-xl bg-violet-500'>
+          className='rounded-xl bg-violet-500'
+          data-testid="save-changes-btn">
           Save Changes
         </Button>
       </ReturnHeader>
@@ -198,6 +202,7 @@ const Settings = () => {
             quality="auto"
             loading='eager'
             className="w-full h-40 object-cover group-hover:opacity-70 transition-opacity"
+            data-testid="banner-img"
           />
 
           <div className='invisible absolute inset-0 flex items-center justify-center group-hover:visible'>
@@ -211,6 +216,7 @@ const Settings = () => {
           className="hidden"
           accept="image/*"
           form='edit-account-form'
+          data-testid="banner-value"
           onChange={(e) => handleFileChange(e, 'banner')}
         />
 
@@ -233,6 +239,7 @@ const Settings = () => {
               quality="auto"
               loading='eager'
               className="w-full h-full object-cover group-hover:opacity-60 transition-opacity"
+              data-testid="avatar-img"
             />
 
             <div className='invisible absolute inset-0 flex items-center justify-center group-hover:visible'>
@@ -246,7 +253,9 @@ const Settings = () => {
             className="hidden"
             accept="image/*"
             form='edit-account-form'
+            data-testid="avatar-value"
             onChange={(e) => handleFileChange(e, 'avatar')}
+            
           />
         </div>
 
@@ -273,6 +282,7 @@ const Settings = () => {
                     <Input
                       {...field}
                       className="border-none bg-transparent pt-12 pb-4 px-3 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+                      data-testid="name-field"
                     />
                   </FormControl>
                   <FormMessage className="text-xs font-semibold px-3 pb-2 text-red-500" />
@@ -293,6 +303,7 @@ const Settings = () => {
                     <Textarea
                       {...field}
                       className="border-none bg-transparent pt-12 pb-3 px-3 focus-visible:ring-0 focus-visible:ring-offset-0 resize-none min-h-[120px] text-base"
+                      data-testid="bio-field"
                     />
                   </FormControl>
                   <FormMessage className="text-xs font-semibold px-3 pb-2 text-red-500" />
@@ -313,6 +324,7 @@ const Settings = () => {
                     <Input
                       {...field}
                       className="border-none bg-transparent pt-12 pb-4 px-3 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+                      data-testid="location-field"
                     />
                   </FormControl>
                   <FormMessage className="text-xs font-semibold px-3 pb-2 text-red-500" />
@@ -333,6 +345,7 @@ const Settings = () => {
                     <Input
                       {...field}
                       className="border-none bg-transparent pt-12 pb-4 px-3 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+                      data-testid="website-field"
                     />
                   </FormControl>
                   <FormMessage className="text-xs font-semibold px-3 pb-2 text-red-500" />

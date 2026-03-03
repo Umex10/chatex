@@ -42,7 +42,8 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
             md:max-w-none md:whitespace-normal'>{name}</span>
             <div className='flex flex-row items-center gap-1'>
               <span className='max-w-[80px] truncate 
-            md:max-w-none md:whitespace-normal'>@{username}</span>
+            md:max-w-none md:whitespace-normal'
+            data-testid="username-in-list">@{username}</span>
 
               {targetFollowingUser &&
               <span className='p-1 bg-gray-800 text-xs'>Follows you</span>}
@@ -54,7 +55,8 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
           <div className='flex-1 flex flex-row gap-2 items-center'>
             <Button variant={!userFollowingTarget ? "outline" : "secondary"}
               className={"flex-1 h-11 py-1 rounded-xl"}
-               onClick={onToggleFollow}>
+               onClick={onToggleFollow}
+               data-testid="follow-btn-in-list">
               {followText}
             </Button>
             <Ellipsis className='flex-1'></Ellipsis>

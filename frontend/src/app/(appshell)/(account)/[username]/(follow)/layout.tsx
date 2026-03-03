@@ -16,7 +16,7 @@ const Layout = ({ children }: Readonly<{
   const router = useRouter();
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col' data-testid="follow-site">
 
       <ReturnHeader></ReturnHeader>
 

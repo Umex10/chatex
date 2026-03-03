@@ -25,6 +25,7 @@ const ReturnHeader = ({ children }: Readonly<{
             className="bg-transparent [&_svg]:!size-6 px-0"
             onClick={() => router.back()}
             aria-label="Zurück"
+            data-testid="return-btn"
           >
             <ArrowLeft/>
           </Button>

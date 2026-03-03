@@ -115,14 +115,14 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
             <h4 className='flex gap-1'
               onClick={() => router.push(`${username}/following`)}
               data-testid="following-list">
-              <span className='font-bold'>{followingCount}</span>
+              <span className='font-bold' data-testid="following-count">{followingCount}</span>
               <span className='opacity-50'>Following</span>
             </h4>
 
             <h4 className='flex gap-1'
               onClick={() => router.push(`${username}/followers`)}
               data-testid="followers-list">
-              <span className='font-bold'>{followersCount}</span>
+              <span className='font-bold' data-testid="followers-count">{followersCount}</span>
               <span className='opacity-50'>Follower</span>
             </h4>
           </div>
@@ -131,7 +131,8 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
         <div className='h-full flex justify-end items-start'>
 
           <Link href="/settings" className={`${isOwnAccount ? "" : "hidden"}
-              rounded-xl px-3 py-2 border text-base font-bold`}>
+              rounded-xl px-3 py-2 border text-base font-bold`}
+              data-testid="edit-account-btn">
             Account bearbeiten
           </Link>
 

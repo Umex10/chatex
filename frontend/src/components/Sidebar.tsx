@@ -236,7 +236,8 @@ export function AppSidebar() {
                     <span className="text-lg font-medium truncate w-full">
                       {user?.name ?? "Load..."}
                     </span>
-                    <span className="text-base text-gray-500 truncate w-full">
+                    <span className="text-base text-gray-500 truncate w-full"
+                    data-testid="username-in-sidebar">
                       {user?.username ? `@${user.username}` : "@..."}
                     </span>
                   </div>
