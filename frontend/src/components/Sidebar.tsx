@@ -56,12 +56,11 @@ export function AppSidebar() {
   const { data: user, isLoading } = useGetUserQuery(undefined);
 
   const navItems = [
-    { title: "Home", href: "/home", icon: Home },
-    { title: "Search", href: "#", icon: Search },
-    { title: "Notifications", href: "#", icon: Bell },
-    { title: "Messages", href: "#", icon: Mail },
-    { title: "Account", href: `/${user?.username}`, icon: User },
-    { title: "More", href: "#", icon: MoreHorizontal },
+    { title: "Home", href: "/home", icon: Home, dataTestId: "home-icon" },
+    { title: "Search", href: "#", icon: Search, dataTestId: "search-icon"  },
+    { title: "Messages", href: "#", icon: Mail, dataTestId: "message-icon"  },
+    { title: "Account", href: `/${user?.username}`, icon: User, dataTestId: "account-icon"  },
+    { title: "More", href: "#", icon: MoreHorizontal, dataTestId: "more-icon"  },
   ]
 
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";
@@ -173,7 +172,8 @@ export function AppSidebar() {
                           if (`${path}` === item.href) {
                             e.preventDefault();
                           }
-                        }}>
+                        }}
+                        data-testid={item.dataTestId}>
                         <item.icon
                           className={cn(
                             "transition-all",

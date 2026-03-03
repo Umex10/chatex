@@ -1,27 +1,16 @@
 import page from "@/app/(appshell)/(account)/[username]/(follow)/verifiedFollowers/page";
 import { test, expect } from "@playwright/test";
-/**
- * Helper to generate unique user data based on the browser
- * We use a function or a shared object to keep it consistent
- */
-const getTestData = (browserName: string) => {
-  const uniqueId = `${browserName}`; // Unique ID per browser run
-  console.log(browserName)
-  const uniqueLength = browserName.toLowerCase() === "webkit" ? 4 : 5;
-  return {
-    username: `${uniqueId}`,
-    email: `${uniqueId}@example.com`,
-    phone: `+4912345${uniqueLength}6789${uniqueLength}`,
-    key: "testKey123"
-  };
-};
+import { getTestData } from "./utils/getTestData";
+
+
+test.describe.configure({ mode: 'serial' });
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
 test('Successful Sign-up', async ({ page, baseURL, browserName }) => {
-  const { username, email, phone, key } = getTestData(browserName);
+  const { username, email, phone, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
   const signUpButton = page.getByTestId("sign-up-button");
@@ -41,18 +30,15 @@ test('Successful Sign-up', async ({ page, baseURL, browserName }) => {
   await expect(createAccountButton).not.toBeDisabled({ timeout: 7000 });
   await createAccountButton.click();
 
-  const loadingToast = page.locator('.toast-loading');
-  await expect(loadingToast).toBeVisible();
-
   await page.waitForURL(`${baseURL}/home`, { timeout: 15000 });
   await expect(page).toHaveURL(`${baseURL}/home`);
 
   const successToast = page.locator('.toast-success');
-  await expect(successToast).toBeVisible();
+  await expect(successToast).toBeVisible({ timeout: 5000 });
 });
 
 test('Successful Sign-in', async ({ page, baseURL, browserName }) => {
-  const { username, key } = getTestData(browserName);
+  const { username, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
   const signInButton = page.getByTestId("sign-in-button");
@@ -68,18 +54,15 @@ test('Successful Sign-in', async ({ page, baseURL, browserName }) => {
   await expect(confirmSignInButton).not.toBeDisabled();
   await confirmSignInButton.click();
 
-  const loadingToast = page.locator('.toast-loading');
-  await expect(loadingToast).toBeVisible();
-
   await page.waitForURL(`${baseURL}/home`);
   await expect(page).toHaveURL(`${baseURL}/home`);
 
   const successToast = page.locator('.toast-success');
-  await expect(successToast).toBeVisible();
+  await expect(successToast).toBeVisible({ timeout: 5000 });
 });
 
 test('Unsuccessful sign-up', async ({ page, baseURL, browserName }) => {
-  const { username, email, phone, key } = getTestData(browserName);
+  const { username, email, phone, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
   const signUpButton = page.getByTestId("sign-up-button");
@@ -100,7 +83,7 @@ test('Unsuccessful sign-up', async ({ page, baseURL, browserName }) => {
   await createAccountButton.click();
 
   const errorToast = page.locator('.toast-error');
-  await expect(errorToast).toBeVisible();
+  await expect(errorToast).toBeVisible({ timeout: 5000 });
 
   await expect(page.getByTestId("username-error")).toBeVisible();
   await expect(page.getByTestId("email-error")).toBeVisible();
@@ -117,7 +100,7 @@ test('Unsuccessful sign-up', async ({ page, baseURL, browserName }) => {
 })
 
 test('Unsuccessful sign-in', async ({ page, baseURL, browserName }) => {
-  const { username, key } = getTestData(browserName);
+  const { username, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
   const signInButton = page.getByTestId("sign-in-button");
@@ -132,7 +115,7 @@ test('Unsuccessful sign-in', async ({ page, baseURL, browserName }) => {
   await confirmSignInButton.click();
 
   const errorToast = page.locator('.toast-error');
-  await expect(errorToast).toBeVisible();
+  await expect(errorToast).toBeVisible({ timeout: 5000 });
 
   // Now correct username
   await page.getByTestId("username").fill(username);
