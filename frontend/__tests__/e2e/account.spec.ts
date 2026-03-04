@@ -12,6 +12,8 @@ test('Successful edit of the account', async ({ page, baseURL }) => {
   const accountIcon = page.getByTestId("account-icon");
   await accountIcon.click();
 
+  await page.waitForLoadState('networkidle');
+
   const usernameInSidebar = await page.getByTestId("username-in-sidebar").innerText();
   const usernameInSidebarCut = usernameInSidebar.slice(1,);
 
@@ -38,8 +40,8 @@ test('Successful edit of the account', async ({ page, baseURL }) => {
   await bioField.fill("new bio");
   await locationField.fill("new location");
   await websiteField.fill("http://localhost.com");
-  await avatarValue.setInputFiles("public/acc.png");
-  await bannerValue.setInputFiles("public/acc.png");
+  await avatarValue.setInputFiles("public/avatar.png");
+  await bannerValue.setInputFiles("public/avatar.png");
 
   const saveChangesButton = page.getByTestId("save-changes-btn");
   await saveChangesButton.click();
