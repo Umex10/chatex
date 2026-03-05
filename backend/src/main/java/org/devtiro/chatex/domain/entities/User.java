@@ -66,7 +66,8 @@ public class User {
     private String website;
 
     @ManyToMany
-    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "following_id"))
+    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"),
+     inverseJoinColumns = @JoinColumn(name = "following_id"))
     @Builder.Default
     private Set<User> following = new HashSet<>();
 
