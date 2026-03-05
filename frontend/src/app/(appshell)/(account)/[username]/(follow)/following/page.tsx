@@ -5,6 +5,10 @@ import Follow from '@/components/Follow'
 import { usePathname } from 'next/navigation';
 import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/apiSlice';
 
+/**
+ * Page displaying the list of accounts a given user is following.
+ * Extracts the username from the URL path and fetches the following list via RTK Query.
+ */
 const Following = () => {
 
   const pathname = usePathname();

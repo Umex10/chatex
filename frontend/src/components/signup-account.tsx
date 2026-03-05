@@ -67,6 +67,7 @@ const createAccountSchema = z
  */
 export type SignUpAccountValues = z.infer<typeof createAccountSchema>;
 
+/** Props for the SignUpAcc dialog component. */
 interface SignUpAccountProps {
     children: React.ReactNode;
 }

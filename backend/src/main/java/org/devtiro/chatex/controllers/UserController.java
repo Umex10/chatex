@@ -97,6 +97,12 @@ public class UserController {
 
   }
 
+  /**
+   * Retrieves the list of followers for the user with the given username.
+   * Each entry is enriched with follow-status badges relative to the requesting user.
+   *
+   * @return ResponseEntity containing a list of FollowDto entries with badge flags
+   */
   @GetMapping(path = "/followers/{username}")
   public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
@@ -107,6 +113,12 @@ public class UserController {
     return ResponseEntity.ok(followersDto);
   }
 
+  /**
+   * Retrieves the list of users that the given user is following.
+   * Each entry is enriched with follow-status badges relative to the requesting user.
+   *
+   * @return ResponseEntity containing a list of FollowDto entries with badge flags
+   */
   @GetMapping(path = "/following/{username}")
   public ResponseEntity<List<FollowDto>> getFollowing(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
@@ -117,6 +129,11 @@ public class UserController {
     return ResponseEntity.ok(followingDto);
   }
 
+  /**
+   * Follows the user identified by {@code username} on behalf of the authenticated user.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @PostMapping(path = "/follow/{username}")
   public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @PathVariable String username) {
 
@@ -125,6 +142,11 @@ public class UserController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  /**
+   * Unfollows the user identified by {@code username} on behalf of the authenticated user.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @PostMapping(path = "/unfollow/{username}")
   public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @PathVariable String username) {
 
@@ -133,6 +155,15 @@ public class UserController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  /**
+   * Enriches a set of users with follow-status badges relative to the requesting user.
+   * Uses a single batch IN-query to avoid the n+1 problem: instead of querying the
+   * database once per user in {@code users}, it collects all IDs and performs two
+   * bulk lookups (who I follow, who follows me).
+   *
+   * @return a list of FollowDto entries with {@code userFollowingTarget} and
+   *         {@code targetFollowingUser} flags set
+   */
   private List<FollowDto> handleFollowBadges(UUID userId, Set<User> users) {
     Set<UUID> idsInList = users.stream().map(User::getId).collect(Collectors.toSet());
 

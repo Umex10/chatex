@@ -201,6 +201,9 @@ public class UserServiceIplTest {
   // ---------------------------------------------------------------------------
   // Lookup by username
   // ---------------------------------------------------------------------------
+  /**
+   * Verifies that a user is returned when found by their username.
+   */
   @Test
   void UserShouldBeFoundByUsername() {
 
@@ -217,6 +220,10 @@ public class UserServiceIplTest {
     verify(userRep).findByUsername(username);
   }
 
+  /**
+   * Verifies that an {@link jakarta.persistence.EntityNotFoundException} is thrown
+   * when no user exists with the given username.
+   */
   @Test
   void UserShouldNotBeFoundByUsername() {
 
@@ -233,6 +240,10 @@ public class UserServiceIplTest {
   // ---------------------------------------------------------------------------
   // User updates
   // ---------------------------------------------------------------------------
+  /**
+   * Verifies that all updatable profile fields are applied to the entity
+   * and that the repository save is called exactly once.
+   */
   @Test
   void UserShouldBeUpdated() {
 

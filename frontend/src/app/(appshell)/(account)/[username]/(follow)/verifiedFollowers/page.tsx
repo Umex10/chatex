@@ -2,6 +2,7 @@ import Follow from '@/components/Follow'
 import { twitterUsers } from '@/utils/dummy'
 import React from 'react'
 
+/** Page displaying placeholder verified-followers entries using static dummy data. */
 const page = () => {
   return (
     <div className='w-full flex-1 p-3 border-y'>

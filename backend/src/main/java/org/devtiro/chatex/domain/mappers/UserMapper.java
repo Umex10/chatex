@@ -17,6 +17,9 @@ public interface UserMapper {
 
   /**
    * Maps a User entity to a UserDto response object.
+   * Follower and following counts are computed via named helper methods.
+   * The {@code userFollowingTarget} flag is intentionally ignored here and must
+   * be set manually after mapping.
    *
    * @return the mapped UserDto
    */
@@ -25,6 +28,12 @@ public interface UserMapper {
   @Mapping(target = "userFollowingTarget", ignore = true)
   UserDto toDto(User user);
 
+  /**
+   * Counts the number of followers.
+   * Returns 0 if the provided set is {@code null}.
+   *
+   * @return the number of followers, or 0 if the set is null
+   */
   @Named("calculateFollowersCount")
   default int calculateFollowersCount(Set<User> followers) {
     if (followers == null) {
@@ -34,6 +43,12 @@ public interface UserMapper {
     return followers.size();
   }
 
+  /**
+   * Counts the number of users the given user is following.
+   * Returns 0 if the provided set is {@code null}.
+   *
+   * @return the size of the following set, or 0 if null
+   */
   @Named("calculateFollowingCount")
   default int calculateFollowingCount(Set<User> following) {
     if (following == null) {

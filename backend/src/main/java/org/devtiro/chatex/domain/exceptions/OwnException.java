@@ -18,6 +18,7 @@ public class OwnException extends RuntimeException {
   /**
    * Constructs an OwnException with the given list of field errors.
    * Builds a summary message based on the number of errors for the stack trace.
+   *
    */
   public OwnException(List<ApiError.FieldError> errors) {
     // Needed for stack trace in the console, when the error is thrown

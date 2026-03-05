@@ -133,7 +133,7 @@ public class JwtServiceIpl implements JwtService {
   /**
    * Generates the signing key from the secret key.
    *
-   * @return the cryptographic key for signing tokens
+   * @return the cryptographic HMAC-SHA key used for signing and verifying tokens
    */
   private Key getSigningKey() {
     byte[] keyBytes = secretKey.getBytes();
@@ -143,7 +143,7 @@ public class JwtServiceIpl implements JwtService {
   /**
    * Extracts the username from a JWT token.
    *
-   * @return the username stored in the token
+   * @return the username stored in the token's subject claim
    */
   private String extractUsername(String tk) {
     Claims claims = Jwts.parserBuilder()

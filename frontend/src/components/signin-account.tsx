@@ -49,6 +49,7 @@ const signInAccountSchema = z.object({
  */
 export type SignInAccountValues = z.infer<typeof signInAccountSchema>;
 
+/** Props for the SignInAcc dialog component. */
 interface SignInAccountProps {
     children: React.ReactNode;
 }

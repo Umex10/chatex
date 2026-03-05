@@ -8,6 +8,12 @@ import type { Follow } from '../../constants/Follow'
 import { useFollow } from '@/hooks/use-follow'
 import { useRouter } from 'next/navigation'
 
+/**
+ * Renders a single user row in a follower or following list.
+ * Shows the user's avatar, name, username, bio, a follow/unfollow toggle button,
+ * and a "Follows you" badge when the listed user is following the current user.
+ * Clicking the row navigates to the listed user's account page.
+ */
 const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollowingUser }: Omit<Follow, "id">) => {
 
   // src must be defined

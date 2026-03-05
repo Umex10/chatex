@@ -1,4 +1,5 @@
 
+/** Represents a single user entry in a follower or following list. */
 export interface Follow {
   id: string,
   name: string,

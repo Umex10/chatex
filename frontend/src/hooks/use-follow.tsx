@@ -3,11 +3,18 @@
 import { useFollowUserMutation, useUnfollowUserMutation } from "@redux/api/apiSlice";
 import { useEffect, useState } from "react";
 
+/** Arguments accepted by the useFollow hook. */
 interface UseFollowArgs {
   username: string,
   userFollowingTarget: boolean
 }
 
+/**
+ * Custom hook managing the follow/unfollow toggle state for a given user.
+ * Tracks the button label ("Follow" / "Following") and exposes a single
+ * `onToggleFollow` handler that calls the correct mutation and rolls back
+ * the optimistic label update on failure.
+ */
 export const useFollow = ({ username, userFollowingTarget }: UseFollowArgs) => {
   const [followText, setFollowText] = useState("Follow");
 
@@ -20,6 +27,7 @@ export const useFollow = ({ username, userFollowingTarget }: UseFollowArgs) => {
   }, [userFollowingTarget]);
 
 
+  /** Dispatches either a follow or unfollow mutation depending on the current state. */
   const onToggleFollow = async () => {
     if (userFollowingTarget) {
       await handleUnfollow();
@@ -28,6 +36,7 @@ export const useFollow = ({ username, userFollowingTarget }: UseFollowArgs) => {
     }
   };
 
+  /** Optimistically sets the label to "Following" and calls the follow mutation. */
   async function handleFollow() {
 
     setFollowText("Following");
@@ -46,6 +55,7 @@ export const useFollow = ({ username, userFollowingTarget }: UseFollowArgs) => {
   }
 
 
+  /** Optimistically sets the label to "Follow" and calls the unfollow mutation. */
   async function handleUnfollow() {
 
     setFollowText("Follow");

@@ -65,12 +65,14 @@ public class User {
     @Column(name = "website")
     private String website;
 
+    /** The set of users this user is following (owner side of the M:N self-reference). */
     @ManyToMany
     @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"),
      inverseJoinColumns = @JoinColumn(name = "following_id"))
     @Builder.Default
     private Set<User> following = new HashSet<>();
 
+    /** The set of users that are following this user (inverse/mirror side of the M:N self-reference). */
     @Builder.Default
     @ManyToMany(mappedBy = "following")
     private Set<User> followers = new HashSet<>();

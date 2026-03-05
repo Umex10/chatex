@@ -6,6 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { usePathname, useRouter } from 'next/navigation'
 import ReturnHeader from '@/components/ReturnHeader'
 
+/**
+ * Layout for the followers/following/verifiedFollowers tab group of a user's account.
+ * Renders a sticky return header and a set of tab triggers that navigate between the three lists.
+ */
 const Layout = ({ children }: Readonly<{
   children?: React.ReactNode
 }>) => {

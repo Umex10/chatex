@@ -12,6 +12,7 @@ public class ChatexApplication {
 
     /**
      * Main entry point that bootstraps and launches the Spring Boot application.
+     *
      */
     public static void main(String[] args) {
         SpringApplication.run(ChatexApplication.class, args);

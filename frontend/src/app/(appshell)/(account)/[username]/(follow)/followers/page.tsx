@@ -5,6 +5,10 @@ import { useGetFollowersQuery } from '@redux/api/apiSlice'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
+/**
+ * Page displaying the followers list for a given user.
+ * Extracts the username from the URL path and fetches the followers via RTK Query.
+ */
 const Followers = () => {
 
   const pathname = usePathname();

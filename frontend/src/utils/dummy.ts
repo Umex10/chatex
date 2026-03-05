@@ -1,3 +1,4 @@
+/** Shape of a user entry used in the placeholder / dummy data list. */
 interface TwitterUser {
   avatar: string;
   name: string;
@@ -6,6 +7,7 @@ interface TwitterUser {
   isPrivate?: boolean; // Optionales Feld für das Schloss-Icon
 }
 
+/** Static placeholder users used to populate UI during development before real data is available. */
 export const twitterUsers: TwitterUser[] = [
   {
     avatar: "user-avatar_yr4qhg",

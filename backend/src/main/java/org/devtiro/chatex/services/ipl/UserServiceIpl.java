@@ -134,6 +134,13 @@ public class UserServiceIpl implements UserService {
 
     }
 
+    /**
+     * Returns all users who follow the user with the given username.
+     * Loads the followers via a JOIN FETCH query to avoid lazy-loading issues.
+     *
+     * @return a Set of User entities that follow the target user
+     * @throws EntityNotFoundException if no user exists with the given username
+     */
     @Override
     public Set<User> getFollowers(String username) {
         User user = userRep.findByUsernameWithFollowers(username).orElseThrow(
@@ -142,6 +149,13 @@ public class UserServiceIpl implements UserService {
         return user.getFollowers();
     }
 
+    /**
+     * Returns all users that the user with the given username is following.
+     * Loads the following list via a JOIN FETCH query to avoid lazy-loading issues.
+     *
+     * @return a Set of User entities that the target user follows
+     * @throws EntityNotFoundException if no user exists with the given username
+     */
     @Override
     public Set<User> getFollowing(String username) {
         User user = userRep.findByUsernameWithFollowing(username).orElseThrow(
@@ -150,6 +164,13 @@ public class UserServiceIpl implements UserService {
         return user.getFollowing();
     }
 
+    /**
+     * Creates a follow relationship from the user identified by {@code userId}
+     * to the user identified by {@code usernameToFollow}.
+     * Both sides of the bidirectional Set are updated in a single transaction.
+     *
+     * @throws EntityNotFoundException if either user cannot be found
+     */
     @Override
     @Transactional
     public void follow(UUID userId, String usernameToFollow) {
@@ -165,6 +186,13 @@ public class UserServiceIpl implements UserService {
         userToFollow.getFollowers().add(user);
     }
 
+    /**
+     * Removes the follow relationship between the user identified by {@code userId}
+     * and the user identified by {@code usernameToFollow}.
+     * Both sides of the bidirectional Set are updated in a single transaction.
+     *
+     * @throws EntityNotFoundException if either user cannot be found
+     */
     @Override
     @Transactional
     public void unfollow(UUID userId, String usernameToFollow) {
@@ -179,16 +207,34 @@ public class UserServiceIpl implements UserService {
         userToUnfollow.getFollowers().remove(user);
     }
 
+    /**
+     * Checks whether the requesting user is already following the target user.
+     * Delegates directly to the repository's COUNT-based query.
+     *
+     * @return {@code true} if the requesting user follows the target, {@code false} otherwise
+     */
     @Override
     public boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId) {
         return userRep.isUserFollowingTarget(targetUsername, requestingUserId);
     }
 
+    /**
+     * Returns the subset of {@code idsInList} that the given user is following.
+     * Used for mass status checks to avoid the n+1 problem when rendering follow badges.
+     *
+     * @return a Set of UUIDs from {@code idsInList} that the user follows
+     */
     @Override
     public Set<UUID> findFollowingIdsIn(UUID userId, Set<UUID> idsInList) {
       return userRep.findFollowingIdsIn(userId, idsInList);
     }
 
+    /**
+     * Returns the subset of {@code idsInList} that are following the given user.
+     * Used for mass status checks to avoid the n+1 problem when rendering follow badges.
+     *
+     * @return a Set of UUIDs from {@code idsInList} that follow the user
+     */
     @Override
     public Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList) {
         return userRep.findFollowersIdsIn(userId, idsInList);

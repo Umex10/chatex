@@ -1,3 +1,4 @@
+/** Props for the FeatureCard component. */
 interface FeatureCardProps {
   title: string;
   description: string;

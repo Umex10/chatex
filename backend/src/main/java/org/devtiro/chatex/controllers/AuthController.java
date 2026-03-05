@@ -107,6 +107,7 @@ public class AuthController {
          * Creates an authentication response DTO with access and refresh tokens.
          * Generates access token and optionally creates refresh token cookie.
          *
+         *                 pass {@code null} to skip cookie creation (e.g. for access-token-only refresh)
          * @return AuthResponseDto containing the access token and expiration time
          */
         private AuthResponseDto createAuthResponseDto(

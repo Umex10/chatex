@@ -109,6 +109,7 @@ export const apiSlice = createApi({
       invalidatesTags: ['User']
     }),
 
+    /** Sends a follow request for the given username via the follow server action. Invalidates the 'User' cache tag. */
     followUser: builder.mutation<void, string>({
 
       async queryFn(usernameToFollow, { getState }) {
@@ -128,6 +129,7 @@ export const apiSlice = createApi({
       invalidatesTags: ['User']
     }),
 
+    /** Sends an unfollow request for the given username via the unfollow server action. Invalidates the 'User' cache tag. */
     unfollowUser: builder.mutation<User, string>({
       async queryFn(usernameToUnfollow, { getState }) {
         const state = getState() as any;
@@ -145,10 +147,12 @@ export const apiSlice = createApi({
       invalidatesTags: ['User']
     }),
 
+    /** Fetches the list of followers for the given username. */
     getFollowers: builder.query<Follow[], string>({
       query: (username) => `/user/followers/${username}`
     }),
 
+    /** Fetches the list of accounts the given username is following. */
     getFollowing: builder.query<Follow[], string>({
       query: (username) => `/user/following/${username}`
     })

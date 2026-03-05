@@ -2,6 +2,10 @@
 
 import axios from "axios";
 
+/**
+ * Server action that sends a follow request to the backend for the given username.
+ * Requires a valid access token to authorise the request.
+ */
 export const followUserRequest = async (usernameToFollow: string, token: string) => {
   
   try {
@@ -22,6 +26,10 @@ export const followUserRequest = async (usernameToFollow: string, token: string)
 
 }
 
+/**
+ * Server action that sends an unfollow request to the backend for the given username.
+ * Requires a valid access token to authorise the request.
+ */
 export const unfollowUserRequest = async (usernameToUnfollow: string, token: string) => {
   
   try {

@@ -44,6 +44,7 @@ const shoutsSlice = createSlice({
   name: "shouts",
   initialState,
   reducers: {
+    /** Prepends a newly composed shout to the top of the feed list. */
     addShout: (state, action: PayloadAction<ShoutData>) => {
       state.shouts.unshift(action.payload);
     }

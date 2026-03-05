@@ -46,20 +46,53 @@ public interface UserRep extends JpaRepository<User, UUID> {
      */
     boolean existsUserByPhone(String phone);
 
+    /**
+     * Loads a user together with their full followers set in a single JOIN FETCH query.
+     * Avoids the n+1 problem when caller needs to access {@code user.getFollowers()}.
+     *
+     * @return Optional containing the user with followers eagerly loaded, or empty if not found
+     */
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.followers WHERE u.username = :username")
     Optional<User> findByUsernameWithFollowers(@Param("username") String username);
 
+    /**
+     * Loads a user together with their full following set in a single JOIN FETCH query.
+     * Avoids the n+1 problem when caller needs to access {@code user.getFollowing()}.
+     *
+     * @return Optional containing the user with following list eagerly loaded, or empty if not found
+     */
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.following WHERE u.username = :username")
     Optional<User> findByUsernameWithFollowing(@Param("username") String username);
 
+    /**
+     * Checks whether {@code userId} is among the followers of the user identified
+     * by {@code targetUsername}. Uses a lightweight {@code COUNT} check to avoid
+     * loading full entity graphs.
+     *
+     * @return {@code true} if the authenticated user follows the target, {@code false} otherwise
+     */
     @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.followers f WHERE u.username = :targetUsername AND f.id = :userId")
     boolean isUserFollowingTarget(
             @Param("targetUsername") String targetUsername,
             @Param("userId") UUID userId);
 
+    /**
+     * Returns the subset of {@code targetIds} that the user identified by {@code myId}
+     * is following. Used for mass badge checks to avoid the n+1 problem.
+     * Only UUIDs, not full entities, are returned to minimise memory and network overhead.
+     *
+     * @return a Set of UUIDs from {@code targetIds} that the user follows
+     */
     @Query("SELECT f.id FROM User u JOIN u.following f WHERE u.id = :myId AND f.id IN :targetIds")
     Set<UUID> findFollowingIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
 
+    /**
+     * Returns the subset of {@code targetIds} that are following the user identified
+     * by {@code myId}. Used for mass badge checks to avoid the n+1 problem.
+     * Only UUIDs, not full entities, are returned to minimise memory and network overhead.
+     *
+     * @return a Set of UUIDs from {@code targetIds} that follow the user
+     */
     @Query("SELECT f.id FROM User u JOIN u.followers f WHERE u.id = :myId AND f.id IN :targetIds")
     Set<UUID> findFollowersIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
 

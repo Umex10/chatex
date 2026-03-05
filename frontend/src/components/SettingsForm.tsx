@@ -137,6 +137,10 @@ const Settings = () => {
 
   }
 
+  /**
+   * Uploads a file to Cloudinary using an unsigned upload preset and returns
+   * the secure URL of the uploaded image.
+   */
   const generateSecureUrl = async (file: File) => {
 
     const formData = new FormData();
@@ -160,6 +164,10 @@ const Settings = () => {
     }
   }
 
+  /**
+   * Handles avatar or banner file input changes.
+   * Updates the form value and sets a local preview URL for immediate feedback.
+   */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner') => {
     const file = e.target.files?.[0];
     if (file) {

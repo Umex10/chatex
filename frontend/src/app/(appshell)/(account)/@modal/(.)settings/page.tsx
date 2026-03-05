@@ -5,6 +5,11 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import SettingsForm from "@/components/SettingsForm"
 
+/**
+ * Intercepted settings modal.
+ * Shown instead of the full settings page during client-side navigation to /settings,
+ * so the underlying account page remains visible in the background.
+ */
 export default function SettingsModal() {
   const router = useRouter()
 
