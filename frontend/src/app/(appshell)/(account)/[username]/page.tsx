@@ -1,6 +1,6 @@
 "use client"
 
-import Shout from '@/components/Shout';
+import OneShout from '@/components/OneShout';
 import { RootState } from '@redux/store';
 import React, { use, useState } from 'react'
 import { useSelector } from 'react-redux';
@@ -8,10 +8,10 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
+import { useGetShoutsQuery, useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
 import { joinedDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
-import {  useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useFollow } from '@/hooks/use-follow';
 
 /**
@@ -25,7 +25,6 @@ import { useFollow } from '@/hooks/use-follow';
 const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");
-  const shouts = useSelector((state: RootState) => state.shoutsState.shouts);
   const { data: meUser } = useGetUserQuery();
   const router = useRouter();
 
@@ -50,7 +49,9 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
   const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
 
-  const { followText, onToggleFollow } = useFollow({username, userFollowingTarget: isRequestingUserFollowing});
+  const { data: shouts } = useGetShoutsQuery(username);
+
+  const { followText, onToggleFollow } = useFollow({ username, userFollowingTarget: isRequestingUserFollowing });
 
   if (isError && !isOwnAccount) {
     return <div className='w-full h-full flex-1 text-center'>
@@ -132,14 +133,14 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
           <Link href="/settings" className={`${isOwnAccount ? "" : "hidden"}
               rounded-xl px-3 py-2 border text-base font-bold`}
-              data-testid="edit-account-btn">
+            data-testid="edit-account-btn">
             Account bearbeiten
           </Link>
 
           <Button variant={!isRequestingUserFollowing ? "outline" : "secondary"}
             className={`${isOwnAccount ? "hidden" : ""}
               rounded-xl px-3 py-2 border text-base font-bold`}
-              data-testid="follow-btn"
+            data-testid="follow-btn"
             onClick={onToggleFollow}>
             {followText}
           </Button>
@@ -162,18 +163,18 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
         </TabsList>
         <TabsContent value="shouts" className='m-0'>
-          {shouts.map(shout => (
-            <Shout {...shout} key={shout.name}></Shout>
+          {shouts?.map(shout => (
+            <OneShout {...shout} key={shout.name}></OneShout>
           ))}
         </TabsContent>
         <TabsContent value="replies" className='m-0'>
-          {shouts.map(shout => (
-            <Shout {...shout} key={shout.name}></Shout>
+          {shouts?.map(shout => (
+            <OneShout {...shout} key={shout.name}></OneShout>
           ))}
         </TabsContent>
         <TabsContent value="media" className='m-0'>
-          {shouts.map(shout => (
-            <Shout {...shout} key={shout.name}></Shout>
+          {shouts?.map(shout => (
+            <OneShout {...shout} key={shout.name}></OneShout>
           ))}
         </TabsContent>
       </Tabs>

@@ -1,4 +1,4 @@
-import { ShoutData } from "@/components/Shout";
+import { ShoutData } from "@/components/OneShout";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 /** Shape of the shouts Redux slice state. */

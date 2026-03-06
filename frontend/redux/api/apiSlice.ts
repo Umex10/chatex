@@ -5,6 +5,8 @@ import { User } from '../../constants/User';
 import { AccountSchemaValues } from '@/components/SettingsForm';
 import { followUserRequest, unfollowUserRequest } from '@/actions/follow-system-user';
 import { Follow } from '../../constants/Follow';
+import { Shout } from '../../constants/Shout';
+import { ShoutValues, ShoutPayload } from '@/app/(appshell)/home/page';
 
 
 /**
@@ -155,6 +157,19 @@ export const apiSlice = createApi({
     /** Fetches the list of accounts the given username is following. */
     getFollowing: builder.query<Follow[], string>({
       query: (username) => `/user/${username}/following`
+    }),
+
+    getShouts: builder.query<Shout[], string>({
+      query: (username) => `/shout/${username}`
+    }),
+
+    createShout: builder.mutation<Shout, ShoutPayload>({
+       query: (createShout) => ({
+        url: `/shout`,
+        method: "POST",
+        body: createShout
+      }),
+      invalidatesTags: ['User']
     })
   }),
 });
@@ -163,5 +178,5 @@ export const apiSlice = createApi({
 export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
   useGetUserByUsernameQuery, useFollowUserMutation, useUnfollowUserMutation,
-  useGetFollowersQuery, useGetFollowingQuery
+  useGetFollowersQuery, useGetFollowingQuery, useGetShoutsQuery, useCreateShoutMutation
 } = apiSlice;

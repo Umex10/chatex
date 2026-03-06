@@ -21,7 +21,7 @@ import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
 import { User } from '../../constants/User';
 import { toast } from 'sonner';
 import { CldImage } from 'next-cloudinary';
-import axios from 'axios';
+import { generateSecureUrl } from '@/utils/cloudinary';
 import { SwitchCamera } from 'lucide-react';
 
 
@@ -135,33 +135,6 @@ const Settings = () => {
       toast.error(errorMessage, { id: toastId });
     }
 
-  }
-
-  /**
-   * Uploads a file to Cloudinary using an unsigned upload preset and returns
-   * the secure URL of the uploaded image.
-   */
-  const generateSecureUrl = async (file: File) => {
-
-    const formData = new FormData();
-
-    formData.append("file", file);
-
-    // Unsigned key so we can actually send from the frontend
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
-
-    try {
-      const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        formData
-      );
-
-      return { success: true, data: res.data };
-    } catch (err: any) {
-      console.error("An error occured while uploading the file:", err);
-
-      return { success: false, error: err }
-    }
   }
 
   /**

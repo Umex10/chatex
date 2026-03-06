@@ -4,21 +4,8 @@ import { Badge } from './ui/badge'
 import { BadgeCheck, icons, LucideIcon } from 'lucide-react'
 
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
-
-
-/** Data shape required to render a single shout card. */
-export interface ShoutData {
-  accImg: string,
-  name: string,
-  hasBadge: boolean,
-  username: string,
-  createdAt: string,
-  desc: string,
-  shoutImg: string,
-  comments: number,
-  reShouts: number,
-  likes: number
-}
+import { Shout } from '../../constants/Shout';
+import { CldImage } from 'next-cloudinary';
 
 /** Represents one engagement action (comment, reshout, like) with its icon and count. */
 interface Action {
@@ -30,18 +17,12 @@ interface Action {
  * Renders a single shout card with the author's avatar, name, optional verified badge,
  * username, timestamp, post text, media image and engagement action counters.
  */
-const Shout = (data: ShoutData) => {
+const OneShout = (data: Shout) => {
 
-  const { accImg, name, hasBadge, username, createdAt,
-    desc, shoutImg, comments, reShouts, likes
+  const { text, images, avatar, likes, reShouts, name, username, createdAt
   } = { ...data };
 
   const actions: Action[] = [
-    {
-      Icon: MessageCircle,
-      value: comments
-
-    },
     {
       Icon: Repeat2,
       value: reShouts
@@ -59,13 +40,17 @@ const Shout = (data: ShoutData) => {
       {/* row layout: avatar column + content column */}
       <div className='flex flex-row gap-1'>
         {/* left column: account avatar */}
-        <div className='w-1/8 flex justify-center'>
-          <Image
-            src={accImg}
-            width={50}
-            height={70}
-            alt="Chatex Logo"
-            className="w-14 h-14 rounded-full"
+        <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
+          <CldImage
+            width="56"
+            height="56"
+            src={avatar ? avatar : "user-avatar_yr4qhg"}
+            alt="User Avatar"
+            crop="thumb"
+            gravity="face"
+            format="auto"
+            quality="auto"
+            className="w-full h-full object-cover"
           />
         </div>
         {/* right column: meta info, text, media, actions */}
@@ -76,7 +61,7 @@ const Shout = (data: ShoutData) => {
             md:max-w-none md:whitespace-normal'>{name}</span>
 
             {/* verified badge only shown when hasBadge is true */}
-            {hasBadge && (
+            {/* {hasBadge && (
               <Badge
                 variant="secondary"
                 className="p-0 bg-transparent border-none shadow-none
@@ -84,7 +69,7 @@ const Shout = (data: ShoutData) => {
               >
                 <BadgeCheck className="w-5 h-5 text-white" />
               </Badge>
-            )}
+            )} */}
 
 
             <span className='max-w-[80px] truncate 
@@ -98,15 +83,26 @@ const Shout = (data: ShoutData) => {
           {/* body section: shout text, optional media, and engagement stats */}
           <div className='flex flex-col gap-2 items-start w-full'>
             {/* post text content */}
-            <p className='text-lg'>{desc}</p>
+            <p className='text-lg'>{text}</p>
             {/* post image/media preview */}
-            <Image
-              src={shoutImg}
-              width={600}
-              height={400}
-              alt="Chatex Logo"
-              className="w-full md:max-w-90 rounded-xl h-90"
-            />
+            <ul className='w-full grid grid cols-2 items-center'>
+              {images.map(image => (
+                <li key={image} className="w-14 h-14 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
+                  <CldImage
+                    width="56"
+                    height="56"
+                    src={avatar ? avatar : "user-avatar_yr4qhg"}
+                    alt="User Avatar"
+                    crop="thumb"
+                    gravity="face"
+                    format="auto"
+                    quality="auto"
+                    className="w-full h-full object-cover"
+                  />
+                </li>
+              ))}
+            </ul>
+
             {/* action counters: comments, reshares and likes */}
             <ul className='flex flex-row gap-10 items-center w-full'>
               {actions.map((action) => (
@@ -124,4 +120,4 @@ const Shout = (data: ShoutData) => {
   )
 }
 
-export default Shout
+export default OneShout

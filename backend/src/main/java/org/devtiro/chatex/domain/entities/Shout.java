@@ -31,4 +31,10 @@ public class Shout {
 
   @Column
   private List<String> images;
+
+  @Column
+  private int likes;
+
+  @Column
+  private int reShouts;
 }
