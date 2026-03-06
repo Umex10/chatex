@@ -2,7 +2,6 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 
-import shoutsSlice from "./slices/shoutsSlice";
 import { apiSlice } from "./api/apiSlice";
 
 /**
@@ -11,7 +10,6 @@ import { apiSlice } from "./api/apiSlice";
  */
 export const store = configureStore({
     reducer: {
-        shoutsState: shoutsSlice,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>

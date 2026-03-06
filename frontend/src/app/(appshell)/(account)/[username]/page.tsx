@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
 import { useGetShoutsQuery, useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
-import { joinedDate } from '@/utils/joinedDate';
+import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useFollow } from '@/hooks/use-follow';
@@ -110,7 +110,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
           <Link href="/account/about" className='flex flex-row gap-2 items-center opacity-50'>
             <CalendarDays className='w-4 h-5 -mt-1/2'></CalendarDays>
-            <span>{joinedDate(createdAt)}</span>
+            <span>{joinedAccountDate(createdAt)}</span>
           </Link>
           <div className='flex flex-row gap-4'>
             <h4 className='flex gap-1'

@@ -22,5 +22,7 @@ public class ShoutDto {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate createdAt;
   private List<String> images;
+  private int likes;
+  private int reShouts;
 
 }

@@ -6,7 +6,7 @@ import { AccountSchemaValues } from '@/components/SettingsForm';
 import { followUserRequest, unfollowUserRequest } from '@/actions/follow-system-user';
 import { Follow } from '../../constants/Follow';
 import { Shout } from '../../constants/Shout';
-import { ShoutValues, ShoutPayload } from '@/app/(appshell)/home/page';
+import { ShoutPayload } from '@/app/(appshell)/home/page';
 
 
 /**

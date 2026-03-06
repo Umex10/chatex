@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Image as ImageIcon, MapPin, Smile, PencilLine, X } from "lucide-react"
+import { useRef, useState } from "react"
 
 import {
   Dialog,
@@ -21,125 +22,189 @@ import {
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
-import { Children, useState } from "react"
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "@redux/store"
-import { addShout } from "@redux/slices/shoutsSlice"
+import { useCreateShoutMutation, useGetUserQuery } from "@redux/api/apiSlice"
+import { CldImage } from "next-cloudinary"
+import { generateSecureUrl } from "@/utils/cloudinary"
 
-/** Zod schema that validates the shout content: must be between 1 and 280 characters. */
-const formSchema = z.object({
-  content: z
+const shoutSchema = z.object({
+  text: z
     .string()
-    .min(1, "Dein Shout darf nicht leer sein.")
-    .max(280, "Shouts sind auf 280 Zeichen begrenzt."),
+    .min(1, "Your shout cannot be empty.")
+    .max(280, "Shouts are limited to 280 characters."),
+  images: z.array(z.instanceof(File)).max(4, "You can add up to 4 images.").optional(),
 })
 
+type ShoutFormValues = z.infer<typeof shoutSchema>
+
 /**
- * Dialog component for composing and submitting a new Shout.
- * Opens a modal with a textarea, optional media/attachment buttons,
- * and dispatches the new shout to the Redux store on submit.
+ * Standalone shout composer form — used both inline (home feed) and inside the dialog.
+ * Handles image picking, Cloudinary uploads and posting via the API mutation.
  */
-export function CreateShout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
+  const { data: user } = useGetUserQuery(undefined)
+  const avatar = user?.avatar ?? "user-avatar_yr4qhg"
+  const [createShout, { isLoading }] = useCreateShoutMutation()
 
-  const [open, setOpen] = useState(false)
+  const imageInputRef = useRef<HTMLInputElement>(null)
+  const [imageViews, setImageViews] = useState<string[]>([])
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      content: "",
-    },
+  const form = useForm<ShoutFormValues>({
+    resolver: zodResolver(shoutSchema),
+    mode: "onChange",
+    defaultValues: { text: "", images: [] },
   })
 
-  const dispatch = useDispatch<AppDispatch>();
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
+    const current = form.getValues("images") ?? []
+    const combined = [...current, ...files].slice(0, 4)
+    form.setValue("images", combined, { shouldDirty: true, shouldValidate: true })
+    setImageViews(prev => [...prev, ...files.map(f => URL.createObjectURL(f))].slice(0, 4))
+    e.target.value = ""
+  }
 
-  /**
-   * Handles form submission for creating a new shout.
-   * Builds a shout object, dispatches it to the Redux store, resets the form and closes the dialog.
-   */
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const removeImage = (index: number) => {
+    const current = form.getValues("images") ?? []
+    form.setValue("images", current.filter((_, i) => i !== index), { shouldDirty: true, shouldValidate: true })
+    setImageViews(prev => prev.filter((_, i) => i !== index))
+  }
 
-    const newShout = {
-      accImg: '/acc.png',
-      name: 'Ramizio Roman',
-      hasBadge: true,
-      username: 'Wastust1234',
-      createdAt: "1 std.",
-      desc: values.content,
-      shoutImg: '/stadion.jpg',
-      comments: 300,
-      reShouts: 5000,
-      likes: 33333
-    };
-
-    dispatch(addShout(newShout));
-
+  async function onSubmit(values: ShoutFormValues) {
+    const uploadedUrls: string[] = []
+    for (const file of values.images ?? []) {
+      const res = await generateSecureUrl(file)
+      if (res.success) uploadedUrls.push(res.data.secure_url)
+    }
+    try {
+      await createShout({ text: values.text, images: uploadedUrls }).unwrap()
+    } catch (err) {
+      console.error(err)
+    }
     form.reset()
-    setOpen(false)
+    setImageViews([])
+    onSubmitted?.()
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-       {children}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] top-[15%] translate-y-0">
-        <DialogHeader className="flex flex-row items-center justify-between border-b pb-2">
-          <DialogTitle className="text-xl font-bold">New Shout</DialogTitle>
-        </DialogHeader>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-row gap-3">
+          <div className="w-12 h-12 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
+            <CldImage
+              width="48"
+              height="48"
+              src={avatar}
+              alt="User Avatar"
+              crop="thumb"
+              gravity="face"
+              format="auto"
+              quality="auto"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12">
-            <div className="w-full h-full flex flex-row items-start gap-3 pt-4">
-              <div className="w-12 h-12 rounded-full bg-violet-100 shrink-0" />
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <Textarea
-                        placeholder="What will you shout out?"
-                        className="min-h-[120px] resize-none border-none focus-visible:ring-0 !text-xl placeholder:text-xl p-0"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+          <div className="flex flex-col flex-1 gap-1 items-start">
+            <FormField
+              control={form.control}
+              name="text"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Textarea
+                      placeholder="What's new to you?"
+                      className="placeholder:text-zinc-500 placeholder:text-lg text-lg max-h-[400px] min-h-[80px] resize-none border-none focus-visible:ring-0 p-0"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-xs font-semibold text-red-500" />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex items-center justify-between border-t pt-2">
-              <div className="flex gap-1 text-violet-500">
-                <Button variant="secondary" size="icon" className="rounded-full h-14 w-14 text-white bg-transparent
-                [&_svg]:!size-8">
-                  <ImageIcon className="h-8 w-8" />
+            {/* Image previews */}
+            {imageViews.length > 0 && (
+              <div className="flex flex-row gap-2 flex-wrap mt-1">
+                {imageViews.map((preview, i) => (
+                  <div key={i} className="relative w-20 h-20">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={preview} alt={`Preview ${i + 1}`} className="w-20 h-20 object-cover rounded-md" />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(i)}
+                      className="absolute -top-1.5 -right-1.5 bg-black/60 rounded-full p-0.5"
+                    >
+                      <X className="w-3 h-3 text-white" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="w-full flex flex-row justify-between items-center mt-1 border-t pt-2">
+              <div className="flex items-center gap-1 text-violet-500">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full h-9 w-9 [&_svg]:!size-5"
+                  disabled={imageViews.length >= 4}
+                  onClick={() => imageInputRef.current?.click()}
+                >
+                  <ImageIcon />
                 </Button>
-                <Button size="icon" className="rounded-full h-14 w-14 text-white bg-transparent
-                [&_svg]:!size-8">
-                  <Smile className="h-8 w-8" />
+                <input
+                  type="file"
+                  ref={imageInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                />
+                <Button type="button" variant="ghost" size="icon" className="rounded-full h-9 w-9 [&_svg]:!size-5">
+                  <Smile />
                 </Button>
-                <Button variant="secondary" size="icon" className="rounded-full h-14 w-14 text-white bg-transparent
-                [&_svg]:!size-8">
-                  <MapPin className="h-8 w-8" />
+                <Button type="button" variant="ghost" size="icon" className="rounded-full h-9 w-9 [&_svg]:!size-5">
+                  <MapPin />
                 </Button>
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="bg-violet-500 hover:bg-violet-600 rounded-full px-6 font-bold"
-                disabled={!form.formState.isDirty || !form.formState.isValid}
+                disabled={isLoading || !form.formState.isDirty || !form.formState.isValid}
               >
                 Shout
               </Button>
             </div>
-          </form>
-        </Form>
+          </div>
+        </div>
+      </form>
+    </Form>
+  )
+}
+
+/**
+ * Dialog trigger wrapper around ShoutComposer.
+ * Used in the Sidebar and as the mobile floating action button.
+ */
+export function CreateShout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-[600px] top-[15%] translate-y-0">
+        <DialogHeader className="border-b pb-2">
+          <DialogTitle className="text-xl font-bold">New Shout</DialogTitle>
+        </DialogHeader>
+        <div className="pt-2">
+          <ShoutComposer onSubmitted={() => setOpen(false)} />
+        </div>
       </DialogContent>
     </Dialog>
   )
