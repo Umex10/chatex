@@ -103,7 +103,7 @@ public class UserController {
    *
    * @return ResponseEntity containing a list of FollowDto entries with badge flags
    */
-  @GetMapping(path = "/followers/{username}")
+  @GetMapping(path = "/{username}/followers")
   public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
     Set<User> followers = userService.getFollowers(username);
@@ -119,7 +119,7 @@ public class UserController {
    *
    * @return ResponseEntity containing a list of FollowDto entries with badge flags
    */
-  @GetMapping(path = "/following/{username}")
+  @GetMapping(path = "/{username}/following")
   public ResponseEntity<List<FollowDto>> getFollowing(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
     Set<User> following = userService.getFollowing(username);
@@ -134,7 +134,7 @@ public class UserController {
    *
    * @return ResponseEntity with HTTP 200 OK and an empty body
    */
-  @PostMapping(path = "/follow/{username}")
+  @PostMapping(path = "/{username}/follow")
   public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @PathVariable String username) {
 
     userService.follow(userId, username);
@@ -147,7 +147,7 @@ public class UserController {
    *
    * @return ResponseEntity with HTTP 200 OK and an empty body
    */
-  @PostMapping(path = "/unfollow/{username}")
+  @PostMapping(path = "/{username}/unfollow")
   public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @PathVariable String username) {
 
     userService.unfollow(userId, username);

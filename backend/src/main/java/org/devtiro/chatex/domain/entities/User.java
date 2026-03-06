@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -64,6 +66,10 @@ public class User {
 
     @Column(name = "website")
     private String website;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Shout> shouts = new ArrayList<>();
 
     /** The set of users this user is following (owner side of the M:N self-reference). */
     @ManyToMany

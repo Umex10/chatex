@@ -149,12 +149,12 @@ export const apiSlice = createApi({
 
     /** Fetches the list of followers for the given username. */
     getFollowers: builder.query<Follow[], string>({
-      query: (username) => `/user/followers/${username}`
+      query: (username) => `/user/${username}/followers`
     }),
 
     /** Fetches the list of accounts the given username is following. */
     getFollowing: builder.query<Follow[], string>({
-      query: (username) => `/user/following/${username}`
+      query: (username) => `/user/${username}/following`
     })
   }),
 });
