@@ -1,5 +1,6 @@
 
 export interface Shout {
+  id: string,
   name: string,
   username: string,
   avatar: string

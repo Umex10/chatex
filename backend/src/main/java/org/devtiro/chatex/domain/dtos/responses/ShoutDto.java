@@ -2,6 +2,7 @@ package org.devtiro.chatex.domain.dtos.responses;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShoutDto {
+  private UUID id;
   private String name;
   private String username;
   private String avatar;

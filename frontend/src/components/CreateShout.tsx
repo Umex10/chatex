@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
+import Image from "next/image"
 import { Image as ImageIcon, MapPin, Smile, PencilLine, X } from "lucide-react"
 import { useRef, useState } from "react"
 
@@ -25,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useCreateShoutMutation, useGetUserQuery } from "@redux/api/apiSlice"
 import { CldImage } from "next-cloudinary"
 import { generateSecureUrl } from "@/utils/cloudinary"
+import Spinner from "./Spinner"
 
 const shoutSchema = z.object({
   text: z
@@ -42,7 +44,7 @@ type ShoutFormValues = z.infer<typeof shoutSchema>
  */
 export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
   const { data: user } = useGetUserQuery(undefined)
-  const avatar = user?.avatar ?? "user-avatar_yr4qhg"
+  const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg"
   const [createShout, { isLoading }] = useCreateShoutMutation()
 
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -50,7 +52,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
 
   const form = useForm<ShoutFormValues>({
     resolver: zodResolver(shoutSchema),
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: { text: "", images: [] },
   })
 
@@ -88,8 +90,16 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row gap-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
+
+        {isLoading || form.formState.isSubmitting && (
+          <div className="absolute z-50 inset-0 flex w-full items-center justify-center bg-transparent">
+            <Spinner></Spinner>
+          </div>
+        )}
+
+        <div className={`flex flex-row gap-3 ${isLoading ? "opacity-50" : ""}`}>
+
           <div className="w-12 h-12 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
             <CldImage
               width="48"
@@ -127,15 +137,16 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
               <div className="flex flex-row gap-2 flex-wrap mt-1">
                 {imageViews.map((preview, i) => (
                   <div key={i} className="relative w-20 h-20">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={preview} alt={`Preview ${i + 1}`} className="w-20 h-20 object-cover rounded-md" />
-                    <button
+                    <Image src={preview} alt={`Preview ${i + 1}`} width={80} height={80} className="w-20 h-20 object-cover rounded-md" />
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon"
                       onClick={() => removeImage(i)}
-                      className="absolute -top-1.5 -right-1.5 bg-black/60 rounded-full p-0.5"
+                      className="absolute -top-1.5 -right-1.5 bg-black/60 hover:bg-black/80 rounded-full h-5 w-5 p-0.5"
                     >
                       <X className="w-3 h-3 text-white" />
-                    </button>
+                    </Button>
                   </div>
                 ))}
               </div>

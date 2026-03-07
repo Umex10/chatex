@@ -160,7 +160,8 @@ export const apiSlice = createApi({
     }),
 
     getShouts: builder.query<Shout[], string>({
-      query: (username) => `/shout/${username}`
+      query: (username) => `/shout/${username}`,
+      providesTags: ['User']
     }),
 
     createShout: builder.mutation<Shout, ShoutPayload>({
@@ -168,6 +169,14 @@ export const apiSlice = createApi({
         url: `/shout`,
         method: "POST",
         body: createShout
+      }),
+      invalidatesTags: ['User']
+    }),
+
+    deleteShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}`,
+        method: "DELETE"
       }),
       invalidatesTags: ['User']
     })
@@ -178,5 +187,6 @@ export const apiSlice = createApi({
 export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
   useGetUserByUsernameQuery, useFollowUserMutation, useUnfollowUserMutation,
-  useGetFollowersQuery, useGetFollowingQuery, useGetShoutsQuery, useCreateShoutMutation
+  useGetFollowersQuery, useGetFollowingQuery, useGetShoutsQuery, useCreateShoutMutation,
+  useDeleteShoutMutation
 } = apiSlice;

@@ -42,7 +42,7 @@ const Home = () => {
 
         <TabsContent value="for-you" className='m-0'>
           {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.name} />
+            <OneShout {...shout} key={shout.createdAt} />
           ))}
         </TabsContent>
         <TabsContent value="following" className='m-0'>Change your following here.</TabsContent>

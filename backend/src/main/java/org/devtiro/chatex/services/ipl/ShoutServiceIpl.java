@@ -34,15 +34,26 @@ public class ShoutServiceIpl implements ShoutService {
             " was not found"));
 
     Shout shout = Shout.builder()
-    .user(user)
-    .text(createShoutRequest.getText())
-    .images(createShoutRequest.getImages())
-    .createdAt(LocalDate.now())
-    .likes(0)
-    .reShouts(0)
-    .build();
+        .user(user)
+        .text(createShoutRequest.getText())
+        .images(createShoutRequest.getImages())
+        .createdAt(LocalDate.now())
+        .likes(0)
+        .reShouts(0)
+        .build();
 
     return shoutRep.save(shout);
+  }
+
+  @Override
+  public void deleteShout(UUID shoutId) {
+
+    Shout shout = shoutRep.findById(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
+            " was not found"));
+    ;
+
+    shoutRep.delete(shout);
   }
 
 }

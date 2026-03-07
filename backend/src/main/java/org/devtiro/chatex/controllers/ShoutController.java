@@ -11,6 +11,7 @@ import org.devtiro.chatex.services.ShoutService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +55,14 @@ public class ShoutController {
 
     return new ResponseEntity<>(shoutDto, HttpStatus.CREATED);
 
+  }
+
+  @DeleteMapping("/{shoutId}")
+  public ResponseEntity<Void> deleteShout( @PathVariable UUID shoutId
+  ) {
+
+    shoutService.deleteShout(shoutId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
   }
 }

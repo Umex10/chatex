@@ -11,5 +11,7 @@ public interface ShoutService {
   List<Shout> getShouts();
 
   Shout createShout(UUID userId, CreateShoutRequest createShoutRequest);
+
+  void deleteShout(UUID shoutId);
   
 }
