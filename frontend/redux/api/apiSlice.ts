@@ -151,12 +151,12 @@ export const apiSlice = createApi({
 
     /** Fetches the list of followers for the given username. */
     getFollowers: builder.query<Follow[], string>({
-      query: (username) => `/user/${username}/followers`
+      query: (username) => `/follow/${username}/followers`
     }),
 
     /** Fetches the list of accounts the given username is following. */
     getFollowing: builder.query<Follow[], string>({
-      query: (username) => `/user/${username}/following`
+      query: (username) => `/follow/${username}/following`
     }),
 
     getShouts: builder.query<Shout[], string>({
@@ -179,7 +179,21 @@ export const apiSlice = createApi({
         method: "DELETE"
       }),
       invalidatesTags: ['User']
-    })
+    }),
+
+    likeTheShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/like`,
+        method: "POST"
+      }),
+    }),
+
+    reShoutTheShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/reShout`,
+        method: "POST"
+      }),
+    }),
   }),
 });
 
@@ -188,5 +202,5 @@ export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
   useGetUserByUsernameQuery, useFollowUserMutation, useUnfollowUserMutation,
   useGetFollowersQuery, useGetFollowingQuery, useGetShoutsQuery, useCreateShoutMutation,
-  useDeleteShoutMutation
+  useDeleteShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation
 } = apiSlice;

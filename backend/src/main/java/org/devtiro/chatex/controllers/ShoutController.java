@@ -48,7 +48,7 @@ public class ShoutController {
     Shout shout = shoutService.createShout(userId, createShoutRequest);
 
     ShoutDto shoutDto = shoutMapper.toDto(shout);
-    
+
     shoutDto.setName(shout.getUser().getName());
     shoutDto.setUsername(shout.getUser().getUsername());
     shoutDto.setAvatar(shout.getUser().getAvatar());
@@ -58,10 +58,25 @@ public class ShoutController {
   }
 
   @DeleteMapping("/{shoutId}")
-  public ResponseEntity<Void> deleteShout( @PathVariable UUID shoutId
-  ) {
+  public ResponseEntity<Void> deleteShout(@PathVariable UUID shoutId) {
 
     shoutService.deleteShout(shoutId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @PostMapping("/{shoutId}/like")
+  public ResponseEntity<Void> likeShout(@PathVariable UUID shoutId) {
+
+    shoutService.likeTheShout(shoutId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @PostMapping("/{shoutId}/reShout")
+  public ResponseEntity<Void> reShoutTheShout(@PathVariable UUID shoutId) {
+
+    shoutService.reShoutTheShout(shoutId);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }

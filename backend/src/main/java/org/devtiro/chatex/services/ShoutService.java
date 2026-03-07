@@ -13,5 +13,9 @@ public interface ShoutService {
   Shout createShout(UUID userId, CreateShoutRequest createShoutRequest);
 
   void deleteShout(UUID shoutId);
+
+  void likeTheShout(UUID shoutId);
+
+  void reShoutTheShout(UUID shoutId);
   
 }

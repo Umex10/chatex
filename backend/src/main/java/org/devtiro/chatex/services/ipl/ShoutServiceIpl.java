@@ -38,8 +38,6 @@ public class ShoutServiceIpl implements ShoutService {
         .text(createShoutRequest.getText())
         .images(createShoutRequest.getImages())
         .createdAt(LocalDate.now())
-        .likes(0)
-        .reShouts(0)
         .build();
 
     return shoutRep.save(shout);
@@ -54,6 +52,26 @@ public class ShoutServiceIpl implements ShoutService {
     ;
 
     shoutRep.delete(shout);
+  }
+
+  @Override
+  public void likeTheShout(UUID shoutId) {
+    Shout shout = shoutRep.findById(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
+            " was not found"));
+    ;
+
+    shoutRep.save(shout);
+  }
+
+  @Override
+  public void reShoutTheShout(UUID shoutId) {
+    Shout shout = shoutRep.findById(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
+            " was not found"));
+    ;
+
+    shoutRep.save(shout);
   }
 
 }

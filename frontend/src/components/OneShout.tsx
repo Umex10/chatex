@@ -5,8 +5,9 @@ import { Shout } from '../../constants/Shout';
 import { CldImage } from 'next-cloudinary';
 import { joinedShoutDate } from '@/utils/joinedDate';
 import { Button } from './ui/button';
-import { useDeleteShoutMutation } from '@redux/api/apiSlice';
+import { useDeleteShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation } from '@redux/api/apiSlice';
 import Spinner from './Spinner';
+import { useState } from 'react';
 
 /** Represents one engagement action (comment, reshout, like) with its icon, count and hover color. */
 interface Action {
@@ -14,6 +15,7 @@ interface Action {
   value: number,
   hoverColor: string,
   hoverBg: string,
+  onClick?: () => void
 }
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
@@ -32,26 +34,39 @@ const OneShout = (data: Shout) => {
   const { id, text, images, avatar, likes, reShouts, name, username, createdAt
   } = { ...data };
 
+  const [likesView, setLikesView] = useState(likes);
+  const [reShoutsView, setReShoutsView] = useState(reShouts);
+
+  const [likeShout] = useLikeTheShoutMutation();
+  const [reShoutTheShout] = useReShoutTheShoutMutation();
+
   const [deleteShout, { isLoading }] = useDeleteShoutMutation();
+
+  function likeShoutView() {
+    setLikesView(prev => prev + 1);
+
+    likeShout(id);
+  }
+
+  function reShoutTheShoutView() {
+    setReShoutsView(prev => prev + 1);
+    reShoutTheShout(id);
+  }
 
   const actions: Action[] = [
     {
-      Icon: MessageCircle,
-      value: 0,
-      hoverColor: "group-hover:text-violet-400",
-      hoverBg: "group-hover:bg-violet-400/10",
-    },
-    {
       Icon: Repeat2,
-      value: reShouts,
+      value: reShoutsView,
       hoverColor: "group-hover:text-green-400",
       hoverBg: "group-hover:bg-green-400/10",
+      onClick: () => reShoutTheShoutView()
     },
     {
       Icon: Heart,
-      value: likes,
+      value: likesView,
       hoverColor: "group-hover:text-pink-500",
       hoverBg: "group-hover:bg-pink-500/10",
+      onClick: () => likeShoutView()
     },
   ]
 
@@ -168,7 +183,8 @@ const OneShout = (data: Shout) => {
               {actions.map((action, i) => (
                 <li key={i} className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
                   <div className={`p-2 rounded-full transition-colors ${action.hoverBg}`}>
-                    <action.Icon className={`w-[18px] h-[18px] text-zinc-500 transition-colors ${action.hoverColor}`} />
+                    <action.Icon onClick={action.onClick}
+                      className={`w-[18px] h-[18px] text-zinc-500 transition-colors ${action.hoverColor}`} />
                   </div>
                   {action.value > 0 && (
                     <span className={`text-sm text-zinc-500 transition-colors ${action.hoverColor}`}>

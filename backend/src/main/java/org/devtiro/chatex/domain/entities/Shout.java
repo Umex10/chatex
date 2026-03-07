@@ -1,7 +1,9 @@
 package org.devtiro.chatex.domain.entities;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -32,9 +34,13 @@ public class Shout {
   @Column
   private List<String> images;
 
-  @Column
-  private int likes;
+  @ManyToMany
+  @JoinTable(name = "shout_likes", joinColumns = @JoinColumn(name = "shout_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+  @Builder.Default
+  private Set<User> likedBy = new HashSet<>();
 
-  @Column
-  private int reShouts;
+  @ManyToMany
+  @JoinTable(name = "shout_reShouts", joinColumns = @JoinColumn(name = "shout_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+  @Builder.Default
+  private Set<User> reShoutedBy = new HashSet<>();
 }

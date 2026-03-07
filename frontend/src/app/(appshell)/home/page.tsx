@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { CreateShout, ShoutComposer } from '@/components/CreateShout';
 import { PencilLine } from 'lucide-react';
 import { useGetShoutsQuery, useGetUserQuery } from '@redux/api/apiSlice';
+import RenderShouts from '@/components/RenderShouts';
 
 export type ShoutPayload = { text: string; images: string[] };
 
@@ -22,7 +23,7 @@ const Home = () => {
 
   const { data: user } = useGetUserQuery(undefined);
   const username = user?.username ?? "";
-  const { data: shouts } = useGetShoutsQuery(username);
+  const { data: shouts, isLoading } = useGetShoutsQuery(username);
 
   return (
     <div className='w-full text-3xl'>
@@ -41,9 +42,7 @@ const Home = () => {
         </div>
 
         <TabsContent value="for-you" className='m-0'>
-          {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.createdAt} />
-          ))}
+          <RenderShouts isLoading={isLoading} shouts={shouts ? shouts : []}></RenderShouts>
         </TabsContent>
         <TabsContent value="following" className='m-0'>Change your following here.</TabsContent>
       </Tabs>

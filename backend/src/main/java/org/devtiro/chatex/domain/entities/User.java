@@ -71,15 +71,31 @@ public class User {
     @Builder.Default
     private List<Shout> shouts = new ArrayList<>();
 
-    /** The set of users this user is following (owner side of the M:N self-reference). */
+    /**
+     * The set of users this user is following (owner side of the M:N
+     * self-reference).
+     */
     @ManyToMany
-    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"),
-     inverseJoinColumns = @JoinColumn(name = "following_id"))
+    @JoinTable(name = "user_follows", 
+    joinColumns = @JoinColumn(name = "follower_id"), 
+    inverseJoinColumns = @JoinColumn(name = "following_id"))
     @Builder.Default
     private Set<User> following = new HashSet<>();
 
-    /** The set of users that are following this user (inverse/mirror side of the M:N self-reference). */
+    /**
+     * The set of users that are following this user (inverse/mirror side of the M:N
+     * self-reference).
+     */
     @Builder.Default
     @ManyToMany(mappedBy = "following")
     private Set<User> followers = new HashSet<>();
+
+    @Builder.Default
+    @ManyToMany(mappedBy = "likedBy")
+    private Set<Shout> likedShouts = new HashSet<>();
+
+    @Builder.Default
+    @ManyToMany(mappedBy = "reShoutedBy")
+    private Set<Shout> reShoutedShouts = new HashSet<>();
+
 }
