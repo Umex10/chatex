@@ -2,6 +2,7 @@ package org.devtiro.chatex.services.ipl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.CreateShoutRequest;
@@ -23,8 +24,8 @@ public class ShoutServiceIpl implements ShoutService {
   private final UserRep userRep;
 
   @Override
-  public List<Shout> getShouts() {
-    return shoutRep.findAllShoutsWithUser();
+  public List<Shout> getShouts(String username) {
+    return shoutRep.findAllShoutsByUsername(username);
   }
 
   @Override
@@ -44,6 +45,24 @@ public class ShoutServiceIpl implements ShoutService {
   }
 
   @Override
+  public Set<User> getLikedBy(UUID shoutId) {
+    Shout shout = shoutRep.findLikedByUsersByShoutId(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the shoutId: " + shoutId +
+            " was not found"));
+
+    return shout.getLikedBy();
+  }
+
+  @Override
+  public Set<User> getReShoutedBy(UUID shoutId) {
+    Shout shout = shoutRep.findReShoutedByUsersByShoutId(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the shoutId: " + shoutId +
+            " was not found"));
+
+    return shout.getReShoutedBy();
+  }
+
+  @Override
   public void deleteShout(UUID shoutId) {
 
     Shout shout = shoutRep.findById(shoutId)
@@ -55,23 +74,76 @@ public class ShoutServiceIpl implements ShoutService {
   }
 
   @Override
-  public void likeTheShout(UUID shoutId) {
+  public void likeTheShout(UUID shoutId, UUID userId) {
     Shout shout = shoutRep.findById(shoutId)
         .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
             " was not found"));
     ;
+
+    User user = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+            " was not found"));
+
+    shout.getLikedBy().add(user);
 
     shoutRep.save(shout);
   }
 
   @Override
-  public void reShoutTheShout(UUID shoutId) {
+  public void dislikeTheShout(UUID shoutId, UUID userId) {
     Shout shout = shoutRep.findById(shoutId)
         .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
             " was not found"));
     ;
 
+    User user = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+            " was not found"));
+
+    shout.getLikedBy().remove(user);
     shoutRep.save(shout);
+  }
+
+  @Override
+  public void reShoutTheShout(UUID shoutId, UUID userId) {
+    Shout shout = shoutRep.findById(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
+            " was not found"));
+    ;
+
+    User user = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+            " was not found"));
+
+    shout.getReShoutedBy().add(user);
+
+    shoutRep.save(shout);
+  }
+
+  @Override
+  public void unShoutTheShout(UUID shoutId, UUID userId) {
+    Shout shout = shoutRep.findById(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
+            " was not found"));
+    ;
+
+    User user = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+            " was not found"));
+
+    shout.getReShoutedBy().remove(user);
+
+    shoutRep.save(shout);
+  }
+
+  @Override
+  public boolean isUserLikingTheShout(UUID shoutId, UUID userId) {
+    return shoutRep.isUserLikingTheShout(shoutId, userId);
+  }
+
+  @Override
+  public boolean isUserReShoutingTheShout(UUID shoutId, UUID userId) {
+    return shoutRep.isUserReShoutingTheShout(shoutId, userId);
   }
 
 }

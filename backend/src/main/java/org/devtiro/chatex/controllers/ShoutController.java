@@ -1,11 +1,15 @@
 package org.devtiro.chatex.controllers;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.CreateShoutRequest;
+import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.ShoutDto;
 import org.devtiro.chatex.domain.entities.Shout;
+import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.domain.mappers.ShoutMapper;
 import org.devtiro.chatex.services.ShoutService;
 import org.springframework.http.HttpStatus;
@@ -30,13 +34,21 @@ public class ShoutController {
 
   private final ShoutService shoutService;
   private final ShoutMapper shoutMapper;
+  private final FollowMapper followMapper;
 
   @GetMapping(path = "/{username}")
-  public ResponseEntity<List<ShoutDto>> getShouts(@PathVariable String username) {
+  public ResponseEntity<List<ShoutDto>> getShouts(@PathVariable String username,
+      @RequestAttribute UUID userId) {
 
-    List<Shout> shouts = shoutService.getShouts();
+    List<Shout> shouts = shoutService.getShouts(username);
 
     List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
+
+    shoutsDto.forEach(dto -> dto.setUserLikingTheShout(
+        shoutService.isUserLikingTheShout(dto.getId(), userId)));
+
+    shoutsDto.forEach(dto -> dto.setUserReShoutingTheShout(
+        shoutService.isUserReShoutingTheShout(dto.getId(), userId)));
 
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
@@ -57,7 +69,27 @@ public class ShoutController {
 
   }
 
-  @DeleteMapping("/{shoutId}")
+  @GetMapping(path = "/{shoutId}/likedBy")
+  public ResponseEntity<List<FollowDto>> getLikedBy(@PathVariable UUID shoutId) {
+
+    Set<User> likedBy = shoutService.getLikedBy(shoutId);
+
+    List<FollowDto> likedByDto = followMapper.toDtoList(likedBy);
+
+    return new ResponseEntity<>(likedByDto, HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/{shoutId}/reShoutedBy")
+  public ResponseEntity<List<FollowDto>> getReShoutedBy(@PathVariable UUID shoutId) {
+
+    Set<User> reShoutedBy = shoutService.getReShoutedBy(shoutId);
+
+    List<FollowDto> reShoutedByDto = followMapper.toDtoList(reShoutedBy);
+
+    return new ResponseEntity<>(reShoutedByDto, HttpStatus.OK);
+  }
+
+  @DeleteMapping(path = "/{shoutId}")
   public ResponseEntity<Void> deleteShout(@PathVariable UUID shoutId) {
 
     shoutService.deleteShout(shoutId);
@@ -65,18 +97,38 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
-  @PostMapping("/{shoutId}/like")
-  public ResponseEntity<Void> likeShout(@PathVariable UUID shoutId) {
+  @PostMapping(path = "/{shoutId}/like")
+  public ResponseEntity<Void> likeShout(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
 
-    shoutService.likeTheShout(shoutId);
+    shoutService.likeTheShout(shoutId, userId);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
-  @PostMapping("/{shoutId}/reShout")
-  public ResponseEntity<Void> reShoutTheShout(@PathVariable UUID shoutId) {
+  @PostMapping(path = "/{shoutId}/dislike")
+  public ResponseEntity<Void> dislikeShout(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
 
-    shoutService.reShoutTheShout(shoutId);
+    shoutService.dislikeTheShout(shoutId, userId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/{shoutId}/reShout")
+  public ResponseEntity<Void> reShoutTheShout(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
+
+    shoutService.reShoutTheShout(shoutId, userId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/{shoutId}/unShout")
+  public ResponseEntity<Void> unShoutTheShout(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
+
+    shoutService.unShoutTheShout(shoutId, userId);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }

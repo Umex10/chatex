@@ -6,7 +6,9 @@ export interface Shout {
   avatar: string
   text: string,
   images: string[],
-  likes: number,
-  reShouts: number,
+  likesCount: number,
+  reShoutsCount: number,
+  userLikingTheShout: boolean, 
+  userReShoutingTheShout: boolean
   createdAt: string
 }

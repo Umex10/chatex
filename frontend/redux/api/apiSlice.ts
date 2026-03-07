@@ -194,6 +194,20 @@ export const apiSlice = createApi({
         method: "POST"
       }),
     }),
+
+     dislikeTheShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/dislike`,
+        method: "POST"
+      }),
+    }),
+
+    unShoutTheShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/unShout`,
+        method: "POST"
+      }),
+    }),
   }),
 });
 
@@ -202,5 +216,6 @@ export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
   useGetUserByUsernameQuery, useFollowUserMutation, useUnfollowUserMutation,
   useGetFollowersQuery, useGetFollowingQuery, useGetShoutsQuery, useCreateShoutMutation,
-  useDeleteShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation
+  useDeleteShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation,
+  useDislikeTheShoutMutation,useUnShoutTheShoutMutation
 } = apiSlice;

@@ -1,22 +1,13 @@
-import { LucideIcon, Trash } from 'lucide-react'
+import { Trash } from 'lucide-react'
 
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
 import { Shout } from '../../constants/Shout';
 import { CldImage } from 'next-cloudinary';
 import { joinedShoutDate } from '@/utils/joinedDate';
 import { Button } from './ui/button';
-import { useDeleteShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation } from '@redux/api/apiSlice';
+import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation, useUnShoutTheShoutMutation } from '@redux/api/apiSlice';
 import Spinner from './Spinner';
 import { useState } from 'react';
-
-/** Represents one engagement action (comment, reshout, like) with its icon, count and hover color. */
-interface Action {
-  Icon: LucideIcon,
-  value: number,
-  hoverColor: string,
-  hoverBg: string,
-  onClick?: () => void
-}
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
 function formatCount(n: number): string {
@@ -31,44 +22,50 @@ function formatCount(n: number): string {
  */
 const OneShout = (data: Shout) => {
 
-  const { id, text, images, avatar, likes, reShouts, name, username, createdAt
+  const { id, text, images, userLikingTheShout, userReShoutingTheShout,
+    avatar, likesCount, reShoutsCount, name, username, createdAt
   } = { ...data };
 
-  const [likesView, setLikesView] = useState(likes);
-  const [reShoutsView, setReShoutsView] = useState(reShouts);
+  const [likesCountView, setLikesCountView] = useState(likesCount);
+  const [reShoutsCountView, setReShoutsCountView] = useState(reShoutsCount);
+
+  const [userLikingTheShoutView, setUserLikingTheShoutView] = useState(userLikingTheShout);
+  const [userReShoutingTheShoutView, setUserReShoutingTheShoutView] = useState(userReShoutingTheShout);
 
   const [likeShout] = useLikeTheShoutMutation();
+  const [dislikeShout] = useDislikeTheShoutMutation();
   const [reShoutTheShout] = useReShoutTheShoutMutation();
+  const [unShoutTheShout] = useUnShoutTheShoutMutation();
 
   const [deleteShout, { isLoading }] = useDeleteShoutMutation();
 
-  function likeShoutView() {
-    setLikesView(prev => prev + 1);
+  function handleLikeTheShoutView() {
 
-    likeShout(id);
+    if (userLikingTheShoutView) {
+      setLikesCountView(last => last - 1);
+      dislikeShout(id);
+
+    } else {
+      setLikesCountView(last => last + 1);
+      likeShout(id);
+    }
+
+    setUserLikingTheShoutView(!userLikingTheShoutView);
   }
 
-  function reShoutTheShoutView() {
-    setReShoutsView(prev => prev + 1);
-    reShoutTheShout(id);
-  }
+  function handleReShoutTheShoutView() {
 
-  const actions: Action[] = [
-    {
-      Icon: Repeat2,
-      value: reShoutsView,
-      hoverColor: "group-hover:text-green-400",
-      hoverBg: "group-hover:bg-green-400/10",
-      onClick: () => reShoutTheShoutView()
-    },
-    {
-      Icon: Heart,
-      value: likesView,
-      hoverColor: "group-hover:text-pink-500",
-      hoverBg: "group-hover:bg-pink-500/10",
-      onClick: () => likeShoutView()
-    },
-  ]
+    if (userReShoutingTheShoutView) {
+      setReShoutsCountView(last => last - 1);
+      unShoutTheShout(id);
+
+    } else {
+      setReShoutsCountView(last => last + 1);
+      reShoutTheShout(id);
+    }
+
+    setUserReShoutingTheShoutView(!userReShoutingTheShoutView);
+  }
 
   return (
     // outer card container for one shout item
@@ -178,21 +175,47 @@ const OneShout = (data: Shout) => {
               </div>
             )}
 
-            {/* action counters: comments, reshares and likes */}
+            {/* action counters: reshouts and likes */}
             <ul className='w-full grid grid-cols-4 items-center -ml-2 mt-1'>
-              {actions.map((action, i) => (
-                <li key={i} className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
-                  <div className={`p-2 rounded-full transition-colors ${action.hoverBg}`}>
-                    <action.Icon onClick={action.onClick}
-                      className={`w-[18px] h-[18px] text-zinc-500 transition-colors ${action.hoverColor}`} />
-                  </div>
-                  {action.value > 0 && (
-                    <span className={`text-sm text-zinc-500 transition-colors ${action.hoverColor}`}>
-                      {formatCount(action.value)}
-                    </span>
-                  )}
-                </li>
-              ))}
+              <li className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
+                <div className='p-2 rounded-full transition-colors group-hover:bg-green-400/10'>
+                  <Repeat2
+                    onClick={handleReShoutTheShoutView}
+                    className={`w-[18px] h-[18px] transition-colors ${userReShoutingTheShoutView
+                      ? 'text-green-400'
+                      : 'text-zinc-500 group-hover:text-green-400'
+                      }`}
+                  />
+                </div>
+                {reShoutsCountView > 0 && (
+                  <span className={`text-sm transition-colors ${userReShoutingTheShoutView
+                    ? 'text-green-400'
+                    : 'text-zinc-500 group-hover:text-green-400'
+                    }`}>
+                    {formatCount(reShoutsCountView)}
+                  </span>
+                )}
+              </li>
+              <li className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
+                <div className='p-2 rounded-full transition-colors group-hover:bg-pink-500/10'>
+                  <Heart
+                    onClick={handleLikeTheShoutView}
+                    fill={userLikingTheShoutView ? 'currentColor' : 'none'}
+                    className={`w-[18px] h-[18px] transition-colors ${userLikingTheShoutView
+                      ? 'text-pink-500'
+                      : 'text-zinc-500 group-hover:text-pink-500'
+                      }`}
+                  />
+                </div>
+                {likesCountView > 0 && (
+                  <span className={`text-sm transition-colors ${userLikingTheShoutView
+                    ? 'text-pink-500'
+                    : 'text-zinc-500 group-hover:text-pink-500'
+                    }`}>
+                    {formatCount(likesCountView)}
+                  </span>
+                )}
+              </li>
             </ul>
           </div>
         </div>
