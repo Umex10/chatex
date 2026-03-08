@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for creating a new shout.
+ * Contains the text content and an optional list of image URLs.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -11,6 +11,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object representing a shout in API responses.
+ * Includes flattened author info, engagement counts, and flags indicating
+ * whether the requesting user has liked or re-shouted this shout.
+ */
 @Data
 @Builder
 @NoArgsConstructor

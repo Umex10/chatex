@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
- * REST controller handling user profile operations.
- * Provides endpoints for retrieving and updating user account data.
+ * REST controller handling follow relationship operations.
+ * Provides endpoints for retrieving follower/following lists and managing follow/unfollow actions.
  */
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController

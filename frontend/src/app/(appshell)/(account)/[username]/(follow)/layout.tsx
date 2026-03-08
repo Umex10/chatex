@@ -22,8 +22,10 @@ const Layout = ({ children }: Readonly<{
   return (
     <div className='flex flex-col' data-testid="follow-site">
 
+      {/* Return Header */}
       <ReturnHeader returnText={username}></ReturnHeader>
 
+      {/* Tab Navigation */}
       <Tabs defaultValue={activeTab} className="w-full"
        onValueChange={setActiveTab}>
         <TabsList className='bg-background w-full gap-1 h-14 p-0'>
@@ -43,6 +45,7 @@ const Layout = ({ children }: Readonly<{
                   onClick={() => router.push(`/${username}/following`)}
                   data-testid="following-label">Following</TabsTrigger>
         </TabsList>
+        {/* Tab Content */}
         <TabsContent value="verified-followers" className='m-0 flex-1 sm:border'>{children}</TabsContent>
         <TabsContent value="followers" className='m-0 flex-1 sm:border'>{children}</TabsContent>
         <TabsContent value="following" className='m-0 flex-1 sm:border'>{children}</TabsContent>

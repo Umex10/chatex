@@ -114,6 +114,7 @@ const OneShout = (data: Shout) => {
 
               {/* verified badge only shown when hasBadge is true */}
 
+              {/* Verified Badge */}
               <Badge
                 variant="secondary"
                 className="p-0 bg-transparent border-none shadow-none
@@ -132,6 +133,7 @@ const OneShout = (data: Shout) => {
               <span className=''>{joinedShoutDate(createdAt)}</span>
             </div>
 
+            {/* Quick Action Buttons: Details, Delete, Re-Shout Info */}
             <div className='flex flex-row gap-1'>
               <Button size="icon" variant="secondary" className='bg-transparent'
                 onClick={(e) => {
@@ -168,12 +170,14 @@ const OneShout = (data: Shout) => {
             {/* post image/media preview — X-style adaptive grid */}
             {images.length > 0 && (
               <div className="w-full mt-1">
+                {/* Single Image Layout */}
                 {images.length === 1 && (
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
                     <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="600px" className="object-cover" />
                   </div>
                 )}
 
+                {/* Two Images Grid */}
                 {images.length === 2 && (
                   <div className="grid grid-cols-2 gap-0.5 rounded-2xl overflow-hidden">
                     {images.map((img, i) => (
@@ -184,6 +188,7 @@ const OneShout = (data: Shout) => {
                   </div>
                 )}
 
+                {/* Three Images Grid */}
                 {images.length === 3 && (
                   <div className="grid grid-cols-2 grid-rows-2 gap-0.5 h-72 rounded-2xl overflow-hidden">
                     <div className="relative row-span-2">
@@ -197,6 +202,7 @@ const OneShout = (data: Shout) => {
                   </div>
                 )}
 
+                {/* Four Images Grid */}
                 {images.length === 4 && (
                   <div className="grid grid-cols-2 gap-0.5 rounded-2xl overflow-hidden">
                     {images.map((img, i) => (
@@ -210,6 +216,7 @@ const OneShout = (data: Shout) => {
             )}
 
             {/* action counters: reshouts and likes */}
+            {/* Engagement Counters: Re-Shouts & Likes */}
             <ul className='w-full grid grid-cols-4 items-center -ml-2 mt-1'>
               <li className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
                 <div className='p-2 rounded-full transition-colors group-hover:bg-green-400/10'>

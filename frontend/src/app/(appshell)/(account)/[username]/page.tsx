@@ -55,6 +55,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
   if (isError && !isOwnAccount) {
     return <div className='w-full h-full flex-1 text-center'>
+      {/* User Not Found */}
       User @{otherUsername} was not found.
     </div>;
   }
@@ -79,6 +80,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           />
         </div>
 
+        {/* Avatar */}
         <div className="absolute left-4 bottom-0 translate-y-1/2">
           <div className="relative w-24 h-24 rounded-full border-4 border-black overflow-hidden bg-zinc-900">
             <CldImage
@@ -96,22 +98,26 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
         </div>
       </div>
 
+      {/* User Info Section */}
       <div className='flex flex-row px-3'>
         <div className='flex-1 flex flex-col justify-center gap-2  pt-12'>
           <div>
             <h2 className='text-xl font-bold'>{name}</h2>
             <h3 className='text-base'>{username}</h3>
           </div>
+          {/* Bio */}
           {bio && (
             <p className='text-base'>
               {bio}
             </p>
           )}
 
+          {/* Join Date */}
           <Link href="/account/about" className='flex flex-row gap-2 items-center opacity-50'>
             <CalendarDays className='w-4 h-5 -mt-1/2'></CalendarDays>
             <span>{joinedAccountDate(createdAt)}</span>
           </Link>
+          {/* Follower Stats */}
           <div className='flex flex-row gap-4'>
             <h4 className='flex gap-1'
               onClick={() => router.push(`${username}/following`)}
@@ -129,6 +135,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           </div>
         </div>
 
+        {/* Edit Account / Follow Button */}
         <div className='h-full flex justify-end items-start'>
 
           <Link href="/settings" className={`${isOwnAccount ? "" : "hidden"}
@@ -149,6 +156,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
       </div>
 
+      {/* Shout Feed Tabs */}
       <Tabs defaultValue="shouts" className="w-full"
         onValueChange={setActiveTab}>
         <TabsList className='bg-background w-full grid grid-cols-3 h-14 p-0'>
@@ -162,16 +170,19 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
             ${activeTab === "media" ? "underline decoration-2 underline-offset-20" : ""}`}>Media</TabsTrigger>
 
         </TabsList>
+        {/* Shouts Tab Content */}
         <TabsContent value="shouts" className='m-0'>
           {shouts?.map(shout => (
             <OneShout {...shout} key={shout.name}></OneShout>
           ))}
         </TabsContent>
+        {/* Replies Tab Content */}
         <TabsContent value="replies" className='m-0'>
           {shouts?.map(shout => (
             <OneShout {...shout} key={shout.name}></OneShout>
           ))}
         </TabsContent>
+        {/* Media Tab Content */}
         <TabsContent value="media" className='m-0'>
           {shouts?.map(shout => (
             <OneShout {...shout} key={shout.name}></OneShout>

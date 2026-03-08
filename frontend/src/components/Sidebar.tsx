@@ -155,6 +155,7 @@ export function AppSidebar() {
         </SidebarHeader>
 
         <SidebarContent>
+          {/* Navigation Items */}
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu className="gap-0">
@@ -191,6 +192,7 @@ export function AppSidebar() {
 
           </SidebarGroup>
 
+          {/* Compose Shout Button */}
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -209,6 +211,7 @@ export function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
 
+        {/* Footer: User Avatar & Sign Out Menu */}
         <SidebarFooter className="p-2">
           <SidebarMenu>
             <SidebarMenuItem>

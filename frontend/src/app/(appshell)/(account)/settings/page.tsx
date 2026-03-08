@@ -25,6 +25,7 @@ export default function SettingsPage() {
       {/* Account page — visible behind the dialog */}
       {me && <AccountPage params={params} />}
 
+      {/* Settings Dialog */}
       <Dialog open={true} onOpenChange={() => router.push(`/${me?.username ?? ""}`)}>
         <DialogContent
           className="h-full w-full max-w-none sm:max-w-[600px] sm:h-auto p-0 bg-black border-none sm:border-zinc-800 rounded-none sm:rounded-2xl overflow-y-auto"

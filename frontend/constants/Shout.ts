@@ -1,4 +1,5 @@
 
+/** Represents a single shout (post) entry with author info, content, and engagement metrics. */
 export interface Shout {
   id: string,
   name: string,

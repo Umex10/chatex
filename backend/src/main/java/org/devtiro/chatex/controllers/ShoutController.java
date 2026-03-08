@@ -27,6 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * REST controller handling shout (post) operations.
+ * Provides endpoints for creating, retrieving, deleting shouts and managing
+ * user engagement actions such as likes and re-shouts.
+ */
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/v1/shout")
@@ -38,6 +43,11 @@ public class ShoutController {
   private final ShoutMapper shoutMapper;
   private final FollowMapper followMapper;
 
+  /**
+   * Retrieves all shouts for the given username with engagement flags for the requesting user.
+   *
+   * @return ResponseEntity containing a list of ShoutDto entries
+   */
   @GetMapping(path = "/{username}")
   public ResponseEntity<List<ShoutDto>> getShouts(@PathVariable String username,
       @RequestAttribute UUID userId) {
@@ -55,6 +65,11 @@ public class ShoutController {
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
 
+  /**
+   * Retrieves a single shout by its ID with engagement flags for the requesting user.
+   *
+   * @return ResponseEntity containing the ShoutDto
+   */
   @GetMapping(path = "/{username}/{shoutId}")
   public ResponseEntity<ShoutDto> getShouts(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
@@ -72,6 +87,11 @@ public class ShoutController {
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
 
+  /**
+   * Creates a new shout on behalf of the authenticated user.
+   *
+   * @return ResponseEntity containing the created ShoutDto with HTTP 201 status
+   */
   @PostMapping()
   public ResponseEntity<ShoutDto> createShout(@RequestAttribute UUID userId,
       @RequestBody CreateShoutRequest createShoutRequest) {
@@ -88,6 +108,11 @@ public class ShoutController {
 
   }
 
+  /**
+   * Retrieves all users who liked the given shout, enriched with follow-status badges.
+   *
+   * @return ResponseEntity containing a list of FollowDto entries
+   */
   @GetMapping(path = "/{shoutId}/likedBy")
   public ResponseEntity<List<FollowDto>> getLikedBy(@PathVariable UUID shoutId,
       @RequestAttribute("userId") UUID userId) {
@@ -99,6 +124,11 @@ public class ShoutController {
     return new ResponseEntity<>(likedByDto, HttpStatus.OK);
   }
 
+  /**
+   * Retrieves all users who re-shouted the given shout, enriched with follow-status badges.
+   *
+   * @return ResponseEntity containing a list of FollowDto entries
+   */
   @GetMapping(path = "/{shoutId}/reShoutedBy")
   public ResponseEntity<List<FollowDto>> getReShoutedBy(@PathVariable UUID shoutId,
       @RequestAttribute("userId") UUID userId) {
@@ -110,6 +140,11 @@ public class ShoutController {
     return new ResponseEntity<>(reShoutedByDto, HttpStatus.OK);
   }
 
+  /**
+   * Deletes the shout identified by the given ID.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @DeleteMapping(path = "/{shoutId}")
   public ResponseEntity<Void> deleteShout(@PathVariable UUID shoutId) {
 
@@ -118,6 +153,11 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  /**
+   * Adds a like from the authenticated user to the given shout.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @PostMapping(path = "/{shoutId}/like")
   public ResponseEntity<Void> likeShout(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
@@ -127,6 +167,11 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  /**
+   * Removes a like from the authenticated user on the given shout.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @PostMapping(path = "/{shoutId}/dislike")
   public ResponseEntity<Void> dislikeShout(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
@@ -136,6 +181,11 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  /**
+   * Adds a re-shout from the authenticated user to the given shout.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @PostMapping(path = "/{shoutId}/reShout")
   public ResponseEntity<Void> reShoutTheShout(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
@@ -145,6 +195,11 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  /**
+   * Removes a re-shout from the authenticated user on the given shout.
+   *
+   * @return ResponseEntity with HTTP 200 OK and an empty body
+   */
   @PostMapping(path = "/{shoutId}/unShout")
   public ResponseEntity<Void> unShoutTheShout(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {

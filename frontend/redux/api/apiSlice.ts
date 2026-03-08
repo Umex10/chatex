@@ -8,7 +8,6 @@ import { Follow } from '../../constants/Follow';
 import { Shout } from '../../constants/Shout';
 import { ShoutPayload } from '@/app/(appshell)/home/page';
 
-
 /**
  * After a sign-up or sign-in mutation succeeds, this helper updates the
  * `refreshAccessTk` cache entry with the returned auth data so the access
@@ -159,24 +158,29 @@ export const apiSlice = createApi({
       query: (username) => `/follow/${username}/following`
     }),
 
+    /** Fetches a single shout by username and shout ID. */
     getShout: builder.query<Shout, { username: string; shoutId: string }>({
       query: ({ username, shoutId }) => `/shout/${username}/${shoutId}`,
       providesTags: ['User']
     }),
 
+    /** Fetches all shouts for a given username. */
     getShouts: builder.query<Shout[], string>({
       query: (username) => `/shout/${username}`,
       providesTags: ['User']
     }),
 
+    /** Fetches the list of users who liked a specific shout. */
     getLikedBy: builder.query<Follow[], string>({
       query: (shoutId) => `/shout/${shoutId}/likedBy`
     }),
 
+    /** Fetches the list of users who re-shouted a specific shout. */
     getReShoutedBy: builder.query<Follow[], string>({
       query: (shoutId) => `/shout/${shoutId}/reShoutedBy`
     }),
 
+    /** Creates a new shout post and invalidates the User cache. */
     createShout: builder.mutation<Shout, ShoutPayload>({
       query: (createShout) => ({
         url: `/shout`,
@@ -186,6 +190,7 @@ export const apiSlice = createApi({
       invalidatesTags: ['User']
     }),
 
+    /** Deletes a shout by its ID and invalidates the User cache. */
     deleteShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}`,
@@ -194,6 +199,7 @@ export const apiSlice = createApi({
       invalidatesTags: ['User']
     }),
 
+    /** Sends a like action on a shout. */
     likeTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}/like`,
@@ -201,6 +207,7 @@ export const apiSlice = createApi({
       }),
     }),
 
+    /** Sends a re-shout action on a shout. */
     reShoutTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}/reShout`,
@@ -208,6 +215,7 @@ export const apiSlice = createApi({
       }),
     }),
 
+    /** Removes a like from a shout. */
     dislikeTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}/dislike`,
@@ -215,6 +223,7 @@ export const apiSlice = createApi({
       }),
     }),
 
+    /** Removes a re-shout from a shout. */
     unShoutTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}/unShout`,

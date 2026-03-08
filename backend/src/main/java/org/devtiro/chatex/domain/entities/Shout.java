@@ -9,6 +9,10 @@ import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Entity class representing a shout (post) in the system.
+ * Stores the text content, optional images, and engagement data such as likes and re-shouts.
+ */
 @Entity
 @Table(name = "shouts")
 @Data

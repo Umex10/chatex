@@ -67,6 +67,9 @@ public class User {
     @Column(name = "website")
     private String website;
 
+    /**
+     * The list of shouts (posts) authored by this user.
+     */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Shout> shouts = new ArrayList<>();
@@ -90,10 +93,16 @@ public class User {
     @ManyToMany(mappedBy = "following")
     private Set<User> followers = new HashSet<>();
 
+    /**
+     * The set of shouts this user has liked (inverse side of the shout-likes M:N relationship).
+     */
     @Builder.Default
     @ManyToMany(mappedBy = "likedBy")
     private Set<Shout> likedShouts = new HashSet<>();
 
+    /**
+     * The set of shouts this user has re-shouted (inverse side of the shout-reShouts M:N relationship).
+     */
     @Builder.Default
     @ManyToMany(mappedBy = "reShoutedBy")
     private Set<Shout> reShoutedShouts = new HashSet<>();

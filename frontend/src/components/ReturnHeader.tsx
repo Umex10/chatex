@@ -24,6 +24,7 @@ const ReturnHeader = ({children, returnText}: ReturnHeaderArgs) => {
      sticky w-full z-50 left-0 top-0 bg-black p-4'>
       <div className='flex-1 flex flex-row items-center'>
         <div className='flex-1 flex flex-row items-center gap-10'>
+          {/* Back Button */}
           <Button
             className="bg-transparent [&_svg]:!size-6 px-0"
             onClick={() => router.back()}
@@ -32,9 +33,11 @@ const ReturnHeader = ({children, returnText}: ReturnHeaderArgs) => {
           >
             <ArrowLeft/>
           </Button>
+          {/* Title */}
           <h2 className='font-bold text-lg'>{returnText}</h2>
         </div>
       </div>
+      {/* Action Slot */}
       <div className=''>
         {children}
       </div>

@@ -14,6 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+          {/* Theme & State Providers */}
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -21,6 +22,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
              <StoreProvider>
+              {/* Toast Notifications */}
               <Toaster closeButton position="top-center" richColors />
             {children}
             </StoreProvider>

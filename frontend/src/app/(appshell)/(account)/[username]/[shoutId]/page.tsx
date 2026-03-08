@@ -5,6 +5,7 @@ import { useGetShoutQuery } from '@redux/api/apiSlice';
 import React, { use } from 'react'
 import { Shout } from '../../../../../../constants/Shout';
 
+/** Page displaying a single shout by its ID, resolved from the URL parameters. */
 const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
   const resolvedParams = use(params);
 
@@ -16,6 +17,7 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
 
   return (
     <div className='w-full'>
+      {/* Single Shout View */}
       <RenderShouts isLoading={isLoading} shouts={shout ? [shout as Shout] : []}></RenderShouts>
     </div>
   )

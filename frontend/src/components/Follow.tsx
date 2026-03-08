@@ -26,6 +26,7 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
     transition ease-out duration-400'
     onClick={() => router.push(`/${username}`)}>
 
+      {/* Avatar */}
       <div className="relative w-13 h-13 rounded-full border-4 border-black 
       overflow-hidden bg-zinc-900">
         <CldImage
@@ -41,8 +42,10 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
         />
       </div>
 
+      {/* User Details */}
       <div className='flex-1 w-full flex flex-col gap-1'>
         <div className='w-full flex flex-row items-start gap-2'>
+          {/* Name & Username */}
           <div className='w-full flex flex-col'>
             <span className='font-bold max-w-[80px] truncate 
             md:max-w-none md:whitespace-normal'>{name}</span>
@@ -51,6 +54,7 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
             md:max-w-none md:whitespace-normal'
             data-testid="username-in-list">@{username}</span>
 
+              {/* "Follows You" Badge */}
               {targetFollowingUser &&
               <span className='p-1 bg-gray-800 text-xs'>Follows you</span>}
               
@@ -58,6 +62,7 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
             </div>
           </div>
 
+          {/* Follow Action & Menu */}
           <div className='flex-1 flex flex-row gap-2 items-center'>
             <Button variant={!userFollowingTarget ? "outline" : "secondary"}
               className={"flex-1 h-11 py-1 rounded-xl"}
@@ -70,6 +75,7 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
 
         </div>
 
+        {/* Bio */}
         <p className='text-base w-full'>{bio}</p>
       </div>
     </div>

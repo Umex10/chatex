@@ -20,6 +20,7 @@ export function ModeToggle() {
 
   return (
     <DropdownMenu>
+      {/* Toggle Button */}
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
           <Sun className="transition-all scale-100 rotate-0 dark:scale-0 dark:-rotate-90 h-[1.2rem] w-[1.2rem]" />
@@ -27,6 +28,7 @@ export function ModeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
+      {/* Theme Options */}
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light

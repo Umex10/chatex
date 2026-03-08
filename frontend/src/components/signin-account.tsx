@@ -112,6 +112,7 @@ export function SignInAcc({ children }: SignInAccountProps) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="overflow-y-auto max-h-[90vh] sm:max-w-[500px]">
+                {/* Dialog Header */}
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">
                         Sign In
@@ -120,11 +121,13 @@ export function SignInAcc({ children }: SignInAccountProps) {
                         Welcome back! Sign in to your account to continue chatting.
                     </DialogDescription>
                 </DialogHeader>
+                {/* Sign-In Form */}
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="py-4 space-y-4"
                     >
+                        {/* Username Field */}
                         <FormField
                             control={form.control}
                             name="username"
@@ -139,6 +142,7 @@ export function SignInAcc({ children }: SignInAccountProps) {
                             )}
                         />
 
+                        {/* Key Field */}
                         <FormField
                             control={form.control}
                             name="key"
@@ -158,6 +162,7 @@ export function SignInAcc({ children }: SignInAccountProps) {
                             )}
                         />
 
+                        {/* Action Buttons */}
                         <div className="flex gap-3 pt-4">
                             <Button
                                 type="button"

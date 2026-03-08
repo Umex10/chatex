@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Implementation of the ShoutService interface.
+ * Handles shout CRUD operations and user engagement actions (likes, re-shouts)
+ * using the Shout and User repositories.
+ */
 @Service
 @RequiredArgsConstructor
 public class ShoutServiceIpl implements ShoutService {
@@ -23,6 +28,7 @@ public class ShoutServiceIpl implements ShoutService {
   private final ShoutRep shoutRep;
   private final UserRep userRep;
 
+  /** {@inheritDoc} */
   @Override
   public Shout getShout(UUID shoutId) {
     return shoutRep.findById(shoutId).orElseThrow(
@@ -30,11 +36,13 @@ public class ShoutServiceIpl implements ShoutService {
         " was not found"));
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<Shout> getShouts(String username) {
     return shoutRep.findAllShoutsByUsername(username);
   }
 
+  /** {@inheritDoc} */
   @Override
   public Shout createShout(UUID userId, CreateShoutRequest createShoutRequest) {
     User user = userRep.findById(userId)
@@ -51,6 +59,7 @@ public class ShoutServiceIpl implements ShoutService {
     return shoutRep.save(shout);
   }
 
+  /** {@inheritDoc} */
   @Override
   public Set<User> getLikedBy(UUID shoutId) {
     Shout shout = shoutRep.findLikedByUsersByShoutId(shoutId)
@@ -60,6 +69,7 @@ public class ShoutServiceIpl implements ShoutService {
     return shout.getLikedBy();
   }
 
+  /** {@inheritDoc} */
   @Override
   public Set<User> getReShoutedBy(UUID shoutId) {
     Shout shout = shoutRep.findReShoutedByUsersByShoutId(shoutId)
@@ -69,6 +79,7 @@ public class ShoutServiceIpl implements ShoutService {
     return shout.getReShoutedBy();
   }
 
+  /** {@inheritDoc} */
   @Override
   public void deleteShout(UUID shoutId) {
 
@@ -80,6 +91,7 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.delete(shout);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void likeTheShout(UUID shoutId, UUID userId) {
     Shout shout = shoutRep.findById(shoutId)
@@ -96,6 +108,7 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.save(shout);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void dislikeTheShout(UUID shoutId, UUID userId) {
     Shout shout = shoutRep.findById(shoutId)
@@ -111,6 +124,7 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.save(shout);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void reShoutTheShout(UUID shoutId, UUID userId) {
     Shout shout = shoutRep.findById(shoutId)
@@ -127,6 +141,7 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.save(shout);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void unShoutTheShout(UUID shoutId, UUID userId) {
     Shout shout = shoutRep.findById(shoutId)
@@ -143,11 +158,13 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.save(shout);
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean isUserLikingTheShout(UUID shoutId, UUID userId) {
     return shoutRep.isUserLikingTheShout(shoutId, userId);
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean isUserReShoutingTheShout(UUID shoutId, UUID userId) {
     return shoutRep.isUserReShoutingTheShout(shoutId, userId);

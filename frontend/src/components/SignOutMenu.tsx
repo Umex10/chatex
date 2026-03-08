@@ -32,10 +32,12 @@ export function SignOutMenu({ children, onSignOut }: SignOutMenuProps) {
 
   return (
     <div ref={ref} className="relative w-full">
+      {/* Trigger */}
       <div onClick={() => setOpen(prev => !prev)}>
         {children}
       </div>
 
+      {/* Sign Out Popover */}
       {open && (
         <div className="absolute bottom-full left-0 mb-1 w-56 rounded-lg border border-border bg-background shadow-lg z-50">
           <Button

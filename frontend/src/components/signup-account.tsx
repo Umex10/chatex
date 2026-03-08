@@ -146,6 +146,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                 {children}
             </DialogTrigger>
             <DialogContent className="overflow-y-auto max-h-[90vh] sm:max-w-[500px]">
+                {/* Dialog Header */}
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">
                         Create Account
@@ -155,11 +156,13 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                         below.
                     </DialogDescription>
                 </DialogHeader>
+                {/* Sign-Up Form */}
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="py-4 space-y-4"
                     >
+                        {/* Name Field */}
                         <FormField
                             control={form.control}
                             name="name"
@@ -174,6 +177,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                             )}
                         />
 
+                        {/* Username Field */}
                         <FormField
                             control={form.control}
                             name="username"
@@ -188,6 +192,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                             )}
                         />
 
+                        {/* Email Field */}
                         <FormField
                             control={form.control}
                             name="email"
@@ -207,6 +212,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                             )}
                         />
 
+                        {/* Phone Field */}
                         <FormField
                             control={form.control}
                             name="phone"
@@ -221,6 +227,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                             )}
                         />
 
+                        {/* Key Field */}
                         <FormField
                             control={form.control}
                             name="key"
@@ -240,6 +247,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                             )}
                         />
 
+                        {/* Confirm Key Field */}
                         <FormField
                             control={form.control}
                             name="keyConfirm"
@@ -259,6 +267,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
                             )}
                         />
 
+                        {/* Action Buttons */}
                         <div className="flex gap-3 pt-4">
                             <Button
                                 type="button"

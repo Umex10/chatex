@@ -92,6 +92,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
 
+        {/* Loading Overlay */}
         {isLoading || form.formState.isSubmitting && (
           <div className="absolute z-50 inset-0 flex w-full items-center justify-center bg-transparent">
             <Spinner></Spinner>
@@ -100,6 +101,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
 
         <div className={`flex flex-row gap-3 ${isLoading ? "opacity-50" : ""}`}>
 
+          {/* User Avatar */}
           <div className="w-12 h-12 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
             <CldImage
               width="48"
@@ -115,6 +117,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
           </div>
 
           <div className="flex flex-col flex-1 gap-1 items-start">
+            {/* Text Input */}
             <FormField
               control={form.control}
               name="text"
@@ -153,6 +156,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
             )}
 
             <div className="w-full flex flex-row justify-between items-center mt-1 border-t pt-2">
+              {/* Toolbar: Image, Emoji, Location */}
               <div className="flex items-center gap-1 text-violet-500">
                 <Button
                   type="button"
@@ -180,6 +184,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
                 </Button>
               </div>
 
+              {/* Submit Button */}
               <Button
                 type="submit"
                 className="bg-violet-500 hover:bg-violet-600 rounded-full px-6 font-bold"
@@ -208,7 +213,9 @@ export function CreateShout({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
+      {/* Trigger Element */}
       <DialogTrigger asChild>{children}</DialogTrigger>
+      {/* Composer Dialog */}
       <DialogContent className="sm:max-w-[600px] top-[15%] translate-y-0">
         <DialogHeader className="border-b pb-2">
           <DialogTitle className="text-xl font-bold">New Shout</DialogTitle>

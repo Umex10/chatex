@@ -28,6 +28,7 @@ const Home = () => {
   return (
     <div className='w-full text-3xl'>
 
+      {/* Tab Navigation */}
       <Tabs defaultValue="for-you" className="w-full" onValueChange={setActiveTab}>
         <TabsList className='bg-background w-full grid grid-cols-2 h-14 p-0'>
           <TabsTrigger value="for-you" className={`flex-1 text-lg
@@ -41,9 +42,11 @@ const Home = () => {
           <ShoutComposer />
         </div>
 
+        {/* "For You" Feed */}
         <TabsContent value="for-you" className='m-0'>
           <RenderShouts isLoading={isLoading} shouts={shouts ? shouts : []}></RenderShouts>
         </TabsContent>
+        {/* "Following" Feed */}
         <TabsContent value="following" className='m-0'>Change your following here.</TabsContent>
       </Tabs>
 

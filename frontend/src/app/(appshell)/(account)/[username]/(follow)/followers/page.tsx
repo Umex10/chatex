@@ -20,6 +20,7 @@ const Followers = () => {
 
   return (
     <div className='w-full p-3 flex-1 border-y'>
+      {/* Loading State */}
       {isLoading ? (
 
         <div className="flex justify-center items-center py-10">
@@ -29,6 +30,7 @@ const Followers = () => {
 
         <div className='flex flex-col'>
 
+          {/* Followers List */}
           {followers?.map(user => (
             <Follow {...user} key={user.username} />
           ))}

@@ -171,6 +171,7 @@ const Settings = () => {
         className='relative w-full cursor-pointer'
         onClick={() => bannerInputRef.current?.click()}
       >
+      {/* Banner Image */}
         <div className="relative bg-zinc-800 w-full h-40 group">
           <CldImage
             width={800}
@@ -200,8 +201,7 @@ const Settings = () => {
           data-testid="banner-value"
           onChange={(e) => handleFileChange(e, 'banner')}
         />
-
-        <div
+        {/* Avatar */}        <div
           className="absolute left-4 bottom-0 translate-y-1/2"
           onClick={(e) => {
             e.stopPropagation();

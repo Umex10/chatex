@@ -12,7 +12,9 @@ export default function Layout({
 }) {
   return (
     <>
+      {/* Primary Page Content */}
       {children}
+      {/* Intercepted Modal Slot */}
       {modal}
     </>
   );

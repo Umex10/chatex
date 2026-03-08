@@ -96,6 +96,12 @@ public interface UserService {
      */
     Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList);
 
+    /**
+     * Enriches a set of users with follow-status badges relative to the requesting user.
+     * Performs batch lookups to avoid the n+1 problem when rendering follow lists.
+     *
+     * @return a list of FollowDto entries with badge flags set
+     */
     List<FollowDto> handleFollowBadges(UUID userId, Set<User> users);
 
 }

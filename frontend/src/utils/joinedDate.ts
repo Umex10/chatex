@@ -22,6 +22,11 @@ export function joinedAccountDate(createdAt: string) {
   return `Joined ${month} ${year}`
 }
 
+/**
+ * Formats an ISO date string into a relative or absolute human-readable timestamp for shout cards.
+ * Returns "X hours ago" for same-day posts, "Yesterday" for the prior day,
+ * or "Day. Month Year" for older posts.
+ */
 export function joinedShoutDate(createdAt: string) {
 
   const date = new Date(createdAt);
