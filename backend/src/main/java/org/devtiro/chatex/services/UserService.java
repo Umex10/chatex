@@ -1,10 +1,12 @@
 package org.devtiro.chatex.services;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
+import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.entities.User;
 
 /**
@@ -93,5 +95,7 @@ public interface UserService {
      * @return a Set of UUIDs from {@code idsInList} that follow the user
      */
     Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList);
+
+    List<FollowDto> handleFollowBadges(UUID userId, Set<User> users);
 
 }

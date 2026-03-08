@@ -12,6 +12,7 @@ import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.domain.mappers.ShoutMapper;
 import org.devtiro.chatex.services.ShoutService;
+import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class ShoutController {
 
   private final ShoutService shoutService;
+  private final UserService userService;
   private final ShoutMapper shoutMapper;
   private final FollowMapper followMapper;
 
@@ -49,6 +51,23 @@ public class ShoutController {
 
     shoutsDto.forEach(dto -> dto.setUserReShoutingTheShout(
         shoutService.isUserReShoutingTheShout(dto.getId(), userId)));
+
+    return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/{username}/{shoutId}")
+  public ResponseEntity<ShoutDto> getShouts(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
+
+    Shout shout = shoutService.getShout(shoutId);
+
+    ShoutDto shoutsDto = shoutMapper.toDto(shout);
+
+    shoutsDto.setUserLikingTheShout(
+        shoutService.isUserLikingTheShout(shoutId, userId));
+
+    shoutsDto.setUserReShoutingTheShout(
+        shoutService.isUserReShoutingTheShout(shoutId, userId));
 
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
@@ -70,21 +89,23 @@ public class ShoutController {
   }
 
   @GetMapping(path = "/{shoutId}/likedBy")
-  public ResponseEntity<List<FollowDto>> getLikedBy(@PathVariable UUID shoutId) {
+  public ResponseEntity<List<FollowDto>> getLikedBy(@PathVariable UUID shoutId,
+      @RequestAttribute("userId") UUID userId) {
 
     Set<User> likedBy = shoutService.getLikedBy(shoutId);
 
-    List<FollowDto> likedByDto = followMapper.toDtoList(likedBy);
+    List<FollowDto> likedByDto = userService.handleFollowBadges(userId, likedBy);
 
     return new ResponseEntity<>(likedByDto, HttpStatus.OK);
   }
 
   @GetMapping(path = "/{shoutId}/reShoutedBy")
-  public ResponseEntity<List<FollowDto>> getReShoutedBy(@PathVariable UUID shoutId) {
+  public ResponseEntity<List<FollowDto>> getReShoutedBy(@PathVariable UUID shoutId,
+      @RequestAttribute("userId") UUID userId) {
 
     Set<User> reShoutedBy = shoutService.getReShoutedBy(shoutId);
 
-    List<FollowDto> reShoutedByDto = followMapper.toDtoList(reShoutedBy);
+    List<FollowDto> reShoutedByDto = userService.handleFollowBadges(userId, reShoutedBy);
 
     return new ResponseEntity<>(reShoutedByDto, HttpStatus.OK);
   }

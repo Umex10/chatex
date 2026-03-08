@@ -12,6 +12,8 @@ public interface ShoutService {
 
   List<Shout> getShouts(String username);
 
+  Shout getShout(UUID shoutId);
+
   Shout createShout(UUID userId, CreateShoutRequest createShoutRequest);
 
   Set<User> getLikedBy(UUID shoutId);

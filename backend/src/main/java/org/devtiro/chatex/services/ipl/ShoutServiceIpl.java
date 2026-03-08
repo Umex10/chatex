@@ -24,6 +24,13 @@ public class ShoutServiceIpl implements ShoutService {
   private final UserRep userRep;
 
   @Override
+  public Shout getShout(UUID shoutId) {
+    return shoutRep.findById(shoutId).orElseThrow(
+      () -> new EntityNotFoundException("The shout with the shoutId: " + shoutId + 
+        " was not found"));
+  }
+
+  @Override
   public List<Shout> getShouts(String username) {
     return shoutRep.findAllShoutsByUsername(username);
   }

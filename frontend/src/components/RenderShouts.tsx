@@ -9,6 +9,7 @@ interface RenderShoutsArgs {
 } 
 
 const RenderShouts = ({isLoading, shouts}: RenderShoutsArgs) => {
+
   return (
     <div className='w-full h-full relative'>
       {isLoading && (
@@ -31,3 +32,4 @@ const RenderShouts = ({isLoading, shouts}: RenderShoutsArgs) => {
 }
 
 export default RenderShouts
+

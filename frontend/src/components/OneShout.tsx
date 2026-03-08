@@ -1,4 +1,6 @@
-import { Trash } from 'lucide-react'
+"use client"
+
+import { BadgeCheck, Ellipsis, Trash } from 'lucide-react'
 
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
 import { Shout } from '../../constants/Shout';
@@ -8,6 +10,9 @@ import { Button } from './ui/button';
 import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation, useUnShoutTheShoutMutation } from '@redux/api/apiSlice';
 import Spinner from './Spinner';
 import { useState } from 'react';
+import { Badge } from './ui/badge';
+import { EllipsisVertical, CircleEllipsis } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
 function formatCount(n: number): string {
@@ -28,6 +33,10 @@ const OneShout = (data: Shout) => {
 
   const [likesCountView, setLikesCountView] = useState(likesCount);
   const [reShoutsCountView, setReShoutsCountView] = useState(reShoutsCount);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const isOnShoutPage = pathname.includes(id);
 
   const [userLikingTheShoutView, setUserLikingTheShoutView] = useState(userLikingTheShout);
   const [userReShoutingTheShoutView, setUserReShoutingTheShoutView] = useState(userReShoutingTheShout);
@@ -69,7 +78,9 @@ const OneShout = (data: Shout) => {
 
   return (
     // outer card container for one shout item
-    <div className='relative p-3 w-full border-y'>
+    <div className={`relative p-3 w-full border-y transition ease-out duration-300 ${isOnShoutPage ? '' : 'cursor-pointer hover:opacity-80'
+      }`}
+      onClick={() => { if (!isOnShoutPage) router.push(`/${username}/${id}`); }}>
 
       {isLoading && (
         <div className="absolute z-50 inset-0 flex w-full items-center justify-center bg-transparent">
@@ -102,7 +113,7 @@ const OneShout = (data: Shout) => {
             md:max-w-none md:whitespace-normal'>{name}</span>
 
               {/* verified badge only shown when hasBadge is true */}
-              {/* {hasBadge && (
+
               <Badge
                 variant="secondary"
                 className="p-0 bg-transparent border-none shadow-none
@@ -110,7 +121,7 @@ const OneShout = (data: Shout) => {
               >
                 <BadgeCheck className="w-5 h-5 text-white" />
               </Badge>
-            )} */}
+
 
 
               <span className='max-w-[80px] truncate 
@@ -121,9 +132,32 @@ const OneShout = (data: Shout) => {
               <span className=''>{joinedShoutDate(createdAt)}</span>
             </div>
 
-            <Button size="icon" variant="secondary" onClick={() => deleteShout(id)}>
-              <Trash className="w-4 h-4" />
-            </Button>
+            <div className='flex flex-row gap-1'>
+              <Button size="icon" variant="secondary" className='bg-transparent'
+                onClick={(e) => {
+                  router.push(`/${username}/${id}/likedBy`);
+                  e.stopPropagation();
+                }}>
+                <Ellipsis className="w-4 h-4" />
+              </Button>
+
+              <Button size="icon" variant="secondary" className='bg-transparent'
+                onClick={(e) => {
+                  deleteShout(id)
+                  e.stopPropagation();
+                }}>
+                <Trash className="w-4 h-4" />
+              </Button>
+
+              <Button size="icon" variant="secondary" className='bg-transparent'
+                onClick={(e) => {
+                  router.push(`/${username}/${id}/reShoutedBy`);
+                  e.stopPropagation();
+                }}>
+                <CircleEllipsis className="w-4 h-4" />
+              </Button>
+            </div>
+
           </div>
 
 

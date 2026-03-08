@@ -3,12 +3,10 @@ package org.devtiro.chatex.controllers;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +31,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class FollowController {
 
   private final UserService userService;
-  private final FollowMapper followMapper;
 
   /**
    * Retrieves the list of followers for the user with the given username.
@@ -46,7 +43,7 @@ public class FollowController {
       @PathVariable String username) {
     Set<User> followers = userService.getFollowers(username);
 
-    List<FollowDto> followersDto = handleFollowBadges(userId, followers);
+    List<FollowDto> followersDto = userService.handleFollowBadges(userId, followers);
 
     return ResponseEntity.ok(followersDto);
   }
@@ -62,7 +59,7 @@ public class FollowController {
       @PathVariable String username) {
     Set<User> following = userService.getFollowing(username);
 
-    List<FollowDto> followingDto = handleFollowBadges(userId, following);
+    List<FollowDto> followingDto = userService.handleFollowBadges(userId, following);
 
     return ResponseEntity.ok(followingDto);
   }
@@ -91,29 +88,6 @@ public class FollowController {
     userService.unfollow(userId, username);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
-  }
-
-  /**
-   * Enriches a set of users with follow-status badges relative to the requesting user.
-   * Uses a single batch IN-query to avoid the n+1 problem: instead of querying the
-   * database once per user in {@code users}, it collects all IDs and performs two
-   * bulk lookups (who I follow, who follows me).
-   *
-   * @return a list of FollowDto entries with {@code userFollowingTarget} and
-   *         {@code targetFollowingUser} flags set
-   */
-  private List<FollowDto> handleFollowBadges(UUID userId, Set<User> users) {
-    Set<UUID> idsInList = users.stream().map(User::getId).collect(Collectors.toSet());
-
-    Set<UUID> followedMe = userService.findFollowersIdsIn(userId, idsInList);
-    Set<UUID> followedByMe = userService.findFollowingIdsIn(userId, idsInList);
-
-    List<FollowDto> followingDto = followMapper.toDtoList(users);
-
-    followingDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
-    followingDto.forEach(dto -> dto.setUserFollowingTarget(followedByMe.contains(dto.getId())));
-
-    return followingDto;
   }
 
 }

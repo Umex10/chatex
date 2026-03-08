@@ -159,13 +159,26 @@ export const apiSlice = createApi({
       query: (username) => `/follow/${username}/following`
     }),
 
+    getShout: builder.query<Shout, { username: string; shoutId: string }>({
+      query: ({ username, shoutId }) => `/shout/${username}/${shoutId}`,
+      providesTags: ['User']
+    }),
+
     getShouts: builder.query<Shout[], string>({
       query: (username) => `/shout/${username}`,
       providesTags: ['User']
     }),
 
+    getLikedBy: builder.query<Follow[], string>({
+      query: (shoutId) => `/shout/${shoutId}/likedBy`
+    }),
+
+    getReShoutedBy: builder.query<Follow[], string>({
+      query: (shoutId) => `/shout/${shoutId}/reShoutedBy`
+    }),
+
     createShout: builder.mutation<Shout, ShoutPayload>({
-       query: (createShout) => ({
+      query: (createShout) => ({
         url: `/shout`,
         method: "POST",
         body: createShout
@@ -195,7 +208,7 @@ export const apiSlice = createApi({
       }),
     }),
 
-     dislikeTheShout: builder.mutation<void, string>({
+    dislikeTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}/dislike`,
         method: "POST"
@@ -215,7 +228,8 @@ export const apiSlice = createApi({
 export const { useRefreshAccessTkQuery, useSignUpMutation,
   useSignInMutation, useGetUserQuery, useUpdateUserMutation,
   useGetUserByUsernameQuery, useFollowUserMutation, useUnfollowUserMutation,
-  useGetFollowersQuery, useGetFollowingQuery, useGetShoutsQuery, useCreateShoutMutation,
+  useGetFollowersQuery, useGetFollowingQuery, useGetShoutQuery, useGetShoutsQuery, useGetLikedByQuery,
+  useGetReShoutedByQuery, useCreateShoutMutation,
   useDeleteShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation,
-  useDislikeTheShoutMutation,useUnShoutTheShoutMutation
+  useDislikeTheShoutMutation, useUnShoutTheShoutMutation
 } = apiSlice;

@@ -19,7 +19,7 @@ const Followers = () => {
   const { data: followers, isLoading } = useGetFollowersQuery(username);
 
   return (
-    <div className='w-full flex-1 border-y'>
+    <div className='w-full p-3 flex-1 border-y'>
       {isLoading ? (
 
         <div className="flex justify-center items-center py-10">

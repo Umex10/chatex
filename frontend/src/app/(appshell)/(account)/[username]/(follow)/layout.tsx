@@ -22,7 +22,7 @@ const Layout = ({ children }: Readonly<{
   return (
     <div className='flex flex-col' data-testid="follow-site">
 
-      <ReturnHeader></ReturnHeader>
+      <ReturnHeader returnText={username}></ReturnHeader>
 
       <Tabs defaultValue={activeTab} className="w-full"
        onValueChange={setActiveTab}>

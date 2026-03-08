@@ -6,13 +6,16 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 
+interface ReturnHeaderArgs {
+  children?: React.ReactNode,
+  returnText: string
+}
+
 /**
  * Sticky header component with a back-navigation button and an optional action slot on the right.
  * Used at the top of detail/settings pages so the user can return to the previous route.
  */
-const ReturnHeader = ({ children }: Readonly<{
-  children?: React.ReactNode
-}>) => {
+const ReturnHeader = ({children, returnText}: ReturnHeaderArgs) => {
 
   const router = useRouter();
 
@@ -29,7 +32,7 @@ const ReturnHeader = ({ children }: Readonly<{
           >
             <ArrowLeft/>
           </Button>
-          <h2 className='font-bold text-lg'>Edit Account</h2>
+          <h2 className='font-bold text-lg'>{returnText}</h2>
         </div>
       </div>
       <div className=''>

@@ -10,12 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.dtos.responses.ApiError;
+import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.domain.exceptions.OwnException;
+import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +34,7 @@ public class UserServiceIpl implements UserService {
 
     private final UserRep userRep;
     private final PasswordEncoder encoder;
+    private final FollowMapper followMapper;
 
     /**
      * Creates a new user account with validation.
@@ -57,7 +61,7 @@ public class UserServiceIpl implements UserService {
         }
         if (userRep.existsUserByEmail(email)) {
             errors.add(ApiError.FieldError.builder().field("email")
-            .message("Email already taken").build());
+                    .message("Email already taken").build());
         }
         if (userRep.existsUserByPhone(phone)) {
             errors.add(ApiError.FieldError.builder().field("phone")
@@ -211,7 +215,8 @@ public class UserServiceIpl implements UserService {
      * Checks whether the requesting user is already following the target user.
      * Delegates directly to the repository's COUNT-based query.
      *
-     * @return {@code true} if the requesting user follows the target, {@code false} otherwise
+     * @return {@code true} if the requesting user follows the target, {@code false}
+     *         otherwise
      */
     @Override
     public boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId) {
@@ -220,24 +225,52 @@ public class UserServiceIpl implements UserService {
 
     /**
      * Returns the subset of {@code idsInList} that the given user is following.
-     * Used for mass status checks to avoid the n+1 problem when rendering follow badges.
+     * Used for mass status checks to avoid the n+1 problem when rendering follow
+     * badges.
      *
      * @return a Set of UUIDs from {@code idsInList} that the user follows
      */
     @Override
     public Set<UUID> findFollowingIdsIn(UUID userId, Set<UUID> idsInList) {
-      return userRep.findFollowingIdsIn(userId, idsInList);
+        return userRep.findFollowingIdsIn(userId, idsInList);
     }
 
     /**
      * Returns the subset of {@code idsInList} that are following the given user.
-     * Used for mass status checks to avoid the n+1 problem when rendering follow badges.
+     * Used for mass status checks to avoid the n+1 problem when rendering follow
+     * badges.
      *
      * @return a Set of UUIDs from {@code idsInList} that follow the user
      */
     @Override
     public Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList) {
         return userRep.findFollowersIdsIn(userId, idsInList);
+    }
+
+    /**
+     * Enriches a set of users with follow-status badges relative to the requesting
+     * user.
+     * Uses a single batch IN-query to avoid the n+1 problem: instead of querying
+     * the
+     * database once per user in {@code users}, it collects all IDs and performs two
+     * bulk lookups (who I follow, who follows me).
+     *
+     * @return a list of FollowDto entries with {@code userFollowingTarget} and
+     *         {@code targetFollowingUser} flags set
+     */
+    @Override
+    public List<FollowDto> handleFollowBadges(UUID userId, Set<User> users) {
+        Set<UUID> idsInList = users.stream().map(User::getId).collect(Collectors.toSet());
+
+        Set<UUID> followedMe = findFollowersIdsIn(userId, idsInList);
+        Set<UUID> followedByMe = findFollowingIdsIn(userId, idsInList);
+
+        List<FollowDto> followingDto = followMapper.toDtoList(users);
+
+        followingDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
+        followingDto.forEach(dto -> dto.setUserFollowingTarget(followedByMe.contains(dto.getId())));
+
+        return followingDto;
     }
 
 }
