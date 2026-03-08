@@ -9,10 +9,9 @@ import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.ShoutDto;
 import org.devtiro.chatex.domain.entities.Shout;
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.domain.mappers.ShoutMapper;
+import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.ShoutService;
-import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,9 +38,8 @@ import lombok.RequiredArgsConstructor;
 public class ShoutController {
 
   private final ShoutService shoutService;
-  private final UserService userService;
+  private final FollowService followService;
   private final ShoutMapper shoutMapper;
-  private final FollowMapper followMapper;
 
   /**
    * Retrieves all shouts for the given username with engagement flags for the requesting user.
@@ -119,7 +117,7 @@ public class ShoutController {
 
     Set<User> likedBy = shoutService.getLikedBy(shoutId);
 
-    List<FollowDto> likedByDto = userService.handleFollowBadges(userId, likedBy);
+    List<FollowDto> likedByDto = followService.handleFollowBadges(userId, likedBy);
 
     return new ResponseEntity<>(likedByDto, HttpStatus.OK);
   }
@@ -135,7 +133,7 @@ public class ShoutController {
 
     Set<User> reShoutedBy = shoutService.getReShoutedBy(shoutId);
 
-    List<FollowDto> reShoutedByDto = userService.handleFollowBadges(userId, reShoutedBy);
+    List<FollowDto> reShoutedByDto = followService.handleFollowBadges(userId, reShoutedBy);
 
     return new ResponseEntity<>(reShoutedByDto, HttpStatus.OK);
   }

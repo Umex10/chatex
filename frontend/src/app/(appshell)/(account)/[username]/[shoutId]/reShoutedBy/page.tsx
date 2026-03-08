@@ -2,7 +2,7 @@
 
 import Follow from '@/components/Follow';
 import ReturnHeader from '@/components/ReturnHeader';
-import {  useGetReShoutedByQuery } from '@redux/api/apiSlice';
+import { useGetReShoutedByQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 
 /** Page displaying all users who re-shouted a specific shout. */

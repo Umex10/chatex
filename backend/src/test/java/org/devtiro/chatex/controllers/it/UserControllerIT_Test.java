@@ -155,7 +155,7 @@ public class UserControllerIT_Test {
     String accessTk = jwtService.createAccessTk(user.getUsername(), TkName.ACCESS);
 
     webTestClient.get()
-        .uri("/api/v1/user/followers/" + user.getUsername()) // "own" list
+        .uri("/api/v1/follow/" + user.getUsername() + "/followers") // "own" list
         .headers(headers -> headers.setBearerAuth(accessTk))
         .exchange()
 
@@ -177,7 +177,7 @@ public class UserControllerIT_Test {
     String accessTk = jwtService.createAccessTk(user.getUsername(), TkName.ACCESS);
 
     webTestClient.get()
-        .uri("/api/v1/user/following/" + user.getUsername()) // "own" list
+        .uri("/api/v1/follow/" + user.getUsername() + "/following") // "own" list
         .headers(headers -> headers.setBearerAuth(accessTk))
         .exchange()
 
@@ -212,7 +212,7 @@ public class UserControllerIT_Test {
     String accessTk = jwtService.createAccessTk(user1.getUsername(), TkName.ACCESS);
 
     List<FollowDto> followers = webTestClient.get()
-        .uri("/api/v1/user/followers/" + user1.getUsername())
+        .uri("/api/v1/follow/" + user1.getUsername() + "/followers")
         .headers(headers -> headers.setBearerAuth(accessTk))
         .exchange()
         .expectStatus().isOk()
@@ -221,7 +221,7 @@ public class UserControllerIT_Test {
         .getResponseBody();
 
     List<FollowDto> following = webTestClient.get()
-        .uri("/api/v1/user/following/" + user1.getUsername())
+        .uri("/api/v1/follow/" + user1.getUsername() + "/following")
         .headers(headers -> headers.setBearerAuth(accessTk))
         .exchange()
         .expectStatus().isOk()
@@ -246,7 +246,7 @@ public class UserControllerIT_Test {
     String accessTk = jwtService.createAccessTk(requestingUser.getUsername(), TkName.ACCESS);
 
     webTestClient.post()
-        .uri("/api/v1/user/follow/" + targetUser.getUsername())
+        .uri("/api/v1/follow/" + targetUser.getUsername() + "/follow")
         .headers(headers -> headers.setBearerAuth(accessTk))
         .exchange()
 
@@ -270,7 +270,7 @@ public class UserControllerIT_Test {
     String accessTk = jwtService.createAccessTk(requestingUser.getUsername(), TkName.ACCESS);
 
     webTestClient.post()
-        .uri("/api/v1/user/unfollow/" + targetUser.getUsername())
+        .uri("/api/v1/follow/" + targetUser.getUsername() + "/unfollow")
         .headers(headers -> headers.setBearerAuth(accessTk))
         .exchange()
 

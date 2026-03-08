@@ -1,6 +1,7 @@
 "use client"
 
-import { useGetUserQuery, useRefreshAccessTkQuery } from '@redux/api/apiSlice'
+import { useGetUserQuery } from '@redux/api/userApi'
+import { useRefreshAccessTkQuery } from '@redux/api/authApi'
 import React from 'react'
 import Loading from './Loading';
 

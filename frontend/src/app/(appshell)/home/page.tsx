@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
 import { CreateShout, ShoutComposer } from '@/components/CreateShout';
 import { PencilLine } from 'lucide-react';
-import { useGetShoutsQuery, useGetUserQuery } from '@redux/api/apiSlice';
+import { useGetShoutsQuery } from '@redux/api/shoutApi';
+import { useGetUserQuery } from '@redux/api/userApi';
 import RenderShouts from '@/components/RenderShouts';
 
 export type ShoutPayload = { text: string; images: string[] };

@@ -8,7 +8,9 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetShoutsQuery, useGetUserByUsernameQuery, useGetUserQuery, useUnfollowUserMutation } from '@redux/api/apiSlice';
+import { useGetShoutsQuery } from '@redux/api/shoutApi';
+import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/userApi';
+import { useUnfollowUserMutation } from '@redux/api/followApi';
 import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';

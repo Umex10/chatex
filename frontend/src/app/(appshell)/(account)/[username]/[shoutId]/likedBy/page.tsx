@@ -2,7 +2,7 @@
 
 import Follow from '@/components/Follow';
 import ReturnHeader from '@/components/ReturnHeader';
-import { useGetLikedByQuery } from '@redux/api/apiSlice';
+import { useGetLikedByQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 
 /** Page displaying all users who liked a specific shout. */

@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.services.UserService;
+import org.devtiro.chatex.services.FollowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class FollowController {
 
-  private final UserService userService;
+  private final FollowService followService;
 
   /**
    * Retrieves the list of followers for the user with the given username.
@@ -41,9 +41,9 @@ public class FollowController {
   @GetMapping(path = "/{username}/followers")
   public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
-    Set<User> followers = userService.getFollowers(username);
+    Set<User> followers = followService.getFollowers(username);
 
-    List<FollowDto> followersDto = userService.handleFollowBadges(userId, followers);
+    List<FollowDto> followersDto = followService.handleFollowBadges(userId, followers);
 
     return ResponseEntity.ok(followersDto);
   }
@@ -57,9 +57,9 @@ public class FollowController {
   @GetMapping(path = "/{username}/following")
   public ResponseEntity<List<FollowDto>> getFollowing(@RequestAttribute("userId") UUID userId,
       @PathVariable String username) {
-    Set<User> following = userService.getFollowing(username);
+    Set<User> following = followService.getFollowing(username);
 
-    List<FollowDto> followingDto = userService.handleFollowBadges(userId, following);
+    List<FollowDto> followingDto = followService.handleFollowBadges(userId, following);
 
     return ResponseEntity.ok(followingDto);
   }
@@ -72,7 +72,7 @@ public class FollowController {
   @PostMapping(path = "/{username}/follow")
   public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @PathVariable String username) {
 
-    userService.follow(userId, username);
+    followService.follow(userId, username);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
@@ -85,7 +85,7 @@ public class FollowController {
   @PostMapping(path = "/{username}/unfollow")
   public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @PathVariable String username) {
 
-    userService.unfollow(userId, username);
+    followService.unfollow(userId, username);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }

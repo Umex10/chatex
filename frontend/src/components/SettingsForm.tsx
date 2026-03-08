@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import ReturnHeader from '@/components/ReturnHeader';
-import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/apiSlice';
+import { useGetUserQuery, useUpdateUserMutation } from '@redux/api/userApi';
 import { User } from '../../constants/User';
 import { toast } from 'sonner';
 import { CldImage } from 'next-cloudinary';

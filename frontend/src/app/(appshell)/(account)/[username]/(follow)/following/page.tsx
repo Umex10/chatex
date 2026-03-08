@@ -3,7 +3,7 @@
 import { twitterUsers } from '@/utils/dummy'
 import Follow from '@/components/Follow'
 import { usePathname } from 'next/navigation';
-import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/apiSlice';
+import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/followApi';
 
 /**
  * Page displaying the list of accounts a given user is following.

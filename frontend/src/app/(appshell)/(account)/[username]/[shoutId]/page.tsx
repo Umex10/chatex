@@ -1,7 +1,7 @@
 "use client"
 
 import RenderShouts from '@/components/RenderShouts';
-import { useGetShoutQuery } from '@redux/api/apiSlice';
+import { useGetShoutQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 import { Shout } from '../../../../../../constants/Shout';
 

@@ -6,6 +6,7 @@ import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.domain.mappers.UserMapper;
+import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
   private final UserService userService;
+  private final FollowService followService;
   private final UserMapper userMapper;
 
   /**
@@ -64,7 +66,7 @@ public class UserController {
 
     UserDto userDto = userMapper.toDto(user);
 
-    boolean isUserFollowingTarget = userService.isUserFollowingTarget(username, userId);
+    boolean isUserFollowingTarget = followService.isUserFollowingTarget(username, userId);
     userDto.setUserFollowingTarget(isUserFollowingTarget);
 
     return new ResponseEntity<>(userDto, HttpStatus.OK);

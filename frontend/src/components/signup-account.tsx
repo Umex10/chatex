@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useSignUpMutation } from "@redux/api/apiSlice";
+import { useSignUpMutation } from "@redux/api/authApi";
 import { toast } from "sonner";
 
 /**

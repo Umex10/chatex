@@ -1,7 +1,7 @@
 "use client"
 
 import Follow from '@/components/Follow'
-import { useGetFollowersQuery } from '@redux/api/apiSlice'
+import { useGetFollowersQuery } from '@redux/api/followApi'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
