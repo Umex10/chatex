@@ -55,11 +55,12 @@ public class ShoutController {
 
     List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
 
-    shoutsDto.forEach(dto -> dto.setUserLikingTheShout(
-        shoutService.isUserLikingTheShout(dto.getId(), userId)));
-
-    shoutsDto.forEach(dto -> dto.setUserReShoutingTheShout(
-        shoutService.isUserReShoutingTheShout(dto.getId(), userId)));
+    shoutsDto.forEach(dto -> {
+      dto.setUserLikingTheShout(
+          shoutService.isUserLikingTheShout(dto.getId(), userId));
+      dto.setUserReShoutingTheShout(
+          shoutService.isUserReShoutingTheShout(dto.getId(), userId));
+    });
 
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
@@ -211,6 +212,25 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  @GetMapping(path = "/{shoutId}/comment")
+  public ResponseEntity<List<ShoutDto>> getComments(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
+
+    Shout shout = shoutService.getShout(shoutId);
+
+    List<Shout> comments = shout.getComments();
+
+    List<ShoutDto> shoutsDto = shoutMapper.toDtoList(comments);
+
+    shoutsDto.forEach(dto -> dto.setUserLikingTheShout(
+        shoutService.isUserLikingTheShout(dto.getId(), userId)));
+
+    shoutsDto.forEach(dto -> dto.setUserReShoutingTheShout(
+        shoutService.isUserReShoutingTheShout(dto.getId(), userId)));
+
+    return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
+  }
+
   @PostMapping(path = "/{shoutId}/comment")
   public ResponseEntity<ShoutDto> commentOnShout(@PathVariable UUID shoutId,
       @RequestBody CreateShoutRequest createShoutRequest,
@@ -225,10 +245,5 @@ public class ShoutController {
     commentDto.setAvatar(comment.getUser().getAvatar());
 
     return new ResponseEntity<>(commentDto, HttpStatus.CREATED);
-  }
-
-  @PostMapping(path = "/{shoutId}/unComment")
-  public ResponseEntity<Void> unCommentOnShout(@PathVariable UUID shoutId) {
-    return new ResponseEntity<Void>(HttpStatus.OK);
   }
 }

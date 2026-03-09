@@ -26,9 +26,8 @@ import {
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { useCreateShoutMutation } from "@redux/api/shoutApi"
+import { useCommentOnShoutMutation, useCreateShoutMutation } from "@redux/api/shoutApi"
 import { useGetUserQuery } from "@redux/api/userApi"
-import { CldImage } from "next-cloudinary"
 import { generateSecureUrl } from "@/utils/cloudinary"
 import Spinner from "./Spinner"
 import Avatar from "./Avatar"
@@ -46,6 +45,8 @@ type ShoutFormValues = z.infer<typeof shoutSchema>
 interface ShoutComposerProps {
   /** Optional callback fired after a shout has been successfully submitted. */
   onSubmitted?: () => void,
+  mainShoutId?: string,
+  mode: 'CREATE_SHOUT' | 'COMMENT_ON_SHOUT',
   placeholder: string,
   submitText?: string
 }
@@ -54,10 +55,11 @@ interface ShoutComposerProps {
  * Standalone shout composer form — used both inline (home feed) and inside the dialog.
  * Handles image picking, Cloudinary uploads and posting via the API mutation.
  */
-export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout"}: ShoutComposerProps) {
+export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", mainShoutId, mode }: ShoutComposerProps) {
   const { data: user } = useGetUserQuery(undefined)
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg"
-  const [createShout, { isLoading }] = useCreateShoutMutation()
+  const [createShout, { isLoading: isLoadingShout }] = useCreateShoutMutation()
+  const [commentOnShout, { isLoading: isLoadingComment }] = useCommentOnShoutMutation();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const emojiPickerRef = useRef<HTMLDivElement>(null)
   const { resolvedTheme } = useTheme()
@@ -112,7 +114,13 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout"}:
       if (res.success) uploadedUrls.push(res.data.secure_url)
     }
     try {
-      await createShout({ text: values.text, images: uploadedUrls }).unwrap()
+
+      if (mode === "CREATE_SHOUT") {
+        await createShout({ text: values.text, images: uploadedUrls }).unwrap()
+      } if (mode === "COMMENT_ON_SHOUT" && mainShoutId) {
+        await commentOnShout({ text: values.text, images: uploadedUrls, mainShoutId: mainShoutId }).unwrap()
+      }
+
     } catch (err) {
       console.error(err)
     }
@@ -126,13 +134,13 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout"}:
       <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
 
         {/* Loading Overlay */}
-        {isLoading || form.formState.isSubmitting && (
+        {isLoadingShout || isLoadingComment || form.formState.isSubmitting && (
           <div className="absolute z-50 inset-0 flex w-full items-center justify-center bg-transparent">
             <Spinner></Spinner>
           </div>
         )}
 
-        <div className={`flex flex-row gap-3 ${isLoading ? "opacity-50" : ""}`}>
+        <div className={`flex flex-row gap-3 ${isLoadingShout || isLoadingComment ? "opacity-50" : ""}`}>
 
           {/* User Avatar */}
           <Avatar avatar={avatar}></Avatar>
@@ -226,7 +234,7 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout"}:
               <Button
                 type="submit"
                 className="bg-violet-500 hover:bg-violet-600 rounded-full px-6 font-bold"
-                disabled={isLoading || !form.formState.isDirty || !form.formState.isValid}
+                disabled={isLoadingShout || isLoadingComment || !form.formState.isDirty || !form.formState.isValid}
               >
                 {submitText}
               </Button>
@@ -259,7 +267,8 @@ export function CreateShout({
           <DialogTitle className="text-xl font-bold">New Shout</DialogTitle>
         </DialogHeader>
         <div className="pt-2">
-          <ShoutComposer placeholder="What's new to you?" onSubmitted={() => setOpen(false)} />
+          <ShoutComposer placeholder="What's new to you?"
+            onSubmitted={() => setOpen(false)} mode="CREATE_SHOUT" />
         </div>
       </DialogContent>
     </Dialog>

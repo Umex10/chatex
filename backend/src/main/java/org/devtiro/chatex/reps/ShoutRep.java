@@ -24,7 +24,7 @@ public interface ShoutRep extends JpaRepository<Shout, UUID> {
    *
    * @return a list of shouts for the specified user
    */
-  @Query("SELECT s from Shout s JOIN FETCH s.user WHERE s.user.username = :username ORDER BY s.createdAt DESC")
+  @Query("SELECT s from Shout s JOIN FETCH s.user WHERE s.user.username = :username AND s.mainShout IS NULL ORDER BY s.createdAt DESC")
   List<Shout> findAllShoutsByUsername(@Param("username") String username);
 
   /**

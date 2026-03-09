@@ -1,7 +1,8 @@
 import { Shout } from '../../constants/Shout';
 import { Follow } from '../../constants/Follow';
-import { ShoutPayload } from '@/app/(appshell)/home/page';
+import { CreateShoutPlayoad } from '@/app/(appshell)/home/page';
 import { apiSlice } from './apiSlice';
+import { CreateCommentPayload } from '@/app/(appshell)/(account)/[username]/[shoutId]/page';
 
 /**
  * Shout-specific endpoints injected into the base API slice.
@@ -33,7 +34,7 @@ const shoutApi = apiSlice.injectEndpoints({
     }),
 
     /** Creates a new shout post and invalidates the User cache. */
-    createShout: builder.mutation<Shout, ShoutPayload>({
+    createShout: builder.mutation<Shout, CreateShoutPlayoad>({
       query: (createShout) => ({
         url: `/shout`,
         method: "POST",
@@ -83,20 +84,20 @@ const shoutApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    /** Add a comment on a shout. */
-    commentOnShout: builder.mutation<Shout, string>({
-      query: (shoutId) => ({
-        url: `/shout/${shoutId}/comment`,
-        method: "POST"
-      }),
+    /** Fetches all comments from a given Shout. */
+    getComments: builder.query<Shout[], string>({
+      query: (shoutId) => `/shout/${shoutId}/comment`,
+      providesTags: ['User']
     }),
 
-    /** Remove the comment from the shout. */
-    unCommentOnShout: builder.mutation<void, string>({
-      query: (shoutId) => ({
-        url: `/shout/${shoutId}/unComment`,
-        method: "POST"
+    /** Add a comment on a shout. */
+    commentOnShout: builder.mutation<Shout, CreateCommentPayload>({
+      query: (createComment) => ({
+        url: `/shout/${createComment.mainShoutId}/comment`,
+        method: "POST",
+        body: createComment
       }),
+      invalidatesTags: ['User']
     }),
   }),
 });
@@ -112,6 +113,6 @@ export const {
   useReShoutTheShoutMutation,
   useDislikeTheShoutMutation,
   useUnShoutTheShoutMutation,
-  useCommentOnShoutMutation,
-  useUnCommentOnShoutMutation
+  useGetCommentsQuery,
+  useCommentOnShoutMutation
 } = shoutApi;

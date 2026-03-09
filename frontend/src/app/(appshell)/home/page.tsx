@@ -11,7 +11,7 @@ import { useGetShoutsQuery } from '@redux/api/shoutApi';
 import { useGetUserQuery } from '@redux/api/userApi';
 import RenderShouts from '@/components/RenderShouts';
 
-export type ShoutPayload = { text: string; images: string[] };
+export type CreateShoutPlayoad = { text: string; images: string[] };
 
 /**
  * Home feed page for authenticated users.
@@ -40,7 +40,8 @@ const Home = () => {
 
         {/* Inline composer — desktop only */}
         <div className='hidden md:block p-3 w-full border-y'>
-          <ShoutComposer placeholder="What's new to you?"/>
+          <ShoutComposer placeholder="What's new to you?" 
+          mode='CREATE_SHOUT'/>
         </div>
 
         {/* "For You" Feed */}
