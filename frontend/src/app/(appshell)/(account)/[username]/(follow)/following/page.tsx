@@ -1,9 +1,10 @@
 "use client"
 
 import { twitterUsers } from '@/utils/dummy'
-import Follow from '@/components/Follow'
+import FollowInstance from '@/components/FollowInstance'
 import { usePathname } from 'next/navigation';
 import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/followApi';
+import RenderFollowList from '@/components/RenderFollowList';
 
 /**
  * Page displaying the list of accounts a given user is following.
@@ -19,24 +20,7 @@ const Following = () => {
   const { data: followers, isLoading } = useGetFollowingQuery(username);
 
   return (
-    <div className='w-full flex-1 p-3 border-y'>
-      {/* Loading State */}
-      {isLoading ? (
-
-        <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500"></div>
-        </div>
-      ) : (
-
-        <div className='flex flex-col gap-5'>
-
-          {/* Following List */}
-          {followers?.map(user => (
-            <Follow {...user} key={user.username} />
-          ))}
-        </div>
-      )}
-    </div>
+    <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
   )
 }
 

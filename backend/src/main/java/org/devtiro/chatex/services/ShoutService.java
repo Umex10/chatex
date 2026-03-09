@@ -16,7 +16,8 @@ import org.devtiro.chatex.domain.entities.User;
 public interface ShoutService {
 
   /**
-   * Retrieves all shouts for the given username, ordered by creation date descending.
+   * Retrieves all shouts for the given username, ordered by creation date
+   * descending.
    *
    * @return a list of Shout entities
    */
@@ -35,6 +36,24 @@ public interface ShoutService {
    * @return the persisted Shout entity
    */
   Shout createShout(UUID userId, CreateShoutRequest createShoutRequest);
+
+  /**
+   * Creates a new shout (Comment) on behalf of the user identified by the given
+   * ID.
+   *
+   * @return the persisted Shout (Comment) entity
+   */
+  Shout createComment(UUID userId, UUID mainShoutId, CreateShoutRequest createShoutRequest);
+
+  /**
+   * Creates a new shout (UnComment) on behalf of the user identified by the given
+   * ID.
+   *
+   * @return the persisted Shout (UnComment) entity
+   */
+  void unComment(UUID shoutId);
+
+  
 
   /**
    * Returns the set of users who liked the given shout.
@@ -85,7 +104,8 @@ public interface ShoutService {
   /**
    * Checks whether the given user has re-shouted the given shout.
    *
-   * @return {@code true} if the user re-shouted the shout, {@code false} otherwise
+   * @return {@code true} if the user re-shouted the shout, {@code false}
+   *         otherwise
    */
   boolean isUserReShoutingTheShout(UUID shoutId, UUID userId);
 

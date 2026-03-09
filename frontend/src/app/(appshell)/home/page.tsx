@@ -40,7 +40,7 @@ const Home = () => {
 
         {/* Inline composer — desktop only */}
         <div className='hidden md:block p-3 w-full border-y'>
-          <ShoutComposer />
+          <ShoutComposer placeholder="What's new to you?"/>
         </div>
 
         {/* "For You" Feed */}

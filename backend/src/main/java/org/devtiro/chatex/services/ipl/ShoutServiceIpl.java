@@ -31,9 +31,7 @@ public class ShoutServiceIpl implements ShoutService {
   /** {@inheritDoc} */
   @Override
   public Shout getShout(UUID shoutId) {
-    return shoutRep.findById(shoutId).orElseThrow(
-      () -> new EntityNotFoundException("The shout with the shoutId: " + shoutId + 
-        " was not found"));
+    return findShoutOrThrow(shoutId);
   }
 
   /** {@inheritDoc} */
@@ -45,9 +43,7 @@ public class ShoutServiceIpl implements ShoutService {
   /** {@inheritDoc} */
   @Override
   public Shout createShout(UUID userId, CreateShoutRequest createShoutRequest) {
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+    User user = findUserOrThrow(userId);
 
     Shout shout = Shout.builder()
         .user(user)
@@ -57,6 +53,32 @@ public class ShoutServiceIpl implements ShoutService {
         .build();
 
     return shoutRep.save(shout);
+  }
+
+  @Override
+  public Shout createComment(UUID userId, UUID mainShoutId, CreateShoutRequest createShoutRequest) {
+
+    User user = findUserOrThrow(userId);
+
+    Shout comment = Shout.builder()
+        .user(user)
+        .text(createShoutRequest.getText())
+        .images(createShoutRequest.getImages())
+        .createdAt(LocalDate.now())
+        .build();
+
+    Shout mainShout = getShout(mainShoutId);
+    comment.setMainShout(mainShout);
+
+    mainShout.getComments().add(comment);
+
+    return shoutRep.save(comment);
+  }
+
+  @Override
+  public void unComment(UUID shoutId) {
+    Shout comment = findShoutOrThrow(shoutId);
+    shoutRep.delete(comment);
   }
 
   /** {@inheritDoc} */
@@ -83,10 +105,7 @@ public class ShoutServiceIpl implements ShoutService {
   @Override
   public void deleteShout(UUID shoutId) {
 
-    Shout shout = shoutRep.findById(shoutId)
-        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
-            " was not found"));
-    ;
+    Shout shout = findShoutOrThrow(shoutId);
 
     shoutRep.delete(shout);
   }
@@ -94,10 +113,7 @@ public class ShoutServiceIpl implements ShoutService {
   /** {@inheritDoc} */
   @Override
   public void likeTheShout(UUID shoutId, UUID userId) {
-    Shout shout = shoutRep.findById(shoutId)
-        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
-            " was not found"));
-    ;
+    Shout shout = findShoutOrThrow(shoutId);
 
     User user = userRep.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
@@ -111,10 +127,7 @@ public class ShoutServiceIpl implements ShoutService {
   /** {@inheritDoc} */
   @Override
   public void dislikeTheShout(UUID shoutId, UUID userId) {
-    Shout shout = shoutRep.findById(shoutId)
-        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
-            " was not found"));
-    ;
+    Shout shout = findShoutOrThrow(shoutId);
 
     User user = userRep.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
@@ -127,10 +140,7 @@ public class ShoutServiceIpl implements ShoutService {
   /** {@inheritDoc} */
   @Override
   public void reShoutTheShout(UUID shoutId, UUID userId) {
-    Shout shout = shoutRep.findById(shoutId)
-        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
-            " was not found"));
-    ;
+    Shout shout = findShoutOrThrow(shoutId);
 
     User user = userRep.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
@@ -138,16 +148,15 @@ public class ShoutServiceIpl implements ShoutService {
 
     shout.getReShoutedBy().add(user);
 
+    user.getShouts().add(shout);
+
     shoutRep.save(shout);
   }
 
   /** {@inheritDoc} */
   @Override
   public void unShoutTheShout(UUID shoutId, UUID userId) {
-    Shout shout = shoutRep.findById(shoutId)
-        .orElseThrow(() -> new EntityNotFoundException("The shout with the shoutId: " + shoutId +
-            " was not found"));
-    ;
+    Shout shout = findShoutOrThrow(shoutId);
 
     User user = userRep.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
@@ -168,6 +177,16 @@ public class ShoutServiceIpl implements ShoutService {
   @Override
   public boolean isUserReShoutingTheShout(UUID shoutId, UUID userId) {
     return shoutRep.isUserReShoutingTheShout(shoutId, userId);
+  }
+
+  private User findUserOrThrow(UUID userId) {
+    return userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+  }
+
+  private Shout findShoutOrThrow(UUID shoutId) {
+    return shoutRep.findById(shoutId)
+        .orElseThrow(() -> new EntityNotFoundException("Shout with id " + shoutId + " not found"));
   }
 
 }

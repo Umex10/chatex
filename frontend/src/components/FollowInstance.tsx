@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Ellipsis } from 'lucide-react'
 import { CldImage } from 'next-cloudinary'
-import type { Follow } from '../../constants/Follow'
+import type { Follow as FollowInstance } from '../../constants/Follow'
 import { useFollow } from '@/hooks/use-follow'
 import { useRouter } from 'next/navigation'
 
@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation'
  * and a "Follows you" badge when the listed user is following the current user.
  * Clicking the row navigates to the listed user's account page.
  */
-const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollowingUser }: Omit<Follow, "id">) => {
+const FollowInstance = ({ name, username, bio, avatar, userFollowingTarget, targetFollowingUser }: Omit<FollowInstance, "id">) => {
 
   // src must be defined
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
@@ -82,4 +82,4 @@ const Follow = ({ name, username, bio, avatar, userFollowingTarget, targetFollow
   )
 }
 
-export default Follow
+export default FollowInstance

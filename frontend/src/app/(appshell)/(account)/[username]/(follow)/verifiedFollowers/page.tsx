@@ -1,20 +1,27 @@
-import Follow from '@/components/Follow'
+"use client"
+
 import { twitterUsers } from '@/utils/dummy'
-import React from 'react'
+import FollowInstance from '@/components/FollowInstance'
+import { usePathname } from 'next/navigation';
+import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/followApi';
+import RenderFollowList from '@/components/RenderFollowList';
 
-/** Page displaying placeholder verified-followers entries using static dummy data. */
-const page = () => {
+/**
+ * Page displaying the list of accounts a given user is following.
+ * Extracts the username from the URL path and fetches the following list via RTK Query.
+ */
+const VerfiedFollowers = () => {
+
+  const pathname = usePathname();
+
+  const segments = pathname.split('/').filter(Boolean);
+  const username = segments[segments.length - 2];
+
+  const { data: followers, isLoading } = useGetFollowingQuery(username);
+
   return (
-    <div className='w-full flex-1 p-3 border-y'>
-      <div className='flex flex-col gap-5'>
-        {/* Verified Followers List */}
-        {twitterUsers.map(user => (
-          <Follow {...user} key={user.username}></Follow>
-        ))}
-      </div>
-
-    </div>
+    <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
   )
 }
 
-export default page
+export default VerfiedFollowers

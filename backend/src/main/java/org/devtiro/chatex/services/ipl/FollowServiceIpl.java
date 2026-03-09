@@ -34,7 +34,7 @@ public class FollowServiceIpl implements FollowService {
      *
      * @return a Set of User entities that follow the target user
      * @throws EntityNotFoundException if no user exists with the given username
-     */
+     */ 
     @Override
     public Set<User> getFollowers(String username) {
         User user = userRep.findByUsernameWithFollowers(username).orElseThrow(

@@ -11,7 +11,8 @@ import lombok.*;
 
 /**
  * Entity class representing a shout (post) in the system.
- * Stores the text content, optional images, and engagement data such as likes and re-shouts.
+ * Stores the text content, optional images, and engagement data such as likes
+ * and re-shouts.
  */
 @Entity
 @Table(name = "shouts")
@@ -47,4 +48,11 @@ public class Shout {
   @JoinTable(name = "shout_reShouts", joinColumns = @JoinColumn(name = "shout_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
   @Builder.Default
   private Set<User> reShoutedBy = new HashSet<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "main_shout_id")
+  private Shout mainShout;
+
+  @OneToMany(mappedBy = "mainShout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Shout> comments;
 }

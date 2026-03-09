@@ -42,7 +42,8 @@ public class ShoutController {
   private final ShoutMapper shoutMapper;
 
   /**
-   * Retrieves all shouts for the given username with engagement flags for the requesting user.
+   * Retrieves all shouts for the given username with engagement flags for the
+   * requesting user.
    *
    * @return ResponseEntity containing a list of ShoutDto entries
    */
@@ -64,12 +65,13 @@ public class ShoutController {
   }
 
   /**
-   * Retrieves a single shout by its ID with engagement flags for the requesting user.
+   * Retrieves a single shout by its ID with engagement flags for the requesting
+   * user.
    *
    * @return ResponseEntity containing the ShoutDto
    */
   @GetMapping(path = "/{username}/{shoutId}")
-  public ResponseEntity<ShoutDto> getShouts(@PathVariable UUID shoutId,
+  public ResponseEntity<ShoutDto> getShout(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
 
     Shout shout = shoutService.getShout(shoutId);
@@ -107,7 +109,8 @@ public class ShoutController {
   }
 
   /**
-   * Retrieves all users who liked the given shout, enriched with follow-status badges.
+   * Retrieves all users who liked the given shout, enriched with follow-status
+   * badges.
    *
    * @return ResponseEntity containing a list of FollowDto entries
    */
@@ -123,7 +126,8 @@ public class ShoutController {
   }
 
   /**
-   * Retrieves all users who re-shouted the given shout, enriched with follow-status badges.
+   * Retrieves all users who re-shouted the given shout, enriched with
+   * follow-status badges.
    *
    * @return ResponseEntity containing a list of FollowDto entries
    */
@@ -204,6 +208,27 @@ public class ShoutController {
 
     shoutService.unShoutTheShout(shoutId, userId);
 
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/{shoutId}/comment")
+  public ResponseEntity<ShoutDto> commentOnShout(@PathVariable UUID shoutId,
+      @RequestBody CreateShoutRequest createShoutRequest,
+      @RequestAttribute UUID userId) {
+
+    Shout comment = shoutService.createComment(userId, shoutId, createShoutRequest);
+
+    ShoutDto commentDto = shoutMapper.toDto(comment);
+
+    commentDto.setName(comment.getUser().getName());
+    commentDto.setUsername(comment.getUser().getUsername());
+    commentDto.setAvatar(comment.getUser().getAvatar());
+
+    return new ResponseEntity<>(commentDto, HttpStatus.CREATED);
+  }
+
+  @PostMapping(path = "/{shoutId}/unComment")
+  public ResponseEntity<Void> unCommentOnShout(@PathVariable UUID shoutId) {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 }

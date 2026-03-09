@@ -5,7 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import Image from "next/image"
 import { Image as ImageIcon, MapPin, Smile, PencilLine, X } from "lucide-react"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
+import data from "@emoji-mart/data"
+import Picker from "@emoji-mart/react"
+import { useTheme } from "next-themes"
 
 import {
   Dialog,
@@ -28,6 +31,7 @@ import { useGetUserQuery } from "@redux/api/userApi"
 import { CldImage } from "next-cloudinary"
 import { generateSecureUrl } from "@/utils/cloudinary"
 import Spinner from "./Spinner"
+import Avatar from "./Avatar"
 
 const shoutSchema = z.object({
   text: z
@@ -39,14 +43,24 @@ const shoutSchema = z.object({
 
 type ShoutFormValues = z.infer<typeof shoutSchema>
 
+interface ShoutComposerProps {
+  /** Optional callback fired after a shout has been successfully submitted. */
+  onSubmitted?: () => void,
+  placeholder: string,
+  submitText?: string
+}
+
 /**
  * Standalone shout composer form — used both inline (home feed) and inside the dialog.
  * Handles image picking, Cloudinary uploads and posting via the API mutation.
  */
-export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
+export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout"}: ShoutComposerProps) {
   const { data: user } = useGetUserQuery(undefined)
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg"
   const [createShout, { isLoading }] = useCreateShoutMutation()
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const emojiPickerRef = useRef<HTMLDivElement>(null)
+  const { resolvedTheme } = useTheme()
 
   const imageInputRef = useRef<HTMLInputElement>(null)
   const [imageViews, setImageViews] = useState<string[]>([])
@@ -56,6 +70,24 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
     mode: "onSubmit",
     defaultValues: { text: "", images: [] },
   })
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false)
+      }
+    }
+    if (showEmojiPicker) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [showEmojiPicker])
+
+  const handleEmojiSelect = (emoji: { native: string }) => {
+    const current = form.getValues("text")
+    form.setValue("text", current + emoji.native, { shouldDirty: true, shouldValidate: true })
+  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
@@ -103,20 +135,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
         <div className={`flex flex-row gap-3 ${isLoading ? "opacity-50" : ""}`}>
 
           {/* User Avatar */}
-          <div className="w-12 h-12 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
-            <CldImage
-              width="48"
-              height="48"
-              src={avatar}
-              alt="User Avatar"
-              crop="thumb"
-              gravity="face"
-              format="auto"
-              quality="auto"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
+          <Avatar avatar={avatar}></Avatar>
           <div className="flex flex-col flex-1 gap-1 items-start">
             {/* Text Input */}
             <FormField
@@ -126,7 +145,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
                 <FormItem className="w-full">
                   <FormControl>
                     <Textarea
-                      placeholder="What's new to you?"
+                      placeholder={placeholder}
                       className="placeholder:text-zinc-500 placeholder:text-lg text-lg max-h-[400px] min-h-[80px] resize-none border-none focus-visible:ring-0 p-0"
                       {...field}
                     />
@@ -177,9 +196,27 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
                   multiple
                   onChange={handleImageChange}
                 />
-                <Button type="button" variant="ghost" size="icon" className="rounded-full h-9 w-9 [&_svg]:!size-5">
-                  <Smile />
-                </Button>
+                <div className="relative" ref={emojiPickerRef}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full h-9 w-9 [&_svg]:!size-5"
+                    onClick={() => setShowEmojiPicker(prev => !prev)}
+                  >
+                    <Smile />
+                  </Button>
+                  {showEmojiPicker && (
+                    <div className="absolute bottom-full left-0 mb-2 z-50">
+                      <Picker
+                        data={data}
+                        onEmojiSelect={handleEmojiSelect}
+                        theme={resolvedTheme === "dark" ? "dark" : "light"}
+                        previewPosition="none"
+                      />
+                    </div>
+                  )}
+                </div>
                 <Button type="button" variant="ghost" size="icon" className="rounded-full h-9 w-9 [&_svg]:!size-5">
                   <MapPin />
                 </Button>
@@ -191,7 +228,7 @@ export function ShoutComposer({ onSubmitted }: { onSubmitted?: () => void }) {
                 className="bg-violet-500 hover:bg-violet-600 rounded-full px-6 font-bold"
                 disabled={isLoading || !form.formState.isDirty || !form.formState.isValid}
               >
-                Shout
+                {submitText}
               </Button>
             </div>
           </div>
@@ -222,7 +259,7 @@ export function CreateShout({
           <DialogTitle className="text-xl font-bold">New Shout</DialogTitle>
         </DialogHeader>
         <div className="pt-2">
-          <ShoutComposer onSubmitted={() => setOpen(false)} />
+          <ShoutComposer placeholder="What's new to you?" onSubmitted={() => setOpen(false)} />
         </div>
       </DialogContent>
     </Dialog>

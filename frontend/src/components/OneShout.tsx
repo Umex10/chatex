@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { Badge } from './ui/badge';
 import { EllipsisVertical, CircleEllipsis } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
+import { ShoutComposer } from './CreateShout';
+import Avatar from './Avatar';
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
 function formatCount(n: number): string {
@@ -76,6 +78,11 @@ const OneShout = (data: Shout) => {
     setUserReShoutingTheShoutView(!userReShoutingTheShoutView);
   }
 
+  function pushToAccount(e: React.MouseEvent<HTMLButtonElement | HTMLImageElement | HTMLSpanElement>) {
+    router.push(`/${username}`);
+    e.stopPropagation();
+  }
+
   return (
     // outer card container for one shout item
     <div className={`relative p-3 w-full border-y transition ease-out duration-300 ${isOnShoutPage ? '' : 'cursor-pointer hover:opacity-80'
@@ -87,30 +94,18 @@ const OneShout = (data: Shout) => {
           <Spinner></Spinner>
         </div>
       )}
-
       {/* row layout: avatar column + content column */}
       <div className='flex flex-row gap-2'>
         {/* left column: account avatar */}
-        <div className="w-14 h-14 bg-gray-200 rounded-full shrink-0 overflow-hidden flex items-center justify-center">
-          <CldImage
-            width="56"
-            height="56"
-            src={avatar ? avatar : "user-avatar_yr4qhg"}
-            alt="User Avatar"
-            crop="thumb"
-            gravity="face"
-            format="auto"
-            quality="auto"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <Avatar avatar={avatar}></Avatar>
         {/* right column: meta info, text, media, actions */}
         <div className='flex flex-col flex-1 gap-0 items-start'>
           {/* meta row: name, optional verified badge, username and time */}
           <div className='w-full flex flex-row'>
             <div className='flex flex-row flex-1 gap-1 items-center text-base'>
               <span className='font-bold max-w-[80px] truncate 
-            md:max-w-none md:whitespace-normal'>{name}</span>
+            md:max-w-none md:whitespace-normal'
+                onClick={(e) => { pushToAccount(e) }}>{name}</span>
 
               {/* verified badge only shown when hasBadge is true */}
 
@@ -126,7 +121,8 @@ const OneShout = (data: Shout) => {
 
 
               <span className='max-w-[80px] truncate 
-            md:max-w-none md:whitespace-normal'>@{username}</span>
+            md:max-w-none md:whitespace-normal'
+                onClick={(e) => { pushToAccount(e) }}>@{username}</span>
 
               <span>·</span>
 
@@ -218,44 +214,48 @@ const OneShout = (data: Shout) => {
             {/* action counters: reshouts and likes */}
             {/* Engagement Counters: Re-Shouts & Likes */}
             <ul className='w-full grid grid-cols-4 items-center -ml-2 mt-1'>
-              <li className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
-                <div className='p-2 rounded-full transition-colors group-hover:bg-green-400/10'>
-                  <Repeat2
-                    onClick={handleReShoutTheShoutView}
-                    className={`w-[18px] h-[18px] transition-colors ${userReShoutingTheShoutView
+              <li>
+                <div className='group inline-flex flex-row items-center gap-1 cursor-pointer select-none'
+                  onClick={(e) => { e.stopPropagation(); handleReShoutTheShoutView(); }}>
+                  <div className='p-2 rounded-full transition-colors group-hover:bg-green-400/10'>
+                    <Repeat2
+                      className={`w-[18px] h-[18px] transition-colors ${userReShoutingTheShoutView
+                        ? 'text-green-400'
+                        : 'text-zinc-500 group-hover:text-green-400'
+                        }`}
+                    />
+                  </div>
+                  {reShoutsCountView > 0 && (
+                    <span className={`text-sm transition-colors ${userReShoutingTheShoutView
                       ? 'text-green-400'
                       : 'text-zinc-500 group-hover:text-green-400'
-                      }`}
-                  />
+                      }`}>
+                      {formatCount(reShoutsCountView)}
+                    </span>
+                  )}
                 </div>
-                {reShoutsCountView > 0 && (
-                  <span className={`text-sm transition-colors ${userReShoutingTheShoutView
-                    ? 'text-green-400'
-                    : 'text-zinc-500 group-hover:text-green-400'
-                    }`}>
-                    {formatCount(reShoutsCountView)}
-                  </span>
-                )}
               </li>
-              <li className='group flex flex-row items-center gap-1 cursor-pointer select-none'>
-                <div className='p-2 rounded-full transition-colors group-hover:bg-pink-500/10'>
-                  <Heart
-                    onClick={handleLikeTheShoutView}
-                    fill={userLikingTheShoutView ? 'currentColor' : 'none'}
-                    className={`w-[18px] h-[18px] transition-colors ${userLikingTheShoutView
+              <li>
+                <div className='group inline-flex flex-row items-center gap-1 cursor-pointer select-none'
+                  onClick={(e) => { e.stopPropagation(); handleLikeTheShoutView(); }}>
+                  <div className='p-2 rounded-full transition-colors group-hover:bg-pink-500/10'>
+                    <Heart
+                      fill={userLikingTheShoutView ? 'currentColor' : 'none'}
+                      className={`w-[18px] h-[18px] transition-colors ${userLikingTheShoutView
+                        ? 'text-pink-500'
+                        : 'text-zinc-500 group-hover:text-pink-500'
+                        }`}
+                    />
+                  </div>
+                  {likesCountView > 0 && (
+                    <span className={`text-sm transition-colors ${userLikingTheShoutView
                       ? 'text-pink-500'
                       : 'text-zinc-500 group-hover:text-pink-500'
-                      }`}
-                  />
+                      }`}>
+                      {formatCount(likesCountView)}
+                    </span>
+                  )}
                 </div>
-                {likesCountView > 0 && (
-                  <span className={`text-sm transition-colors ${userLikingTheShoutView
-                    ? 'text-pink-500'
-                    : 'text-zinc-500 group-hover:text-pink-500'
-                    }`}>
-                    {formatCount(likesCountView)}
-                  </span>
-                )}
               </li>
             </ul>
           </div>

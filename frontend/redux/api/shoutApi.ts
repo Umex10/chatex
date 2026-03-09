@@ -82,6 +82,22 @@ const shoutApi = apiSlice.injectEndpoints({
         method: "POST"
       }),
     }),
+
+    /** Add a comment on a shout. */
+    commentOnShout: builder.mutation<Shout, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/comment`,
+        method: "POST"
+      }),
+    }),
+
+    /** Remove the comment from the shout. */
+    unCommentOnShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/unComment`,
+        method: "POST"
+      }),
+    }),
   }),
 });
 
@@ -96,4 +112,6 @@ export const {
   useReShoutTheShoutMutation,
   useDislikeTheShoutMutation,
   useUnShoutTheShoutMutation,
+  useCommentOnShoutMutation,
+  useUnCommentOnShoutMutation
 } = shoutApi;
