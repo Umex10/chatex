@@ -84,12 +84,6 @@ const OneShout = (data: Shout) => {
     e.stopPropagation();
   }
 
-  function handleCommentView() {
-
-
-
-  }
-
   return (
     // outer card container for one shout item
     <div className={`relative p-3 w-full border-y transition ease-out duration-300 ${isOnShoutPage ? '' : 'cursor-pointer hover:opacity-80'
@@ -266,9 +260,9 @@ const OneShout = (data: Shout) => {
               </li>
               <li>
                 <div className='group inline-flex flex-row items-center gap-1 cursor-pointer select-none'
-                  onClick={(e) => { e.stopPropagation(); handleCommentView(); }}>
+                  onClick={(e) => e.stopPropagation()}>
                   <div className='p-2 rounded-full transition-colors group-hover:bg-violet-400/10'>
-                    <CreateShout mode='COMMENT_ON_SHOUT' mainShoutId={id}>
+                    <CreateShout mode='COMMENT_ON_SHOUT' mainShoutId={id} incrementCommentCounter={setCommentsCountview}>
                       <MessageCircle
                         className={`w-[18px] h-[18px] transition-colors
                          text-zinc-500 group-hover:text-violet-400`}

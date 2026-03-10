@@ -8,7 +8,7 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetShoutsQuery } from '@redux/api/shoutApi';
+import { useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
 import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/userApi';
 import { useUnfollowUserMutation } from '@redux/api/followApi';
 import { joinedAccountDate } from '@/utils/joinedDate';
@@ -22,7 +22,7 @@ import { useFollow } from '@/hooks/use-follow';
  * identified by the `username` route parameter.
  * Fetches the "other" user's data only when the account does not belong to the current user.
  * Displays the user's banner, avatar, bio, join date, follower stats,
- * and a tabbed feed of their shouts, replies and media.
+ * and a tabbed feed of their shouts, comments and media.
  */
 const Page = ({ params }: { params: Promise<{ username: string }> }) => {
 
@@ -52,6 +52,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
 
   const { data: shouts } = useGetShoutsQuery(username);
+  const { data: userComments} = useGetUserCommentsQuery(username);
 
   const { followText, onToggleFollow } = useFollow({ username, userFollowingTarget: isRequestingUserFollowing });
 
@@ -165,8 +166,8 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
           <TabsTrigger value="shouts" className={`flex-1 text-lg
             ${activeTab === "shouts" ? "underline decoration-2 underline-offset-20" : ""}`}>Shouts</TabsTrigger>
 
-          <TabsTrigger value="replies" className={`flex-1 text-lg
-            ${activeTab === "replies" ? "underline decoration-2 underline-offset-20" : ""}`}>Replies</TabsTrigger>
+          <TabsTrigger value="comments" className={`flex-1 text-lg
+            ${activeTab === "comments" ? "underline decoration-2 underline-offset-20" : ""}`}>Comments</TabsTrigger>
 
           <TabsTrigger value="media" className={`flex-1 text-lg
             ${activeTab === "media" ? "underline decoration-2 underline-offset-20" : ""}`}>Media</TabsTrigger>
@@ -175,19 +176,19 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
         {/* Shouts Tab Content */}
         <TabsContent value="shouts" className='m-0'>
           {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.name}></OneShout>
+            <OneShout {...shout} key={shout.createdAt}></OneShout>
           ))}
         </TabsContent>
         {/* Replies Tab Content */}
-        <TabsContent value="replies" className='m-0'>
-          {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.name}></OneShout>
+        <TabsContent value="comments" className='m-0'>
+          {userComments?.map(shout => (
+            <OneShout {...shout} key={shout.createdAt}></OneShout>
           ))}
         </TabsContent>
         {/* Media Tab Content */}
         <TabsContent value="media" className='m-0'>
           {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.name}></OneShout>
+            <OneShout {...shout} key={shout.createdAt}></OneShout>
           ))}
         </TabsContent>
       </Tabs>

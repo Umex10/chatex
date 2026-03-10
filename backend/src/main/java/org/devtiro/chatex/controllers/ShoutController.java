@@ -231,6 +231,24 @@ public class ShoutController {
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
 
+  @GetMapping(path = "/{username}/userComment")
+  public ResponseEntity<List<ShoutDto>> getUserComments(@PathVariable String username,
+      @RequestAttribute UUID userId) {
+
+    List<Shout> shouts = shoutService.getComments(username);
+
+    List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
+
+    shoutsDto.forEach(dto -> {
+      dto.setUserLikingTheShout(
+          shoutService.isUserLikingTheShout(dto.getId(), userId));
+      dto.setUserReShoutingTheShout(
+          shoutService.isUserReShoutingTheShout(dto.getId(), userId));
+    });
+
+    return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
+  }
+
   @PostMapping(path = "/{shoutId}/comment")
   public ResponseEntity<ShoutDto> commentOnShout(@PathVariable UUID shoutId,
       @RequestBody CreateShoutRequest createShoutRequest,

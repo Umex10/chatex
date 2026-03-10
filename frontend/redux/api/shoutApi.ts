@@ -90,6 +90,12 @@ const shoutApi = apiSlice.injectEndpoints({
       providesTags: ['User']
     }),
 
+    /** Fetches all comments from a given Shout. */
+    getUserComments: builder.query<Shout[], string>({
+      query: (username) => `/shout/${username}/userComment`,
+      providesTags: ['User']
+    }),
+
     /** Add a comment on a shout. */
     commentOnShout: builder.mutation<Shout, CreateCommentPayload>({
       query: (createComment) => ({
@@ -114,5 +120,6 @@ export const {
   useDislikeTheShoutMutation,
   useUnShoutTheShoutMutation,
   useGetCommentsQuery,
+  useGetUserCommentsQuery,
   useCommentOnShoutMutation
 } = shoutApi;

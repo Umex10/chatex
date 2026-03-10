@@ -30,6 +30,8 @@ public interface ShoutService {
    */
   Shout getShout(UUID shoutId);
 
+  List<Shout> getComments(String username);
+
   /**
    * Creates a new shout on behalf of the user identified by the given ID.
    *

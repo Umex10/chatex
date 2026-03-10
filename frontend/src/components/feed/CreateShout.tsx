@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import Image from "next/image"
 import { Image as ImageIcon, MapPin, Smile, PencilLine, X } from "lucide-react"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, Dispatch, SetStateAction } from "react"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { useTheme } from "next-themes"
@@ -255,13 +255,14 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
 
 interface CreateShoutArgs extends ShoutModeArgs {
   children: React.ReactNode,
+  incrementCommentCounter?: Dispatch<SetStateAction<number>>
 }
 
 /**
  * Dialog trigger wrapper around ShoutComposer.
  * Used in the Sidebar and as the mobile floating action button.
  */
-export function CreateShout({ children, mode, mainShoutId }: CreateShoutArgs) {
+export function CreateShout({ children, mode, mainShoutId, incrementCommentCounter }: CreateShoutArgs) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -275,7 +276,12 @@ export function CreateShout({ children, mode, mainShoutId }: CreateShoutArgs) {
         </DialogHeader>
         <div className="pt-2">
           <ShoutComposer placeholder="What's new to you?"
-            onSubmitted={() => setOpen(false)} mode={mode}
+            onSubmitted={() => {
+              setOpen(false);
+              if (incrementCommentCounter) {
+                incrementCommentCounter(last => last + 1);
+              }
+            }} mode={mode}
             mainShoutId={mainShoutId} />
         </div>
       </DialogContent>

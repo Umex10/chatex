@@ -40,6 +40,12 @@ public class ShoutServiceIpl implements ShoutService {
     return shoutRep.findAllShoutsByUsername(username);
   }
 
+
+  @Override
+  public List<Shout> getComments(String username) {
+    return shoutRep.findAllCommentsByUsername(username);
+  }
+
   /** {@inheritDoc} */
   @Override
   public Shout createShout(UUID userId, CreateShoutRequest createShoutRequest) {
@@ -188,5 +194,6 @@ public class ShoutServiceIpl implements ShoutService {
     return shoutRep.findById(shoutId)
         .orElseThrow(() -> new EntityNotFoundException("Shout with id " + shoutId + " not found"));
   }
+
 
 }
