@@ -1,6 +1,7 @@
 package org.devtiro.chatex.domain.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,5 +55,6 @@ public class Shout {
   private Shout mainShout;
 
   @OneToMany(mappedBy = "mainShout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<Shout> comments;
+  @Builder.Default
+  private List<Shout> comments = new ArrayList<>();
 }

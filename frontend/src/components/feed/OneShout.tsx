@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { Badge } from '../ui/badge';
 import { EllipsisVertical, CircleEllipsis } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
-import { ShoutComposer } from './CreateShout';
+import { CreateShout, ShoutComposer } from './CreateShout';
 import Avatar from '../profile/Avatar';
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
@@ -30,11 +30,12 @@ function formatCount(n: number): string {
 const OneShout = (data: Shout) => {
 
   const { id, text, images, userLikingTheShout, userReShoutingTheShout,
-    avatar, likesCount, reShoutsCount, name, username, createdAt
+    avatar, likesCount, reShoutsCount, commentsCount, name, username, createdAt
   } = { ...data };
 
   const [likesCountView, setLikesCountView] = useState(likesCount);
   const [reShoutsCountView, setReShoutsCountView] = useState(reShoutsCount);
+  const [commentsCountView, setCommentsCountview] = useState(commentsCount);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -81,6 +82,12 @@ const OneShout = (data: Shout) => {
   function pushToAccount(e: React.MouseEvent<HTMLButtonElement | HTMLImageElement | HTMLSpanElement>) {
     router.push(`/${username}`);
     e.stopPropagation();
+  }
+
+  function handleCommentView() {
+
+
+
   }
 
   return (
@@ -253,6 +260,26 @@ const OneShout = (data: Shout) => {
                       : 'text-zinc-500 group-hover:text-pink-500'
                       }`}>
                       {formatCount(likesCountView)}
+                    </span>
+                  )}
+                </div>
+              </li>
+              <li>
+                <div className='group inline-flex flex-row items-center gap-1 cursor-pointer select-none'
+                  onClick={(e) => { e.stopPropagation(); handleCommentView(); }}>
+                  <div className='p-2 rounded-full transition-colors group-hover:bg-violet-400/10'>
+                    <CreateShout mode='COMMENT_ON_SHOUT' mainShoutId={id}>
+                      <MessageCircle
+                        className={`w-[18px] h-[18px] transition-colors
+                         text-zinc-500 group-hover:text-violet-400`}
+                      />
+                    </CreateShout>
+
+                  </div>
+                  {commentsCountView > 0 && (
+                    <span className={`text-sm transition-colors
+                     text-zinc-500 group-hover:text-violet-400`}>
+                      {formatCount(commentsCountView)}
                     </span>
                   )}
                 </div>

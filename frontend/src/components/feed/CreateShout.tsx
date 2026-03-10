@@ -42,20 +42,25 @@ const shoutSchema = z.object({
 
 type ShoutFormValues = z.infer<typeof shoutSchema>
 
-interface ShoutComposerProps {
+interface ShoutModeArgs {
+  mode: 'CREATE_SHOUT' | 'COMMENT_ON_SHOUT';
+  mainShoutId?: string;
+}
+
+
+interface ShoutComposerArgs extends ShoutModeArgs {
   /** Optional callback fired after a shout has been successfully submitted. */
   onSubmitted?: () => void,
-  mainShoutId?: string,
-  mode: 'CREATE_SHOUT' | 'COMMENT_ON_SHOUT',
   placeholder: string,
   submitText?: string
 }
+
 
 /**
  * Standalone shout composer form — used both inline (home feed) and inside the dialog.
  * Handles image picking, Cloudinary uploads and posting via the API mutation.
  */
-export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", mainShoutId, mode }: ShoutComposerProps) {
+export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", mainShoutId, mode }: ShoutComposerArgs) {
   const { data: user } = useGetUserQuery(undefined)
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg"
   const [createShout, { isLoading: isLoadingShout }] = useCreateShoutMutation()
@@ -117,8 +122,10 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
 
       if (mode === "CREATE_SHOUT") {
         await createShout({ text: values.text, images: uploadedUrls }).unwrap()
-      } if (mode === "COMMENT_ON_SHOUT" && mainShoutId) {
+      } else if (mode === "COMMENT_ON_SHOUT" && mainShoutId) {
         await commentOnShout({ text: values.text, images: uploadedUrls, mainShoutId: mainShoutId }).unwrap()
+      } else {
+        console.error("You need to set a mode in order to create a Shout!")
       }
 
     } catch (err) {
@@ -246,15 +253,15 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
   )
 }
 
+interface CreateShoutArgs extends ShoutModeArgs {
+  children: React.ReactNode,
+}
+
 /**
  * Dialog trigger wrapper around ShoutComposer.
  * Used in the Sidebar and as the mobile floating action button.
  */
-export function CreateShout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export function CreateShout({ children, mode, mainShoutId }: CreateShoutArgs) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -268,7 +275,8 @@ export function CreateShout({
         </DialogHeader>
         <div className="pt-2">
           <ShoutComposer placeholder="What's new to you?"
-            onSubmitted={() => setOpen(false)} mode="CREATE_SHOUT" />
+            onSubmitted={() => setOpen(false)} mode={mode}
+            mainShoutId={mainShoutId} />
         </div>
       </DialogContent>
     </Dialog>

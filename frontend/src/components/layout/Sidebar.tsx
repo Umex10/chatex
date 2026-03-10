@@ -197,7 +197,7 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <CreateShout>
+                  <CreateShout mode="CREATE_SHOUT">
                     <SidebarMenuButton className="h-12 px-2 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!w-12 
                     bg-violet-500 text-white rounded-full [&>svg]:!size-7">
                       <PencilLine className="w-6 h-6 group-[:not([data-collapsible=icon])]:hidden " />

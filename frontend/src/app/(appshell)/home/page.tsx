@@ -40,8 +40,8 @@ const Home = () => {
 
         {/* Inline composer — desktop only */}
         <div className='hidden md:block p-3 w-full border-y'>
-          <ShoutComposer placeholder="What's new to you?" 
-          mode='CREATE_SHOUT'/>
+          <ShoutComposer placeholder="What's new to you?"
+            mode='CREATE_SHOUT' />
         </div>
 
         {/* "For You" Feed */}
@@ -53,7 +53,7 @@ const Home = () => {
       </Tabs>
 
       {/* Floating compose button — mobile only */}
-      <CreateShout>
+      <CreateShout mode='CREATE_SHOUT'>
         <Button className="fixed right-6 bottom-24 h-12 w-12 rounded-full bg-violet-500 md:hidden [&_svg]:!size-6">
           <PencilLine className="w-8 h-8 text-white" />
         </Button>

@@ -23,13 +23,6 @@ const RenderShouts = ({isLoading, shouts}: RenderShoutsArgs) => {
           <Spinner></Spinner>
         </div>
       )}
-
-      {/* Empty State */}
-      {!isLoading && shouts.length === 0 && (
-        <div className='p-3 w-full flex flex-col items-center'>
-          <p>There are now shouts yet {":("}</p>
-        </div>
-      )}
       
       {/* Shout List */}
       {shouts.map(shout => (

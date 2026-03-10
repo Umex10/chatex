@@ -1,11 +1,9 @@
 package org.devtiro.chatex.domain.mappers;
 
 import java.util.List;
-import java.util.Set;
 
 import org.devtiro.chatex.domain.dtos.responses.ShoutDto;
 import org.devtiro.chatex.domain.entities.Shout;
-import org.devtiro.chatex.domain.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -31,8 +29,9 @@ public interface ShoutMapper {
   @Mapping(source = "user.name", target = "name")
   @Mapping(source = "user.username", target = "username")
   @Mapping(source = "user.avatar", target = "avatar")
-  @Mapping(source = "likedBy", target = "likesCount", qualifiedByName = "calculateLikesCount")
-  @Mapping(source = "reShoutedBy", target = "reShoutsCount", qualifiedByName = "calculateReShoutsCount")
+  @Mapping(source = "likedBy", target = "likesCount", qualifiedByName = "countCollection")
+  @Mapping(source = "reShoutedBy", target = "reShoutsCount", qualifiedByName = "countCollection")
+  @Mapping(source = "comments", target = "commentsCount", qualifiedByName = "countCollection")
   @Mapping(target = "userLikingTheShout", ignore = true)
   @Mapping(target = "userReShoutingTheShout", ignore = true)
   ShoutDto toDto(Shout shout);
@@ -45,32 +44,13 @@ public interface ShoutMapper {
   List<ShoutDto> toDtoList(List<Shout> shouts);
 
   /**
-   * Counts the number of users who liked the shout.
+   * Counts the number of the given List or Set.
    * Returns 0 if the provided set is {@code null}.
    *
-   * @return the number of likes, or 0 if the set is null
+   * @return the number (length) of the List or Set
    */
-  @Named("calculateLikesCount")
-  default int calculateLikesCount(Set<User> likedBy) {
-    if (likedBy == null) {
-      return 0;
-    }
-
-    return likedBy.size();
-  }
-
-  /**
-   * Counts the number of users who re-shouted the shout.
-   * Returns 0 if the provided set is {@code null}.
-   *
-   * @return the number of re-shouts, or 0 if the set is null
-   */
-  @Named("calculateReShoutsCount")
-  default int calculateReShoutsCount(Set<User> reShoutedBy) {
-    if (reShoutedBy == null) {
-      return 0;
-    }
-
-    return reShoutedBy.size();
+  @Named("countCollection")
+  default int countCollection(java.util.Collection<?> collection) {
+    return (collection == null) ? 0 : collection.size();
   }
 }

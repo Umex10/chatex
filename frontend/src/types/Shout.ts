@@ -9,6 +9,7 @@ export interface Shout {
   images: string[],
   likesCount: number,
   reShoutsCount: number,
+  commentsCount: number,
   userLikingTheShout: boolean, 
   userReShoutingTheShout: boolean
   createdAt: string

@@ -31,7 +31,7 @@ public class ShoutDto {
   private List<String> images;
   private int likesCount;
   private int reShoutsCount;
+  private int commentsCount;
   private boolean userLikingTheShout;
   private boolean userReShoutingTheShout;
-
 }
