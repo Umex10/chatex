@@ -29,8 +29,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { useCommentOnShoutMutation, useCreateShoutMutation } from "@redux/api/shoutApi"
 import { useGetUserQuery } from "@redux/api/userApi"
 import { generateSecureUrl } from "@/utils/cloudinary"
-import Spinner from "./Spinner"
-import Avatar from "./Avatar"
+import Spinner from "../shared/Spinner"
+import Avatar from "../profile/Avatar"
 
 const shoutSchema = z.object({
   text: z

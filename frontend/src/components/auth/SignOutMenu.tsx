@@ -2,7 +2,7 @@
 
 import { LogOut } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 
 /** Props for the SignOutMenu component. */
 interface SignOutMenuProps {

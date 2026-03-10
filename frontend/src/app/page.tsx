@@ -8,10 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link"
-import { ModeToggle } from "@/components/mode-toggle";
-import { FeatureCard } from "@/components/feature-card";
-import { SignUpAcc } from "@/components/signup-account";
-import { SignInAcc } from "@/components/signin-account";
+import { ModeToggle } from "@/components/shared/mode-toggle";
+import { FeatureCard } from "@/components/shared/feature-card";
+import { SignUpAcc } from "@/components/auth/signup-account";
+import { SignInAcc } from "@/components/auth/signin-account";
 
 /**
  * Home page component displaying the landing page.

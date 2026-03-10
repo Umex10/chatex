@@ -1,7 +1,7 @@
 "use client"
 
-import FollowInstance from '@/components/FollowInstance'
-import RenderFollowList from '@/components/RenderFollowList'
+import FollowInstance from '@/components/follow/FollowInstance'
+import RenderFollowList from '@/components/follow/RenderFollowList'
 import { useGetFollowersQuery } from '@redux/api/followApi'
 import { usePathname } from 'next/navigation'
 import React from 'react'

@@ -2,8 +2,8 @@
 
 import axios from "axios";
 import { cookies } from "next/headers";
-import { SignUpAccountValues } from "@/components/signup-account";
-import { SignInAccountValues } from "@/components/signin-account";
+import { SignUpAccountValues } from "@/components/auth/signup-account";
+import { SignInAccountValues } from "@/components/auth/signin-account";
 
 const api = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth`,

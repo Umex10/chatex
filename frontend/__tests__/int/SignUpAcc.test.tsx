@@ -1,6 +1,6 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SignUpAcc } from "../../src/components/signup-account";
+import { SignUpAcc } from "../../src/components/auth/signup-account";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";

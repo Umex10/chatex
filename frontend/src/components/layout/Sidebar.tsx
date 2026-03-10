@@ -24,17 +24,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { SignOutMenu } from "./SignOutMenu"
+import { SignOutMenu } from "../auth/SignOutMenu"
 import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { CreateShout } from "./CreateShout"
+import { CreateShout } from "../feed/CreateShout"
 import { usePathname, useRouter } from "next/navigation"
 import { CldImage } from 'next-cloudinary';
 import { useGetUserQuery } from "@redux/api/userApi"
 import { signOutRequest } from "@/actions/auth-account-actions"
 import { toast } from "sonner"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import Link from "next/link"
 
 

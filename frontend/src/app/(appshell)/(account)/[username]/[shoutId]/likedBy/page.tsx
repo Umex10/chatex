@@ -1,7 +1,7 @@
 "use client"
 
-import FollowInstance from '@/components/FollowInstance';
-import ReturnHeader from '@/components/ReturnHeader';
+import FollowInstance from '@/components/follow/FollowInstance';
+import ReturnHeader from '@/components/layout/ReturnHeader';
 import { useGetLikedByQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 

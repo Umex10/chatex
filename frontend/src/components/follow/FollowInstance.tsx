@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useState } from 'react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { Ellipsis } from 'lucide-react'
 import { CldImage } from 'next-cloudinary'
-import type { Follow as FollowInstance } from '../../constants/Follow'
+import type { Follow as FollowInstance } from '@/types/Follow'
 import { useFollow } from '@/hooks/use-follow'
 import { useRouter } from 'next/navigation'
 

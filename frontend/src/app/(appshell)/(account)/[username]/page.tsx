@@ -1,6 +1,6 @@
 "use client"
 
-import OneShout from '@/components/OneShout';
+import OneShout from '@/components/feed/OneShout';
 import { RootState } from '@redux/store';
 import React, { use, useState } from 'react'
 import { useSelector } from 'react-redux';

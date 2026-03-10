@@ -1,16 +1,16 @@
 "use client"
 
-import AuthProvider from '@/components/AuthProvider'
+import AuthProvider from '@/components/auth/AuthProvider'
 import React, { useEffect, useState } from 'react'
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/Sidebar"
+import { AppSidebar } from "@/components/layout/Sidebar"
 
-import { CustomTrigger } from '@/components/CustomTrigger'
+import { CustomTrigger } from '@/components/layout/CustomTrigger'
 import { Button } from '@/components/ui/button'
 
 import { Award, Search } from "lucide-react";
-import NavMenu from '@/components/NavMenu'
+import NavMenu from '@/components/layout/NavMenu'
 import Image from 'next/image'
 const XL_BREAKPOINT = 1280
 

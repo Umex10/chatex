@@ -1,11 +1,11 @@
 "use client"
 
-import RenderShouts from '@/components/RenderShouts';
+import RenderShouts from '@/components/feed/RenderShouts';
 import { useGetCommentsQuery, useGetShoutQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
-import { Shout } from '../../../../../../constants/Shout';
-import ReturnHeader from '@/components/ReturnHeader';
-import { ShoutComposer } from '@/components/CreateShout';
+import { Shout } from '@/types/Shout';
+import ReturnHeader from '@/components/layout/ReturnHeader';
+import { ShoutComposer } from '@/components/feed/CreateShout';
 
 export interface CreateCommentPayload {
   text: string,

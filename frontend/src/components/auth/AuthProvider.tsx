@@ -3,7 +3,7 @@
 import { useGetUserQuery } from '@redux/api/userApi'
 import { useRefreshAccessTkQuery } from '@redux/api/authApi'
 import React from 'react'
-import Loading from './Loading';
+import Loading from '../shared/Loading';
 
 /**
  * Provider component that manages access JWT token fetching and state.

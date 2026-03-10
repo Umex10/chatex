@@ -1,5 +1,5 @@
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/shared/theme-provider";
 import StoreProvider from "@redux/StoreProvider";
 import { Toaster } from 'sonner';
 /**

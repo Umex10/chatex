@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { usePathname, useRouter } from 'next/navigation'
-import ReturnHeader from '@/components/ReturnHeader'
+import ReturnHeader from '@/components/layout/ReturnHeader'
 
 /**
  * Layout for the followers/following/verifiedFollowers tab group of a user's account.

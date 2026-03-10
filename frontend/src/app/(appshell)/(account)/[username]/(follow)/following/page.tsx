@@ -1,10 +1,10 @@
 "use client"
 
 import { twitterUsers } from '@/utils/dummy'
-import FollowInstance from '@/components/FollowInstance'
+import FollowInstance from '@/components/follow/FollowInstance'
 import { usePathname } from 'next/navigation';
 import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/followApi';
-import RenderFollowList from '@/components/RenderFollowList';
+import RenderFollowList from '@/components/follow/RenderFollowList';
 
 /**
  * Page displaying the list of accounts a given user is following.

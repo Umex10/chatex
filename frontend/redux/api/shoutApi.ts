@@ -1,5 +1,5 @@
-import { Shout } from '../../constants/Shout';
-import { Follow } from '../../constants/Follow';
+import { Shout } from '@/types/Shout';
+import { Follow } from '@/types/Follow';
 import { CreateShoutPlayoad } from '@/app/(appshell)/home/page';
 import { apiSlice } from './apiSlice';
 import { CreateCommentPayload } from '@/app/(appshell)/(account)/[username]/[shoutId]/page';

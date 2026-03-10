@@ -2,7 +2,7 @@
 
 import { useSidebar } from "@/components/ui/sidebar"
 import Image from "next/image"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { useGetUserQuery } from "@redux/api/userApi"
 import { CldImage } from "next-cloudinary"
 

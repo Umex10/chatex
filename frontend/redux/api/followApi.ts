@@ -1,6 +1,6 @@
 import { followUserRequest, unfollowUserRequest } from '@/actions/follow-system-user';
-import { Follow } from '../../constants/Follow';
-import { User } from '../../constants/User';
+import { Follow } from '@/types/Follow';
+import { User } from '@/types/User';
 import { apiSlice } from './apiSlice';
 
 /**

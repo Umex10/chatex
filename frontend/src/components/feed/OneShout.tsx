@@ -3,18 +3,18 @@
 import { BadgeCheck, Ellipsis, Trash } from 'lucide-react'
 
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
-import { Shout } from '../../constants/Shout';
+import { Shout } from '@/types/Shout';
 import { CldImage } from 'next-cloudinary';
 import { joinedShoutDate } from '@/utils/joinedDate';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation, useUnShoutTheShoutMutation } from '@redux/api/shoutApi';
-import Spinner from './Spinner';
+import Spinner from '../shared/Spinner';
 import { useState } from 'react';
-import { Badge } from './ui/badge';
+import { Badge } from '../ui/badge';
 import { EllipsisVertical, CircleEllipsis } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { ShoutComposer } from './CreateShout';
-import Avatar from './Avatar';
+import Avatar from '../profile/Avatar';
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
 function formatCount(n: number): string {

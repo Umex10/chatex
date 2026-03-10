@@ -1,5 +1,5 @@
 import React from 'react'
-import { Follow } from '../../constants/Follow'
+import { Follow } from '@/types/Follow'
 import FollowInstance from './FollowInstance'
 
 interface RenderFollowsArgs {

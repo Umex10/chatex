@@ -1,6 +1,6 @@
 import React from 'react'
-import { Shout } from '../../constants/Shout'
-import Spinner from './Spinner'
+import { Shout } from '@/types/Shout'
+import Spinner from '../shared/Spinner'
 import OneShout from './OneShout'
 
 /** Props for the RenderShouts component. */
