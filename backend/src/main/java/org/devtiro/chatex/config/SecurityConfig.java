@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -32,7 +33,8 @@ import org.springframework.beans.factory.annotation.Value;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Reads the frontend URL from the environment variable (e.g. set on Railway).
+    // Reads the frontend URL(s) from the environment variable (e.g. set on Railway).
+    // Supports a comma-separated list for multiple origins (production + preview deployments).
     // Falls back to localhost for local development.
     @Value("${FRONTEND_URL:http://localhost:3000}")
     private String frontendUrl;
@@ -105,8 +107,16 @@ public class SecurityConfig {
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        // Split by comma to support multiple origins, trim whitespace from each entry
+        List<String> allowedOrigins = Stream.of(frontendUrl.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendUrl));                 // Reads from FRONTEND_URL env var
+        // setAllowedOriginPatterns works correctly with allowCredentials(true)
+        // and supports wildcards like https://*.vercel.app
+        configuration.setAllowedOriginPatterns(allowedOrigins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);                               // Required for JWT cookies
