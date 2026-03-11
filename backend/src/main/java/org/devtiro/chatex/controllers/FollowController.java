@@ -10,7 +10,6 @@ import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.services.FollowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
  * REST controller handling follow relationship operations.
  * Provides endpoints for retrieving follower/following lists and managing follow/unfollow actions.
  */
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/v1/follow")
 @RequiredArgsConstructor

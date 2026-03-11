@@ -14,7 +14,6 @@ import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.ShoutService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +30,6 @@ import lombok.RequiredArgsConstructor;
  * Provides endpoints for creating, retrieving, deleting shouts and managing
  * user engagement actions such as likes and re-shouts.
  */
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/v1/shout")
 @RequiredArgsConstructor

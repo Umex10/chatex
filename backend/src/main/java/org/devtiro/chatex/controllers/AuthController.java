@@ -24,7 +24,6 @@ import jakarta.servlet.http.Cookie;
  * REST controller handling authentication operations.
  * Provides endpoints for user sign-up, sign-in, and access token generation.
  */
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 @RequiredArgsConstructor
