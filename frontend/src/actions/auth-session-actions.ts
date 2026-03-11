@@ -20,7 +20,8 @@ export async function refreshAuthSessionRequest() {
       return { success: false, error: "No refresh token found" };
     }
 
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/access-jwt`, {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
+    const res = await axios.get(`${backendUrl}/api/v1/auth/access-jwt`, {
       headers: {
         "Content-Type": "application/json",
         Cookie: `refresh_jwt=${refreshCookie.value}`

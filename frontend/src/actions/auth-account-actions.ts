@@ -5,8 +5,10 @@ import { cookies } from "next/headers";
 import { SignUpAccountValues } from "@/components/auth/signup-account";
 import { SignInAccountValues } from "@/components/auth/signin-account";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
+
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth`,
+  baseURL: `${BACKEND_URL}/api/v1/auth`,
   headers: {
     "Content-Type": "application/json",
   }
@@ -22,6 +24,8 @@ const api = axios.create({
  */
 export async function signUpRequest(formData: Omit<SignUpAccountValues, "keyConfirm">) {
   try {
+    console.log(api.getUri())
+    console.log(api);
     const res = await api.post("/sign-up", formData);
 
     const setCookieHeader = res.headers["set-cookie"];

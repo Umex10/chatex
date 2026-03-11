@@ -6,7 +6,7 @@
 import { http, HttpResponse } from 'msw';
 
 /** Base URL of the backend API, sourced from environment or defaulting to localhost. */
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL || 'http://localhost:8080';
 
 /**
  * Array of MSW request handlers used by the mock server.

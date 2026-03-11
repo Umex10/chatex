@@ -9,7 +9,8 @@ import axios from "axios";
 export const followUserRequest = async (usernameToFollow: string, token: string) => {
   
   try {
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/follow/${usernameToFollow}/follow`,
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
+    const res = await axios.post(`${backendUrl}/api/v1/follow/${usernameToFollow}/follow`,
       {}, {
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +34,8 @@ export const followUserRequest = async (usernameToFollow: string, token: string)
 export const unfollowUserRequest = async (usernameToUnfollow: string, token: string) => {
   
   try {
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/follow/${usernameToUnfollow}/unfollow`,
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
+    const res = await axios.post(`${backendUrl}/api/v1/follow/${usernameToUnfollow}/unfollow`,
       {}, {
       headers: {
         "Content-Type": "application/json",
