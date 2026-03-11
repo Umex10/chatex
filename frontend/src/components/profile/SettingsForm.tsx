@@ -157,7 +157,7 @@ const Settings = () => {
 
   return (
     <div className='w-full flex-1 flex flex-col'>
-      <ReturnHeader>
+      <ReturnHeader returnText='Edit'>
         <Button variant="secondary"
           type="submit"
           form="edit-account-form"
