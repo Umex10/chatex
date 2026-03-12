@@ -32,6 +32,8 @@ public interface ShoutService {
 
   List<Shout> getComments(String username);
 
+  List<String> getAllImages(String username);
+
   /**
    * Creates a new shout on behalf of the user identified by the given ID.
    *

@@ -12,5 +12,7 @@ export interface Shout {
   commentsCount: number,
   userLikingTheShout: boolean, 
   userReShoutingTheShout: boolean
-  createdAt: string
+  createdAt: string,
+  mainShoutId: string,
+  mainShoutUsername: string
 }

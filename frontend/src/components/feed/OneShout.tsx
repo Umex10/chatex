@@ -9,12 +9,16 @@ import { joinedShoutDate } from '@/utils/joinedDate';
 import { Button } from '../ui/button';
 import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation, useUnShoutTheShoutMutation } from '@redux/api/shoutApi';
 import Spinner from '../shared/Spinner';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { Badge } from '../ui/badge';
 import { EllipsisVertical, CircleEllipsis } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { CreateShout, ShoutComposer } from './CreateShout';
 import Avatar from '../profile/Avatar';
+import { Activity } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import { DialogTitle } from '@radix-ui/react-dialog';
+
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
 function formatCount(n: number): string {
@@ -30,12 +34,16 @@ function formatCount(n: number): string {
 const OneShout = (data: Shout) => {
 
   const { id, text, images, userLikingTheShout, userReShoutingTheShout,
-    avatar, likesCount, reShoutsCount, commentsCount, name, username, createdAt
+    avatar, likesCount, reShoutsCount, commentsCount, name, username, createdAt, mainShoutId,
+    mainShoutUsername
   } = { ...data };
 
   const [likesCountView, setLikesCountView] = useState(likesCount);
   const [reShoutsCountView, setReShoutsCountView] = useState(reShoutsCount);
   const [commentsCountView, setCommentsCountview] = useState(commentsCount);
+
+  const [open, setOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -84,6 +92,12 @@ const OneShout = (data: Shout) => {
     e.stopPropagation();
   }
 
+  function handleImage(e: React.MouseEvent<HTMLDivElement>, imgUrl: string) {
+    setImageUrl(imgUrl);
+    setOpen(true);
+    e.stopPropagation();
+  }
+
   return (
     // outer card container for one shout item
     <div className={`relative p-3 w-full border-y transition ease-out duration-300 ${isOnShoutPage ? '' : 'cursor-pointer hover:opacity-80'
@@ -95,8 +109,24 @@ const OneShout = (data: Shout) => {
           <Spinner></Spinner>
         </div>
       )}
+
+
+
+      <div className={`${!mainShoutId || !mainShoutUsername ? "hidden" : "w-full flex flex-row items-center gap-1"}`}
+        onClick={(e) => {
+          router.push(`/${mainShoutUsername}/${mainShoutId}`);
+          e.stopPropagation();
+        }}>
+        <Activity className='w-4 h-4'></Activity>
+        <span className='text-sm'>
+          Commented on {" "}
+          <span className='font-bold text-violet-400'>{mainShoutUsername}</span>
+          {" "} Shout
+        </span>
+      </div>
+
       {/* row layout: avatar column + content column */}
-      <div className='flex flex-row gap-2'>
+      <div className='flex flex-row gap-2 pt-1'>
         {/* left column: account avatar */}
         <Avatar avatar={avatar}></Avatar>
         {/* right column: meta info, text, media, actions */}
@@ -169,16 +199,19 @@ const OneShout = (data: Shout) => {
               <div className="w-full mt-1">
                 {/* Single Image Layout */}
                 {images.length === 1 && (
-                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
-                    <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="600px" className="object-cover" />
+                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden"
+                    onClick={(e) => handleImage(e, images[0])}>
+                    <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" />
                   </div>
+
                 )}
 
                 {/* Two Images Grid */}
                 {images.length === 2 && (
                   <div className="grid grid-cols-2 gap-0.5 rounded-2xl overflow-hidden">
                     {images.map((img, i) => (
-                      <div key={img} className="relative aspect-square">
+                      <div key={img} className="relative aspect-square"
+                        onClick={(e) => handleImage(e, img)}>
                         <CldImage fill src={img} alt={`Post image ${i + 1}`} crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" />
                       </div>
                     ))}
@@ -188,11 +221,13 @@ const OneShout = (data: Shout) => {
                 {/* Three Images Grid */}
                 {images.length === 3 && (
                   <div className="grid grid-cols-2 grid-rows-2 gap-0.5 h-72 rounded-2xl overflow-hidden">
-                    <div className="relative row-span-2">
+                    <div className="relative row-span-2"
+                      onClick={(e) => handleImage(e, images[0])}>
                       <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" />
                     </div>
                     {images.slice(1).map((img, i) => (
-                      <div key={img} className="relative">
+                      <div key={img} className="relative"
+                        onClick={(e) => handleImage(e, img)}>
                         <CldImage fill src={img} alt={`Post image ${i + 2}`} crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" />
                       </div>
                     ))}
@@ -203,12 +238,25 @@ const OneShout = (data: Shout) => {
                 {images.length === 4 && (
                   <div className="grid grid-cols-2 gap-0.5 rounded-2xl overflow-hidden">
                     {images.map((img, i) => (
-                      <div key={img} className="relative aspect-square">
+                      <div key={img} className="relative aspect-square"
+                        onClick={(e) => handleImage(e, img)}>
                         <CldImage fill src={img} alt={`Post image ${i + 1}`} crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" />
                       </div>
                     ))}
                   </div>
                 )}
+
+                <div onClick={(e) => e.stopPropagation()}>
+                  <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+
+                    <DialogTitle></DialogTitle>
+
+                    <DialogContent className='max-w-[95vw] min-h-[65vh] md:max-h-[95vh]'>
+
+                      <CldImage fill src={imageUrl} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="1300px" className="object-cover h-full" />
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
             )}
 

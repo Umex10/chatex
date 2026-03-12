@@ -23,6 +23,11 @@ const shoutApi = apiSlice.injectEndpoints({
       providesTags: ['User']
     }),
 
+    getAllImages: builder.query<string[], string>({
+      query: (username) => `/shout/${username}/images`,
+      providesTags: ['User']
+    }),
+
     /** Fetches the list of users who liked a specific shout. */
     getLikedBy: builder.query<Follow[], string>({
       query: (shoutId) => `/shout/${shoutId}/likedBy`
@@ -111,6 +116,7 @@ const shoutApi = apiSlice.injectEndpoints({
 export const {
   useGetShoutQuery,
   useGetShoutsQuery,
+  useGetAllImagesQuery,
   useGetLikedByQuery,
   useGetReShoutedByQuery,
   useCreateShoutMutation,

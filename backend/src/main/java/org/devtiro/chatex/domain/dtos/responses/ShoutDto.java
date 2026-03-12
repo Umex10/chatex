@@ -34,4 +34,6 @@ public class ShoutDto {
   private int commentsCount;
   private boolean userLikingTheShout;
   private boolean userReShoutingTheShout;
+  private UUID mainShoutId;
+  private String mainShoutUsername;
 }

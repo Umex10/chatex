@@ -1,6 +1,7 @@
 package org.devtiro.chatex.domain.mappers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.responses.ShoutDto;
 import org.devtiro.chatex.domain.entities.Shout;
@@ -34,6 +35,8 @@ public interface ShoutMapper {
   @Mapping(source = "comments", target = "commentsCount", qualifiedByName = "countCollection")
   @Mapping(target = "userLikingTheShout", ignore = true)
   @Mapping(target = "userReShoutingTheShout", ignore = true)
+  @Mapping(source = "mainShout", target = "mainShoutId", qualifiedByName = "getMainShoutId")
+  @Mapping(source = "mainShout", target = "mainShoutUsername", qualifiedByName = "getMainShoutUsername")
   ShoutDto toDto(Shout shout);
 
   /**
@@ -52,5 +55,15 @@ public interface ShoutMapper {
   @Named("countCollection")
   default int countCollection(java.util.Collection<?> collection) {
     return (collection == null) ? 0 : collection.size();
+  }
+
+  @Named("getMainShoutId")
+  default UUID getMainShoutId(Shout mainShout) {
+    return (mainShout == null) ? null : mainShout.getId();
+  }
+
+  @Named("getMainShoutUsername")
+  default String getMainShoutUsername(Shout mainShout) {
+    return (mainShout == null) ? null : mainShout.getUser().getUsername();
   }
 }

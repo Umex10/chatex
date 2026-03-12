@@ -86,6 +86,14 @@ public class ShoutController {
     return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
   }
 
+  @GetMapping(path = "/{username}/images")
+  public ResponseEntity<List<String>> getAllImages(@PathVariable String username) {
+
+    List<String> images = shoutService.getAllImages(username);
+
+    return new ResponseEntity<>(images, HttpStatus.OK);
+  }
+
   /**
    * Creates a new shout on behalf of the authenticated user.
    *

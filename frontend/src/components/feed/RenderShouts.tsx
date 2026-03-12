@@ -25,8 +25,8 @@ const RenderShouts = ({isLoading, shouts}: RenderShoutsArgs) => {
       )}
       
       {/* Shout List */}
-      {shouts.map(shout => (
-        <OneShout {...shout} key={shout.createdAt} />
+      {shouts.map((shout, index) => (
+        <OneShout {...shout} key={shout.createdAt + index} />
       ))}
     </div>
   )

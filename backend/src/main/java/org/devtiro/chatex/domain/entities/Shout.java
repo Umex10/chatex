@@ -37,8 +37,11 @@ public class Shout {
   @Column
   private String text;
 
-  @Column
-  private List<String> images;
+  @ElementCollection
+  @CollectionTable(name = "shout_images", joinColumns = @JoinColumn(name = "shout_id"))
+  @Column(name = "image_url")
+  @Builder.Default
+  private List<String> images = new ArrayList<>();
 
   @ManyToMany
   @JoinTable(name = "shout_likes", joinColumns = @JoinColumn(name = "shout_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))

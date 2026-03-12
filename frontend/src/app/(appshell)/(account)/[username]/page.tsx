@@ -8,13 +8,15 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
+import { useGetAllImagesQuery, useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
 import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/userApi';
 import { useUnfollowUserMutation } from '@redux/api/followApi';
 import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useFollow } from '@/hooks/use-follow';
+import Image from 'next/image';
+import RenderShouts from '@/components/feed/RenderShouts';
 
 /**
  * Dynamic user Account page.
@@ -51,8 +53,9 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
   const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
 
-  const { data: shouts } = useGetShoutsQuery(username);
-  const { data: userComments} = useGetUserCommentsQuery(username);
+  const { data: shouts, isLoading: isLoadingShouts } = useGetShoutsQuery(username);
+  const { data: userComments, isLoading: isLoadingUserComments } = useGetUserCommentsQuery(username);
+  const { data: images, isLoading: isLoadingImages } = useGetAllImagesQuery(username);
 
   const { followText, onToggleFollow } = useFollow({ username, userFollowingTarget: isRequestingUserFollowing });
 
@@ -175,21 +178,21 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
         </TabsList>
         {/* Shouts Tab Content */}
         <TabsContent value="shouts" className='m-0'>
-          {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.createdAt}></OneShout>
-          ))}
+          <RenderShouts isLoading={isLoadingShouts} shouts={shouts ? shouts : []}></RenderShouts>
         </TabsContent>
         {/* Replies Tab Content */}
         <TabsContent value="comments" className='m-0'>
-          {userComments?.map(shout => (
-            <OneShout {...shout} key={shout.createdAt}></OneShout>
-          ))}
+          <RenderShouts isLoading={isLoadingShouts} shouts={shouts ? shouts : []}></RenderShouts>
         </TabsContent>
         {/* Media Tab Content */}
         <TabsContent value="media" className='m-0'>
-          {shouts?.map(shout => (
-            <OneShout {...shout} key={shout.createdAt}></OneShout>
-          ))}
+          <div className='grid grid-cols-3'>
+            {images?.map((img, index) => (
+              <div key={img + index} className="relative aspect-square">
+                <CldImage fill src={img} alt={img} crop="fill" format="auto" quality="auto" sizes="200px" className="object-cover" />
+              </div>
+            ))}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
