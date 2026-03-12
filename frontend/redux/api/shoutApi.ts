@@ -89,6 +89,22 @@ const shoutApi = apiSlice.injectEndpoints({
       }),
     }),
 
+     /** Sends a re-shout action on a shout. */
+    quoteTheShout: builder.mutation<void, {shoutId: string, text: string}>({
+      query: ({shoutId, text}) => ({
+        url: `/shout/${shoutId}/quote`,
+        method: "POST",
+        body: text
+      }),
+    }),
+
+     unQuoteTheShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/unQoute`,
+        method: "POST"
+      }),
+    }),
+
     /** Fetches all comments from a given Shout. */
     getComments: builder.query<Shout[], string>({
       query: (shoutId) => `/shout/${shoutId}/comment`,
@@ -127,5 +143,7 @@ export const {
   useUnShoutTheShoutMutation,
   useGetCommentsQuery,
   useGetUserCommentsQuery,
-  useCommentOnShoutMutation
+  useCommentOnShoutMutation,
+  useQuoteTheShoutMutation,
+  useUnQuoteTheShoutMutation
 } = shoutApi;

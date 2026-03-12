@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.devtiro.chatex.TestData;
 import org.devtiro.chatex.controllers.AuthController;
-import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.TkName;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.JwtService;
 import org.devtiro.chatex.services.UserService;

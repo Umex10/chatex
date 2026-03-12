@@ -85,7 +85,7 @@ export function AppSidebar() {
   return (
     <header>
       <Sidebar collapsible="icon" className="[&>[data-sidebar=sidebar]]:bg-transparent">
-        <SidebarHeader className="p-4"
+        <SidebarHeader className="p-4 sm:mx-auto sm:px-0 sm:pt-0 sm:py-1 xl:w-full xl:px-2"
           onClick={() => {
             if (isMobile) {
               toggleSidebar();
@@ -105,7 +105,7 @@ export function AppSidebar() {
           </div>
 
           <div className="flex flex-row items-start">
-            <div className="flex-1 flex flex-col items-start md:flex-row gap-2">
+            <div className="flex-1 flex flex-col items-start w-full md:flex gap-2">
 
               {/* mobile screens */}
               <div className="md:hidden w-14 h-14 rounded-full border-4 border-black overflow-hidden bg-zinc-900">
@@ -122,7 +122,7 @@ export function AppSidebar() {
                 />
               </div>
 
-              <div className='md:hidden flex-1 flex flex-col justify-center gap-2'>
+              <div className='md:hidden flex-1 flex flex-col justify-center gap-2 group-data-[collapsible=icon]:hidden'>
                 <div>
                   <h2 className='text-xl font-bold'>{name}</h2>
                   <h3 className='text-base'>@{username}</h3>
@@ -141,7 +141,7 @@ export function AppSidebar() {
                 </div>
               </div>
             </div>
-            <div className="pt-2.5">
+            <div className="pt-2.5 group-data-[collapsible=icon]:hidden">
               <Button
                 onClick={handleSignOut}
                 className="md:hidden bg-red-500 rounded-full"
@@ -197,7 +197,7 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <CreateShout mode="CREATE_SHOUT">
+                  <CreateShout variant="DEFAULT">
                     <SidebarMenuButton className="h-12 px-2 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!w-12 
                     bg-violet-500 text-white rounded-full [&>svg]:!size-7">
                       <PencilLine className="w-6 h-6 group-[:not([data-collapsible=icon])]:hidden " />

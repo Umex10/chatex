@@ -9,6 +9,7 @@ import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.ShoutDto;
 import org.devtiro.chatex.domain.entities.Shout;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.ShoutVariant;
 import org.devtiro.chatex.domain.mappers.ShoutMapper;
 import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.ShoutService;
@@ -49,7 +50,7 @@ public class ShoutController {
   public ResponseEntity<List<ShoutDto>> getShouts(@PathVariable String username,
       @RequestAttribute UUID userId) {
 
-    List<Shout> shouts = shoutService.getShouts(username);
+    List<Shout> shouts = shoutService.getShouts(username, ShoutVariant.DEFAULT);
 
     List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
 
@@ -218,6 +219,24 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  @PostMapping(path = "/{shoutId}/quote")
+  public ResponseEntity<Void> quoteTheShout(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId, @RequestBody String text) {
+
+    shoutService.quoteTheShout(shoutId, userId, text);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+    @PostMapping(path = "/{shoutId}/unQuote")
+  public ResponseEntity<Void> unQuoteTheShout(@PathVariable UUID shoutId,
+      @RequestAttribute UUID userId) {
+
+    shoutService.unQuoteTheShout(shoutId, userId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
   @GetMapping(path = "/{shoutId}/comment")
   public ResponseEntity<List<ShoutDto>> getComments(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
@@ -241,7 +260,7 @@ public class ShoutController {
   public ResponseEntity<List<ShoutDto>> getUserComments(@PathVariable String username,
       @RequestAttribute UUID userId) {
 
-    List<Shout> shouts = shoutService.getComments(username);
+    List<Shout> shouts = shoutService.getShouts(username, ShoutVariant.COMMENT);
 
     List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
 

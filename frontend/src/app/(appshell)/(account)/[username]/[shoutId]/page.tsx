@@ -32,7 +32,7 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
 
       <div className='hidden md:block p-3 w-full border-y'>
         <ShoutComposer placeholder="Comment on the shout" submitText='Comment'
-        mode='COMMENT_ON_SHOUT' mainShoutId={shout?.id} />
+        variant='COMMENT_ON_SHOUT' mainShoutId={shout?.id} />
       </div>
 
        <RenderShouts isLoading={isLoadingCommnets} shouts={comments ? comments : []}></RenderShouts>

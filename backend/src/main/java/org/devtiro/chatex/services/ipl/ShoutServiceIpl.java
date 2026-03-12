@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.devtiro.chatex.domain.dtos.requests.CreateShoutRequest;
 import org.devtiro.chatex.domain.entities.Shout;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.ShoutVariant;
 import org.devtiro.chatex.reps.ShoutRep;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.ShoutService;
@@ -36,13 +37,8 @@ public class ShoutServiceIpl implements ShoutService {
 
   /** {@inheritDoc} */
   @Override
-  public List<Shout> getShouts(String username) {
-    return shoutRep.findAllShoutsByUsername(username);
-  }
-
-  @Override
-  public List<Shout> getComments(String username) {
-    return shoutRep.findAllCommentsByUsername(username);
+  public List<Shout> getShouts(String username, ShoutVariant variant) {
+    return shoutRep.findAllShoutsByUsernameAndVariant(username, variant);
   }
 
   @Override
@@ -62,6 +58,8 @@ public class ShoutServiceIpl implements ShoutService {
         .createdAt(LocalDate.now())
         .build();
 
+    shout.setVariant(ShoutVariant.DEFAULT);
+
     return shoutRep.save(shout);
   }
 
@@ -77,10 +75,11 @@ public class ShoutServiceIpl implements ShoutService {
         .createdAt(LocalDate.now())
         .build();
 
-    Shout mainShout = getShout(mainShoutId);
-    comment.setMainShout(mainShout);
+    Shout commentedShout = getShout(mainShoutId);
+    comment.setCommentedShout(commentedShout);
+    commentedShout.getComments().add(comment);
 
-    mainShout.getComments().add(comment);
+    comment.setVariant(ShoutVariant.COMMENT);
 
     return shoutRep.save(comment);
   }
@@ -158,6 +157,8 @@ public class ShoutServiceIpl implements ShoutService {
 
     shout.getReShoutedBy().add(user);
 
+    shout.setVariant(ShoutVariant.DEFAULT);
+
     user.getShouts().add(shout);
 
     shoutRep.save(shout);
@@ -174,7 +175,52 @@ public class ShoutServiceIpl implements ShoutService {
 
     shout.getReShoutedBy().remove(user);
 
+    user.getShouts().remove(shout);
+
     shoutRep.save(shout);
+    userRep.save(user);
+  }
+
+  @Override
+  public void quoteTheShout(UUID shoutId, UUID userId, String text) {
+    Shout shout = findShoutOrThrow(shoutId);
+
+    User user = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+            " was not found"));
+
+    Shout quote = Shout.builder()
+        .user(user)
+        .text(text)
+        .quotedShout(shout)
+        .createdAt(LocalDate.now())
+        .build();
+
+    shout.getQuotedBy().add(quote);
+
+    shoutRep.save(shout);
+
+    quote.setVariant(ShoutVariant.DEFAULT);
+
+    user.getShouts().add(quote);
+
+    userRep.save(user);
+  }
+
+  @Override
+  public void unQuoteTheShout(UUID shoutId, UUID userId) {
+    Shout quote = findShoutOrThrow(shoutId);
+    Shout quotedShout = quote.getQuotedShout();
+
+    User user = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+            " was not found"));
+
+    quotedShout.getQuotedBy().remove(quote);
+
+    user.getShouts().remove(quote);
+
+    shoutRep.delete(quote);
   }
 
   /** {@inheritDoc} */

@@ -1,6 +1,6 @@
 package org.devtiro.chatex.services;
 
-import org.devtiro.chatex.domain.TkName;
+import org.devtiro.chatex.domain.enums.TkName;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.servlet.http.HttpServletRequest;

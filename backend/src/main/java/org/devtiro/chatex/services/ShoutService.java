@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.devtiro.chatex.domain.dtos.requests.CreateShoutRequest;
 import org.devtiro.chatex.domain.entities.Shout;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.ShoutVariant;
 
 /**
  * Service interface for shout (post) management operations.
@@ -21,7 +22,7 @@ public interface ShoutService {
    *
    * @return a list of Shout entities
    */
-  List<Shout> getShouts(String username);
+  List<Shout> getShouts(String username, ShoutVariant variant);
 
   /**
    * Retrieves a single shout by its unique identifier.
@@ -29,8 +30,6 @@ public interface ShoutService {
    * @return the Shout entity
    */
   Shout getShout(UUID shoutId);
-
-  List<Shout> getComments(String username);
 
   List<String> getAllImages(String username);
 
@@ -56,8 +55,6 @@ public interface ShoutService {
    * @return the persisted Shout (UnComment) entity
    */
   void unComment(UUID shoutId);
-
-  
 
   /**
    * Returns the set of users who liked the given shout.
@@ -97,6 +94,10 @@ public interface ShoutService {
    * Removes a re-shout from the given user on the given shout.
    */
   void unShoutTheShout(UUID shoutId, UUID userId);
+
+  void quoteTheShout(UUID shoutId, UUID userId, String text);
+
+  void unQuoteTheShout(UUID shoutId, UUID userId);
 
   /**
    * Checks whether the given user has liked the given shout.

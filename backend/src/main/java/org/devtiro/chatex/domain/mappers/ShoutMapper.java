@@ -1,8 +1,9 @@
 package org.devtiro.chatex.domain.mappers;
 
 import java.util.List;
-import java.util.UUID;
 
+import org.devtiro.chatex.domain.dtos.responses.CommentDto;
+import org.devtiro.chatex.domain.dtos.responses.QuoteDto;
 import org.devtiro.chatex.domain.dtos.responses.ShoutDto;
 import org.devtiro.chatex.domain.entities.Shout;
 import org.mapstruct.Mapper;
@@ -30,14 +31,36 @@ public interface ShoutMapper {
   @Mapping(source = "user.name", target = "name")
   @Mapping(source = "user.username", target = "username")
   @Mapping(source = "user.avatar", target = "avatar")
+
+  // stats
   @Mapping(source = "likedBy", target = "likesCount", qualifiedByName = "countCollection")
   @Mapping(source = "reShoutedBy", target = "reShoutsCount", qualifiedByName = "countCollection")
   @Mapping(source = "comments", target = "commentsCount", qualifiedByName = "countCollection")
+
+  // Mapping for the new nested DTOs
+  @Mapping(source = "commentedShout", target = "commentDto")
+  @Mapping(source = "quotedShout", target = "quoteDto")
+
   @Mapping(target = "userLikingTheShout", ignore = true)
   @Mapping(target = "userReShoutingTheShout", ignore = true)
-  @Mapping(source = "mainShout", target = "mainShoutId", qualifiedByName = "getMainShoutId")
-  @Mapping(source = "mainShout", target = "mainShoutUsername", qualifiedByName = "getMainShoutUsername")
   ShoutDto toDto(Shout shout);
+
+  /**
+   * Helper mapping for comment information.
+   */
+  @Mapping(source = "id", target = "commentedShoutId")
+  @Mapping(source = "user.username", target = "commentedShoutUsername")
+  CommentDto toCommentDto(Shout commentedShout);
+
+  /**
+   * Helper mapping for quote information.
+   */
+  @Mapping(source = "id", target = "quotedShoutId")
+  @Mapping(source = "user.name", target = "name")
+  @Mapping(source = "user.username", target = "username")
+  @Mapping(source = "user.avatar", target = "avatar")
+  // text, createdAt, and images are mapped automatically due to identical names
+  QuoteDto toQuoteDto(Shout quotedShout);
 
   /**
    * Maps a list of Shout entities to a list of ShoutDto objects.
@@ -55,15 +78,5 @@ public interface ShoutMapper {
   @Named("countCollection")
   default int countCollection(java.util.Collection<?> collection) {
     return (collection == null) ? 0 : collection.size();
-  }
-
-  @Named("getMainShoutId")
-  default UUID getMainShoutId(Shout mainShout) {
-    return (mainShout == null) ? null : mainShout.getId();
-  }
-
-  @Named("getMainShoutUsername")
-  default String getMainShoutUsername(Shout mainShout) {
-    return (mainShout == null) ? null : mainShout.getUser().getUsername();
   }
 }

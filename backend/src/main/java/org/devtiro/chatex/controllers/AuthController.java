@@ -5,11 +5,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.TkName;
 import org.devtiro.chatex.services.AuthService;
 import org.devtiro.chatex.services.JwtService;
 import org.devtiro.chatex.services.UserService;

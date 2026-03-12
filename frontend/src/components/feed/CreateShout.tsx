@@ -31,6 +31,8 @@ import { useGetUserQuery } from "@redux/api/userApi"
 import { generateSecureUrl } from "@/utils/cloudinary"
 import Spinner from "../shared/Spinner"
 import Avatar from "../profile/Avatar"
+import { ShoutPreview } from "./ShoutPreview"
+import { ShoutQuote } from "@/types/Shout"
 
 const shoutSchema = z.object({
   text: z
@@ -43,24 +45,23 @@ const shoutSchema = z.object({
 type ShoutFormValues = z.infer<typeof shoutSchema>
 
 interface ShoutModeArgs {
-  mode: 'CREATE_SHOUT' | 'COMMENT_ON_SHOUT';
+  variant: 'DEFAULT' | 'COMMENT' | 'QUOTE';
   mainShoutId?: string;
 }
-
-
 interface ShoutComposerArgs extends ShoutModeArgs {
   /** Optional callback fired after a shout has been successfully submitted. */
   onSubmitted?: () => void,
   placeholder: string,
   submitText?: string
+  /** The shout being quoted — shown as a read-only preview when variant is QUOTE. */
+  quotedShout?: ShoutQuote
 }
-
 
 /**
  * Standalone shout composer form — used both inline (home feed) and inside the dialog.
  * Handles image picking, Cloudinary uploads and posting via the API mutation.
  */
-export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", mainShoutId, mode }: ShoutComposerArgs) {
+export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", mainShoutId, variant, quotedShout }: ShoutComposerArgs) {
   const { data: user } = useGetUserQuery(undefined)
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg"
   const [createShout, { isLoading: isLoadingShout }] = useCreateShoutMutation()
@@ -120,9 +121,9 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
     }
     try {
 
-      if (mode === "CREATE_SHOUT") {
+      if (variant === "DEFAULT") {
         await createShout({ text: values.text, images: uploadedUrls }).unwrap()
-      } else if (mode === "COMMENT_ON_SHOUT" && mainShoutId) {
+      } else if (variant === "COMMENT" && mainShoutId) {
         await commentOnShout({ text: values.text, images: uploadedUrls, mainShoutId: mainShoutId }).unwrap()
       } else {
         console.error("You need to set a mode in order to create a Shout!")
@@ -188,6 +189,11 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
                   </div>
                 ))}
               </div>
+            )}
+
+            {/* Quoted shout preview — rendered below the text area when composing a quote */}
+            {variant === "QUOTE" && quotedShout && (
+              <ShoutPreview {...quotedShout} />
             )}
 
             <div className="w-full flex flex-row justify-between items-center mt-1 border-t pt-2">
@@ -256,14 +262,23 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
 interface CreateShoutArgs extends ShoutModeArgs {
   children: React.ReactNode,
   incrementCommentCounter?: Dispatch<SetStateAction<number>>
+  /** The shout being quoted — forwarded to ShoutComposer when variant is QUOTE. */
+  quotedShout?: ShoutQuote
+  /** Externally controlled open state. When provided, the internal state is overridden. */
+  open?: boolean
+  /** Called when the dialog requests an open state change. Required when `open` is provided. */
+  onOpenChange?: (open: boolean) => void
 }
 
 /**
  * Dialog trigger wrapper around ShoutComposer.
  * Used in the Sidebar and as the mobile floating action button.
  */
-export function CreateShout({ children, mode, mainShoutId, incrementCommentCounter }: CreateShoutArgs) {
-  const [open, setOpen] = useState(false)
+export function CreateShout({ children, variant: mode, mainShoutId, incrementCommentCounter, quotedShout, open: controlledOpen, onOpenChange }: CreateShoutArgs) {
+  const [internalOpen, setInternalOpen] = useState(false)
+  // Support both controlled and uncontrolled usage
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen
+  const setOpen = onOpenChange !== undefined ? onOpenChange : setInternalOpen
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -281,8 +296,9 @@ export function CreateShout({ children, mode, mainShoutId, incrementCommentCount
               if (incrementCommentCounter) {
                 incrementCommentCounter(last => last + 1);
               }
-            }} mode={mode}
-            mainShoutId={mainShoutId} />
+            }} variant={mode}
+            mainShoutId={mainShoutId}
+            quotedShout={quotedShout} />
         </div>
       </DialogContent>
     </Dialog>

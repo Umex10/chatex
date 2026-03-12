@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.devtiro.chatex.TestData;
-import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.TkName;
 import org.devtiro.chatex.security.CustomUserDetails;
 import org.devtiro.chatex.services.ipl.JwtServiceIpl;
 import org.junit.jupiter.api.BeforeEach;

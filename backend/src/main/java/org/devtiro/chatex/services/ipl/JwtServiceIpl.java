@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.devtiro.chatex.domain.TkName;
+import org.devtiro.chatex.domain.enums.TkName;
 import org.devtiro.chatex.services.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;

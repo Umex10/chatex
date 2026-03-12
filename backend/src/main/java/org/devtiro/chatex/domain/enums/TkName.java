@@ -1,4 +1,4 @@
-package org.devtiro.chatex.domain;
+package org.devtiro.chatex.domain.enums;
 
 /**
  * Enumeration representing JWT token expiry types.

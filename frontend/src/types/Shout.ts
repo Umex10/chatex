@@ -1,18 +1,38 @@
 
-/** Represents a single shout (post) entry with author info, content, and engagement metrics. */
+
+export interface ShoutCommentInfo {
+  commentedShoutId: string;
+  commentedShoutUsername: string;
+}
+
+export interface ShoutQuote {
+  quotedShoutId: string;
+  name: string;
+  username: string;
+  avatar: string;
+  text: string;
+  createdAt: string;
+  images: string[];
+}
+
+/** A single shout entry with nested metrics and references. */
 export interface Shout {
-  id: string,
-  name: string,
-  username: string,
-  avatar: string
-  text: string,
-  images: string[],
-  likesCount: number,
+  id: string;
+  name: string;
+  username: string;
+  avatar: string;
+  text: string;
+  images: string[];
+  createdAt: string;
+  variant: 'DEFAULT' | 'COMMENT';
+  
+  likesCount: number;
   reShoutsCount: number,
   commentsCount: number,
-  userLikingTheShout: boolean, 
-  userReShoutingTheShout: boolean
-  createdAt: string,
-  mainShoutId: string,
-  mainShoutUsername: string
+
+  commentDto?: ShoutCommentInfo;
+  quoteDto?: ShoutQuote;
+
+  userLikingTheShout: boolean;
+  userReShoutingTheShout: boolean;
 }

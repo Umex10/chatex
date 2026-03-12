@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.devtiro.chatex.domain.enums.ShoutVariant;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,10 +56,22 @@ public class Shout {
   private Set<User> reShoutedBy = new HashSet<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "main_shout_id")
-  private Shout mainShout;
+  @JoinColumn(name = "comment_shout_id")
+  private Shout commentedShout;
 
-  @OneToMany(mappedBy = "mainShout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "commentedShout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @Builder.Default
   private List<Shout> comments = new ArrayList<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "quoted_shout_id")
+  private Shout quotedShout;
+
+  @OneToMany(mappedBy = "quotedShout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @Builder.Default
+  private List<Shout> quotedBy = new ArrayList<>();
+
+  @Enumerated(EnumType.STRING)
+  private ShoutVariant variant;
+
 }

@@ -182,7 +182,7 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
         </TabsContent>
         {/* Replies Tab Content */}
         <TabsContent value="comments" className='m-0'>
-          <RenderShouts isLoading={isLoadingShouts} shouts={shouts ? shouts : []}></RenderShouts>
+          <RenderShouts isLoading={isLoadingShouts} shouts={userComments ? userComments : []}></RenderShouts>
         </TabsContent>
         {/* Media Tab Content */}
         <TabsContent value="media" className='m-0'>

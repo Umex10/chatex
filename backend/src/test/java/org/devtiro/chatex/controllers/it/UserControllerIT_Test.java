@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.devtiro.chatex.TestData;
-import org.devtiro.chatex.domain.TkName;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.enums.TkName;
 import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.JwtService;
