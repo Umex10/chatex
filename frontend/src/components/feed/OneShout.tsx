@@ -1,6 +1,6 @@
 "use client"
 
-import { BadgeCheck, Ellipsis, Trash } from 'lucide-react'
+import { BadgeCheck, Trash } from 'lucide-react'
 
 import { Repeat2, Heart, MessageCircle } from 'lucide-react';
 import { Shout } from '@/types/Shout';
@@ -11,14 +11,15 @@ import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMuta
 import Spinner from '../shared/Spinner';
 import { MouseEvent, useState } from 'react';
 import { Badge } from '../ui/badge';
-import { EllipsisVertical, CircleEllipsis } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { CreateShout, ShoutComposer } from './CreateShout';
 import { ReShoutMenu } from './ReShoutMenu';
+import { ShoutDetailsMenu } from './ShoutDetailsMenu';
 import Avatar from '../profile/Avatar';
 import { Activity } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';
+import { ShoutView } from './ShoutView';
 
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
@@ -161,15 +162,14 @@ const OneShout = (data: Shout) => {
               <span className=''>{joinedShoutDate(createdAt)}</span>
             </div>
 
-            {/* Quick Action Buttons: Details, Delete, Re-Shout Info */}
+            {/* Quick Action Buttons: Details menu and Delete */}
             <div className='flex flex-row gap-1'>
-              <Button size="icon" variant="secondary" className='bg-transparent'
-                onClick={(e) => {
-                  router.push(`/${username}/${id}/likedBy`);
-                  e.stopPropagation();
-                }}>
-                <Ellipsis className="w-4 h-4" />
-              </Button>
+              <div onClick={(e) => e.stopPropagation()}>
+                <ShoutDetailsMenu
+                  onShowLikedBy={() => router.push(`/${username}/${id}/likedBy`)}
+                  onShowReShoutedBy={() => router.push(`/${username}/${id}/reShoutedBy`)}
+                />
+              </div>
 
               <Button size="icon" variant="secondary" className='bg-transparent'
                 onClick={(e) => {
@@ -177,14 +177,6 @@ const OneShout = (data: Shout) => {
                   e.stopPropagation();
                 }}>
                 <Trash className="w-4 h-4" />
-              </Button>
-
-              <Button size="icon" variant="secondary" className='bg-transparent'
-                onClick={(e) => {
-                  router.push(`/${username}/${id}/reShoutedBy`);
-                  e.stopPropagation();
-                }}>
-                <CircleEllipsis className="w-4 h-4" />
               </Button>
             </div>
 
@@ -272,9 +264,13 @@ const OneShout = (data: Shout) => {
               </div>
             )}
 
-            {!quoteDto && (
-              /* action counters: reshouts and likes */
-              /* Engagement Counters: Re-Shouts & Likes */
+            {quoteDto && (
+              <ShoutView {...quoteDto}></ShoutView>
+            )}
+
+        
+              {/* action counters: reshouts and likes */}
+             { /* Engagement Counters: Re-Shouts & Likes */}
               <ul className='w-full grid grid-cols-4 items-center -ml-2 mt-1'>
                 <li>
                   <div className='group inline-flex flex-row items-center gap-1 select-none'
@@ -321,7 +317,7 @@ const OneShout = (data: Shout) => {
                   <div className='group inline-flex flex-row items-center gap-1 cursor-pointer select-none'
                     onClick={(e) => e.stopPropagation()}>
                     <div className='p-2 rounded-full transition-colors group-hover:bg-violet-400/10'>
-                      <CreateShout variant='COMMENT' mainShoutId={id} incrementCommentCounter={setCommentsCountview}>
+                      <CreateShout variant='COMMENT' commentedShoutId={id} incrementCommentCounter={setCommentsCountview}>
                         <MessageCircle
                           className={`w-[18px] h-[18px] transition-colors
                          text-zinc-500 group-hover:text-violet-400`}
@@ -338,8 +334,6 @@ const OneShout = (data: Shout) => {
                   </div>
                 </li>
               </ul>
-            )}
-
 
           </div>
         </div>

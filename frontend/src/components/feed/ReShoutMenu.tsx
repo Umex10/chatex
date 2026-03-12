@@ -53,8 +53,9 @@ export function ReShoutMenu({ isReShouted, onReShout, quotedShout }: ReShoutMenu
         />
       </div>
 
-      {/* Quote dialog — always mounted outside the dropdown so it doesn't unmount on close */}
-      <CreateShout variant="QUOTE" quotedShout={quotedShout} open={quoteOpen} onOpenChange={setQuoteOpen}>
+      {/* Quote dialog — always mounted outside the menu so it doesn't unmount on close */}
+      <CreateShout variant="QUOTE" quotedShout={quotedShout} open={quoteOpen} 
+      onOpenChange={setQuoteOpen} onReShout={onReShout}>
         <span className="hidden" />
       </CreateShout>
 
@@ -79,7 +80,7 @@ export function ReShoutMenu({ isReShouted, onReShout, quotedShout }: ReShoutMenu
               hover:bg-secondary transition-colors bg-transparent justify-start"
           >
             <Quote className="w-4 h-4" />
-            Quote
+            {quotedShout ? "Quote" : "Unqoute"}
           </Button>
 
         </div>

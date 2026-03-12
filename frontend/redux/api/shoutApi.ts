@@ -90,12 +90,13 @@ const shoutApi = apiSlice.injectEndpoints({
     }),
 
      /** Sends a re-shout action on a shout. */
-    quoteTheShout: builder.mutation<void, {shoutId: string, text: string}>({
-      query: ({shoutId, text}) => ({
-        url: `/shout/${shoutId}/quote`,
+    quoteTheShout: builder.mutation<void, CreateShoutPlayoad>({
+      query: (createShout) => ({
+        url: `/shout/${createShout.shoutId}/quote`,
         method: "POST",
-        body: text
+        body: createShout
       }),
+      invalidatesTags: ['User']
     }),
 
      unQuoteTheShout: builder.mutation<void, string>({
@@ -103,6 +104,7 @@ const shoutApi = apiSlice.injectEndpoints({
         url: `/shout/${shoutId}/unQoute`,
         method: "POST"
       }),
+      invalidatesTags: ['User']
     }),
 
     /** Fetches all comments from a given Shout. */
@@ -120,7 +122,7 @@ const shoutApi = apiSlice.injectEndpoints({
     /** Add a comment on a shout. */
     commentOnShout: builder.mutation<Shout, CreateCommentPayload>({
       query: (createComment) => ({
-        url: `/shout/${createComment.mainShoutId}/comment`,
+        url: `/shout/${createComment.commentedShoutId}/comment`,
         method: "POST",
         body: createComment
       }),

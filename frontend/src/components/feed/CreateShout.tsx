@@ -26,13 +26,14 @@ import {
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { useCommentOnShoutMutation, useCreateShoutMutation } from "@redux/api/shoutApi"
+import { useCommentOnShoutMutation, useCreateShoutMutation, useQuoteTheShoutMutation } from "@redux/api/shoutApi"
 import { useGetUserQuery } from "@redux/api/userApi"
 import { generateSecureUrl } from "@/utils/cloudinary"
 import Spinner from "../shared/Spinner"
 import Avatar from "../profile/Avatar"
-import { ShoutPreview } from "./ShoutPreview"
+import { ShoutView } from "./ShoutView"
 import { ShoutQuote } from "@/types/Shout"
+import { ShoutComposerSkeleton } from "./ShoutComposerSkeleton"
 
 const shoutSchema = z.object({
   text: z
@@ -46,7 +47,7 @@ type ShoutFormValues = z.infer<typeof shoutSchema>
 
 interface ShoutModeArgs {
   variant: 'DEFAULT' | 'COMMENT' | 'QUOTE';
-  mainShoutId?: string;
+  commentedShoutId?: string;
 }
 interface ShoutComposerArgs extends ShoutModeArgs {
   /** Optional callback fired after a shout has been successfully submitted. */
@@ -61,11 +62,12 @@ interface ShoutComposerArgs extends ShoutModeArgs {
  * Standalone shout composer form — used both inline (home feed) and inside the dialog.
  * Handles image picking, Cloudinary uploads and posting via the API mutation.
  */
-export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", mainShoutId, variant, quotedShout }: ShoutComposerArgs) {
+export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", commentedShoutId, variant, quotedShout }: ShoutComposerArgs) {
   const { data: user } = useGetUserQuery(undefined)
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg"
   const [createShout, { isLoading: isLoadingShout }] = useCreateShoutMutation()
   const [commentOnShout, { isLoading: isLoadingComment }] = useCommentOnShoutMutation();
+  const [quoteTheShout, { isLoading: isLoadingQuote }] = useQuoteTheShoutMutation();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const emojiPickerRef = useRef<HTMLDivElement>(null)
   const { resolvedTheme } = useTheme()
@@ -123,8 +125,14 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
 
       if (variant === "DEFAULT") {
         await createShout({ text: values.text, images: uploadedUrls }).unwrap()
-      } else if (variant === "COMMENT" && mainShoutId) {
-        await commentOnShout({ text: values.text, images: uploadedUrls, mainShoutId: mainShoutId }).unwrap()
+      } else if (variant === "COMMENT" && commentedShoutId) {
+        await commentOnShout({ text: values.text, images: uploadedUrls, commentedShoutId }).unwrap()
+      } else if (variant === "QUOTE" && quotedShout?.quotedShoutId) {
+        quoteTheShout({
+          shoutId: quotedShout?.quotedShoutId,
+          text: values.text,
+          images: uploadedUrls
+        });
       } else {
         console.error("You need to set a mode in order to create a Shout!")
       }
@@ -138,6 +146,12 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
   }
 
   return (
+    <>
+      {/* Loading state: show skeleton while user data is being fetched */}
+      {!user && <ShoutComposerSkeleton />}
+
+      {/* Loaded state: show the form */}
+      {user && (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
 
@@ -193,7 +207,7 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
 
             {/* Quoted shout preview — rendered below the text area when composing a quote */}
             {variant === "QUOTE" && quotedShout && (
-              <ShoutPreview {...quotedShout} />
+              <ShoutView {...quotedShout} />
             )}
 
             <div className="w-full flex flex-row justify-between items-center mt-1 border-t pt-2">
@@ -256,6 +270,8 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
         </div>
       </form>
     </Form>
+      )}
+    </>
   )
 }
 
@@ -267,14 +283,18 @@ interface CreateShoutArgs extends ShoutModeArgs {
   /** Externally controlled open state. When provided, the internal state is overridden. */
   open?: boolean
   /** Called when the dialog requests an open state change. Required when `open` is provided. */
-  onOpenChange?: (open: boolean) => void
+  onOpenChange?: (open: boolean) => void,
+   onReShout?: () => void
 }
 
 /**
  * Dialog trigger wrapper around ShoutComposer.
  * Used in the Sidebar and as the mobile floating action button.
  */
-export function CreateShout({ children, variant: mode, mainShoutId, incrementCommentCounter, quotedShout, open: controlledOpen, onOpenChange }: CreateShoutArgs) {
+export function CreateShout({ children, variant: mode, commentedShoutId,
+   incrementCommentCounter, quotedShout, open: controlledOpen,
+    onOpenChange,
+  onReShout}: CreateShoutArgs) {
   const [internalOpen, setInternalOpen] = useState(false)
   // Support both controlled and uncontrolled usage
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen
@@ -295,9 +315,10 @@ export function CreateShout({ children, variant: mode, mainShoutId, incrementCom
               setOpen(false);
               if (incrementCommentCounter) {
                 incrementCommentCounter(last => last + 1);
-              }
+              };
+              if (onReShout) onReShout();
             }} variant={mode}
-            mainShoutId={mainShoutId}
+            commentedShoutId={commentedShoutId}
             quotedShout={quotedShout} />
         </div>
       </DialogContent>

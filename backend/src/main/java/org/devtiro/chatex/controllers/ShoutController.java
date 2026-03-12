@@ -221,9 +221,9 @@ public class ShoutController {
 
   @PostMapping(path = "/{shoutId}/quote")
   public ResponseEntity<Void> quoteTheShout(@PathVariable UUID shoutId,
-      @RequestAttribute UUID userId, @RequestBody String text) {
+      @RequestAttribute UUID userId, @RequestBody CreateShoutRequest createShoutRequest) {
 
-    shoutService.quoteTheShout(shoutId, userId, text);
+    shoutService.quoteTheShout(shoutId, userId, createShoutRequest);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
   }

@@ -95,7 +95,7 @@ public interface ShoutService {
    */
   void unShoutTheShout(UUID shoutId, UUID userId);
 
-  void quoteTheShout(UUID shoutId, UUID userId, String text);
+  void quoteTheShout(UUID shoutId, UUID userId, CreateShoutRequest createShoutRequest);
 
   void unQuoteTheShout(UUID shoutId, UUID userId);
 

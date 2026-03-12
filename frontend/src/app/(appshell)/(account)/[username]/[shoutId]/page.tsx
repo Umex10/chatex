@@ -10,7 +10,7 @@ import { ShoutComposer } from '@/components/feed/CreateShout';
 export interface CreateCommentPayload {
   text: string,
   images: string[], 
-  mainShoutId: string
+  commentedShoutId: string
 }
 
 /** Page displaying a single shout by its ID, resolved from the URL parameters. */
@@ -32,7 +32,7 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
 
       <div className='hidden md:block p-3 w-full border-y'>
         <ShoutComposer placeholder="Comment on the shout" submitText='Comment'
-        variant='COMMENT' mainShoutId={shout?.id} />
+        variant='COMMENT' commentedShoutId={shout?.id} />
       </div>
 
        <RenderShouts isLoading={isLoadingCommnets} shouts={comments ? comments : []}></RenderShouts>

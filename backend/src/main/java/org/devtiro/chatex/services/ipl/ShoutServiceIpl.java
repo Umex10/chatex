@@ -182,7 +182,7 @@ public class ShoutServiceIpl implements ShoutService {
   }
 
   @Override
-  public void quoteTheShout(UUID shoutId, UUID userId, String text) {
+  public void quoteTheShout(UUID shoutId, UUID userId, CreateShoutRequest createShoutRequest) {
     Shout shout = findShoutOrThrow(shoutId);
 
     User user = userRep.findById(userId)
@@ -191,16 +191,18 @@ public class ShoutServiceIpl implements ShoutService {
 
     Shout quote = Shout.builder()
         .user(user)
-        .text(text)
+        .text(createShoutRequest.getText())
+        .images(createShoutRequest.getImages())
         .quotedShout(shout)
+        .variant(ShoutVariant.DEFAULT)
         .createdAt(LocalDate.now())
         .build();
+
+    shoutRep.save(quote);
 
     shout.getQuotedBy().add(quote);
 
     shoutRep.save(shout);
-
-    quote.setVariant(ShoutVariant.DEFAULT);
 
     user.getShouts().add(quote);
 

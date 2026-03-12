@@ -11,7 +11,7 @@ import { useGetShoutsQuery } from '@redux/api/shoutApi';
 import { useGetUserQuery } from '@redux/api/userApi';
 import RenderShouts from '@/components/feed/RenderShouts';
 
-export type CreateShoutPlayoad = { text: string; images: string[] };
+export type CreateShoutPlayoad = { shoutId?: string, text: string; images: string[] };
 
 /**
  * Home feed page for authenticated users.
