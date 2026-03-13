@@ -167,7 +167,7 @@ const OneShout = (data: Shout) => {
               <div onClick={(e) => e.stopPropagation()}>
                 <ShoutDetailsMenu
                   onShowLikedBy={() => router.push(`/${username}/${id}/likedBy`)}
-                  onShowReShoutedBy={() => router.push(`/${username}/${id}/reShoutedBy`)}
+                  onShowReShoutedBy={() => router.push(`/${username}/${id}/reShoutedBy/reShouts`)}
                 />
               </div>
 

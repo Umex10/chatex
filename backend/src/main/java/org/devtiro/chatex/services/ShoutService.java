@@ -99,6 +99,8 @@ public interface ShoutService {
 
   void unQuoteTheShout(UUID shoutId, UUID userId);
 
+  List<Shout> getQuotedBy(UUID shoutId);
+
   /**
    * Checks whether the given user has liked the given shout.
    *

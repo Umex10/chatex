@@ -107,6 +107,12 @@ const shoutApi = apiSlice.injectEndpoints({
       invalidatesTags: ['User']
     }),
 
+     /** Fetches all comments from a given Shout. */
+    getQuotes: builder.query<Shout[], string>({
+      query: (shoutId) => `/shout/${shoutId}/quote`,
+      providesTags: ['User']
+    }),
+
     /** Fetches all comments from a given Shout. */
     getComments: builder.query<Shout[], string>({
       query: (shoutId) => `/shout/${shoutId}/comment`,
@@ -147,5 +153,6 @@ export const {
   useGetUserCommentsQuery,
   useCommentOnShoutMutation,
   useQuoteTheShoutMutation,
-  useUnQuoteTheShoutMutation
+  useUnQuoteTheShoutMutation,
+  useGetQuotesQuery
 } = shoutApi;

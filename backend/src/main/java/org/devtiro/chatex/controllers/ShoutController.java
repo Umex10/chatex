@@ -228,13 +228,32 @@ public class ShoutController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
-    @PostMapping(path = "/{shoutId}/unQuote")
+  @PostMapping(path = "/{shoutId}/unQuote")
   public ResponseEntity<Void> unQuoteTheShout(@PathVariable UUID shoutId,
       @RequestAttribute UUID userId) {
 
     shoutService.unQuoteTheShout(shoutId, userId);
 
     return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/{shoutId}/quote")
+  public ResponseEntity<List<ShoutDto>> getQuotedBy(@PathVariable UUID shoutId,
+    @RequestAttribute UUID userId
+  ) {
+
+    List<Shout> quotes = shoutService.getQuotedBy(shoutId);
+
+    List<ShoutDto> quotsDto = shoutMapper.toDtoList(quotes);
+
+    quotsDto.forEach(dto -> {
+      dto.setUserLikingTheShout(
+          shoutService.isUserLikingTheShout(dto.getId(), userId));
+      dto.setUserReShoutingTheShout(
+          shoutService.isUserReShoutingTheShout(dto.getId(), userId));
+    });
+
+    return new ResponseEntity<>(quotsDto, HttpStatus.OK);
   }
 
   @GetMapping(path = "/{shoutId}/comment")

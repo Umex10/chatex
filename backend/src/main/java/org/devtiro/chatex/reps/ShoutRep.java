@@ -20,13 +20,14 @@ import org.springframework.stereotype.Repository;
 public interface ShoutRep extends JpaRepository<Shout, UUID> {
 
         /**
-         * Finds all shouts by a given username, eagerly fetching the author.
+         * Finds all authored and re-shouted shouts by a given username, eagerly
+         * fetching the author.
          * Results are ordered by creation date in descending order.
          *
          * @return a list of shouts for the specified user
          */
-        @Query("SELECT s from Shout s JOIN FETCH s.user" +
-                        " WHERE s.user.username = :username" +
+        @Query("SELECT DISTINCT s from Shout s JOIN FETCH s.user LEFT JOIN s.reShoutedBy reShouter" +
+                        " WHERE (s.user.username = :username OR reShouter.username = :username)" +
                         " AND s.variant = :variant" +
                         " ORDER BY s.createdAt DESC")
         List<Shout> findAllShoutsByUsernameAndVariant(@Param("username") String username,

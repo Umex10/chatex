@@ -129,8 +129,10 @@ public class ShoutServiceIpl implements ShoutService {
             " was not found"));
 
     shout.getLikedBy().add(user);
-
     shoutRep.save(shout);
+
+    user.getLikedShouts().add(shout);
+    userRep.save(user);
   }
 
   /** {@inheritDoc} */
@@ -143,7 +145,10 @@ public class ShoutServiceIpl implements ShoutService {
             " was not found"));
 
     shout.getLikedBy().remove(user);
+
     shoutRep.save(shout);
+    user.getLikedShouts().remove(shout);
+    userRep.save(user);
   }
 
   /** {@inheritDoc} */
@@ -156,12 +161,10 @@ public class ShoutServiceIpl implements ShoutService {
             " was not found"));
 
     shout.getReShoutedBy().add(user);
-
-    shout.setVariant(ShoutVariant.DEFAULT);
-
-    user.getShouts().add(shout);
-
     shoutRep.save(shout);
+
+    user.getReShoutedShouts().add(shout);
+    userRep.save(user);
   }
 
   /** {@inheritDoc} */
@@ -174,10 +177,9 @@ public class ShoutServiceIpl implements ShoutService {
             " was not found"));
 
     shout.getReShoutedBy().remove(user);
-
-    user.getShouts().remove(shout);
-
     shoutRep.save(shout);
+
+    user.getReShoutedShouts().remove(shout);
     userRep.save(user);
   }
 
@@ -225,6 +227,14 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.delete(quote);
   }
 
+
+  @Override
+  public List<Shout> getQuotedBy(UUID shoutId) {
+    Shout shout = findShoutOrThrow(shoutId);
+
+    return shout.getQuotedBy();
+  }
+
   /** {@inheritDoc} */
   @Override
   public boolean isUserLikingTheShout(UUID shoutId, UUID userId) {
@@ -246,5 +256,6 @@ public class ShoutServiceIpl implements ShoutService {
     return shoutRep.findById(shoutId)
         .orElseThrow(() -> new EntityNotFoundException("Shout with id " + shoutId + " not found"));
   }
+
 
 }
