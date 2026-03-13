@@ -1,5 +1,5 @@
 import { User } from '@/types/User';
-import { AccountSchemaValues } from '@/components/profile/SettingsForm';
+import { AccountSchemaValues } from '@/components/account/SettingsForm';
 import { apiSlice } from './apiSlice';
 
 /**

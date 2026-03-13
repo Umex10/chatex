@@ -7,8 +7,8 @@ import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/followApi
 import RenderFollowList from '@/components/follow/RenderFollowList';
 
 /**
- * Page displaying the list of accounts a given user is following.
- * Extracts the username from the URL path and fetches the following list via RTK Query.
+ * Page displaying the list of verified followers for a given user.
+ * Extracts the username from the URL path and fetches the verified followers via RTK Query.
  */
 const VerfiedFollowers = () => {
 
@@ -20,7 +20,10 @@ const VerfiedFollowers = () => {
   const { data: followers, isLoading } = useGetFollowingQuery(username);
 
   return (
-    <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
+    <div className='flex flex-col'>
+      {/* Renders the Follow list using the fetched verified followers */}
+      <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
+    </div>
   )
 }
 

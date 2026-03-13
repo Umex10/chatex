@@ -11,7 +11,7 @@ import ReturnHeader from '@/components/layout/ReturnHeader'
  * Layout for the followers/following/verifiedFollowers tab group of a user's account.
  * Renders a sticky return header and a set of tab triggers that navigate between the three lists.
  */
-const Layout = ({ children }: Readonly<{
+const FollowSystemLayout = ({ children }: Readonly<{
   children?: React.ReactNode
 }>) => {
   const path = usePathname().split("/")
@@ -60,4 +60,4 @@ const Layout = ({ children }: Readonly<{
   )
 }
 
-export default Layout
+export default FollowSystemLayout

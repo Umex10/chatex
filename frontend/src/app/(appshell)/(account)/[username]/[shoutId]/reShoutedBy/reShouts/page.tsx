@@ -6,7 +6,10 @@ import ReturnHeader from '@/components/layout/ReturnHeader';
 import { useGetQuotesQuery, useGetReShoutedByQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 
-const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
+/**
+ * Page displaying all users who re-shouted a specific shout.
+ */
+const ReShoutsPage = ({ params }: { params: Promise<Record<string, string>> }) => {
 
   const resolvedParams = use(params);
 
@@ -16,11 +19,11 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
   const { data: reShoutedUsers, isLoading } = useGetReShoutedByQuery(shoutId);
 
   return (
-
-    <RenderFollowList list={reShoutedUsers ? reShoutedUsers : []}
-      isLoading={isLoading}></RenderFollowList>
+    /* Re-shouters List Render */
+    < RenderFollowList list={reShoutedUsers ? reShoutedUsers : []}
+      isLoading={isLoading} ></RenderFollowList >
 
   )
 }
 
-export default Page
+export default ReShoutsPage

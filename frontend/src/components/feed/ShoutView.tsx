@@ -3,7 +3,7 @@
 import { CldImage } from "next-cloudinary"
 import { BadgeCheck } from "lucide-react"
 import { Badge } from "../ui/badge"
-import Avatar from "../profile/Avatar"
+import Avatar from "../account/Avatar"
 import { joinedShoutDate } from "@/utils/joinedDate"
 import { ShoutQuote } from "@/types/Shout"
 import { useRouter } from "next/navigation"

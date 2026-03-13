@@ -4,7 +4,11 @@ import RenderShouts from '@/components/feed/RenderShouts';
 import { useGetQuotesQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 
-const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
+/**
+ * Page displaying all quotes associated with a specific shout.
+ * Fetches quotes and renders them using the RenderShouts component.
+ */
+const QuotesPage = ({ params }: { params: Promise<Record<string, string>> }) => {
 
   const resolvedParams = use(params);
 
@@ -14,9 +18,11 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
   const { data: quotes, isLoading } = useGetQuotesQuery(shoutId);
 
   return (
-         <RenderShouts shouts={quotes ? quotes : []}
-      isLoading={isLoading}></RenderShouts>
+
+    /* Quotes List Render */
+    <RenderShouts shouts={quotes ? quotes : []} isLoading={isLoading}></RenderShouts>
+
   )
 }
 
-export default Page
+export default QuotesPage

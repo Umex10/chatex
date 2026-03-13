@@ -15,7 +15,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { CreateShout, ShoutComposer } from './CreateShout';
 import { ReShoutMenu } from './ReShoutMenu';
 import { ShoutDetailsMenu } from './ShoutDetailsMenu';
-import Avatar from '../profile/Avatar';
+import Avatar from '../account/Avatar';
 import { Activity } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';

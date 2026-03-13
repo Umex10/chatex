@@ -13,7 +13,11 @@ import ReturnHeader from '@/components/layout/ReturnHeader';
 export type CreateShoutPlayoad = { shoutId?: string, text: string; images: string[] };
 
 
-const Layout = ({ params, children }: { params: Promise<Record<string, string>>, children: React.ReactNode }) => {
+/**
+ * Layout for the re-shouts and quotes activity tab group.
+ * Renders a sticky return header and navigation tabs for re-shouts and quotes.
+ */
+const ActivityByLayout = ({ params, children }: { params: Promise<Record<string, string>>, children: React.ReactNode }) => {
 
   const resolvedParams = use(params);
   const [activeTab, setActiveTab] = useState("reShoutedBy");
@@ -27,7 +31,8 @@ const Layout = ({ params, children }: { params: Promise<Record<string, string>>,
   return (
     <div className='w-full'>
 
-       <ReturnHeader returnText={activeTab === "reShoutedBy" ? "Re-Shouted by" : "Quoted by"}></ReturnHeader>
+      {/* Return Header */}
+      <ReturnHeader returnText={activeTab === "reShoutedBy" ? "Re-Shouted by" : "Quoted by"}></ReturnHeader>
 
       {/* Tab Navigation */}
       <Tabs defaultValue="reShoutedBy" className="w-full" onValueChange={setActiveTab}>
@@ -49,7 +54,10 @@ const Layout = ({ params, children }: { params: Promise<Record<string, string>>,
         />
 
         <TabsContent value="reShoutedBy" className='m-0 flex-1 sm:border'>
-          {children}
+            <div className="w-full flex-col">
+                     {children}
+            </div>
+   
         </TabsContent>
  
         <TabsContent value="quotedBy" className='m-0 flex-1 sm:border'>
@@ -60,4 +68,4 @@ const Layout = ({ params, children }: { params: Promise<Record<string, string>>,
   )
 }
 
-export default Layout
+export default ActivityByLayout

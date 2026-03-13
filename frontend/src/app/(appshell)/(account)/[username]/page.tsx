@@ -26,7 +26,7 @@ import RenderShouts from '@/components/feed/RenderShouts';
  * Displays the user's banner, avatar, bio, join date, follower stats,
  * and a tabbed feed of their shouts, comments and media.
  */
-const Page = ({ params }: { params: Promise<{ username: string }> }) => {
+const ProfilePage = ({ params }: { params: Promise<{ username: string }> }) => {
 
   const [activeTab, setActiveTab] = useState("shouts");
   const { data: meUser } = useGetUserQuery();
@@ -199,4 +199,4 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
   )
 }
 
-export default Page
+export default ProfilePage

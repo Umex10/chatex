@@ -7,7 +7,7 @@ import { useGetLikedByQuery } from '@redux/api/shoutApi';
 import React, { use } from 'react'
 
 /** Page displaying all users who liked a specific shout. */
-const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
+const LikedByPage = ({ params }: { params: Promise<Record<string, string>> }) => {
   const resolvedParams = use(params);
 
   const segments = Object.values(resolvedParams);
@@ -15,16 +15,15 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
   const { data: likedUsers, isLoading } = useGetLikedByQuery(shoutId);
 
   return (
-
     <div className='flex flex-col'>
       {/* Return Header */}
       <ReturnHeader returnText='Liked By'></ReturnHeader>
+
+      {/* Renders the list of users who liked the shout */}
       <RenderFollowList list={likedUsers ? likedUsers : []}
         isLoading={isLoading}></RenderFollowList>
     </div>
-
-
   )
 }
 
-export default Page
+export default LikedByPage

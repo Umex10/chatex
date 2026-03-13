@@ -30,7 +30,7 @@ import { useCommentOnShoutMutation, useCreateShoutMutation, useQuoteTheShoutMuta
 import { useGetUserQuery } from "@redux/api/userApi"
 import { generateSecureUrl } from "@/utils/cloudinary"
 import Spinner from "../shared/Spinner"
-import Avatar from "../profile/Avatar"
+import Avatar from "../account/Avatar"
 import { ShoutView } from "./ShoutView"
 import { ShoutQuote } from "@/types/Shout"
 import { ShoutComposerSkeleton } from "./ShoutComposerSkeleton"

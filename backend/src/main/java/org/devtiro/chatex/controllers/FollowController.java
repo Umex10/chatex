@@ -4,20 +4,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
-
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.services.FollowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * REST controller handling follow relationship operations.
@@ -28,64 +21,71 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class FollowController {
 
-  private final FollowService followService;
+    private final FollowService followService;
 
-  /**
-   * Retrieves the list of followers for the user with the given username.
-   * Each entry is enriched with follow-status badges relative to the requesting user.
-   *
-   * @return ResponseEntity containing a list of FollowDto entries with badge flags
-   */
-  @GetMapping(path = "/{username}/followers")
-  public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
-      @PathVariable String username) {
-    Set<User> followers = followService.getFollowers(username);
+    // ==========================================
+    // QUERIES (GET)
+    // ==========================================
 
-    List<FollowDto> followersDto = followService.handleFollowBadges(userId, followers);
+    /**
+     * Retrieves the list of followers for the user with the given username.
+     * Each entry is enriched with follow-status badges relative to the requesting user.
+     *
+     * @param userId   the ID of the requesting user (auth token)
+     * @param username the target username whose followers are being retrieved
+     * @return ResponseEntity containing a list of FollowDto entries with badge flags
+     */
+    @GetMapping(path = "/{username}/followers")
+    public ResponseEntity<List<FollowDto>> getFollowers(@RequestAttribute("userId") UUID userId,
+                                                        @PathVariable String username) {
+        Set<User> followers = followService.getFollowers(username);
+        List<FollowDto> followersDto = followService.handleFollowBadges(userId, followers);
+        return ResponseEntity.ok(followersDto);
+    }
 
-    return ResponseEntity.ok(followersDto);
-  }
+    /**
+     * Retrieves the list of users that the given user is following.
+     * Each entry is enriched with follow-status badges relative to the requesting user.
+     *
+     * @param userId   the ID of the requesting user (auth token)
+     * @param username the target username whose following list is being retrieved
+     * @return ResponseEntity containing a list of FollowDto entries with badge flags
+     */
+    @GetMapping(path = "/{username}/following")
+    public ResponseEntity<List<FollowDto>> getFollowing(@RequestAttribute("userId") UUID userId,
+                                                        @PathVariable String username) {
+        Set<User> following = followService.getFollowing(username);
+        List<FollowDto> followingDto = followService.handleFollowBadges(userId, following);
+        return ResponseEntity.ok(followingDto);
+    }
 
-  /**
-   * Retrieves the list of users that the given user is following.
-   * Each entry is enriched with follow-status badges relative to the requesting user.
-   *
-   * @return ResponseEntity containing a list of FollowDto entries with badge flags
-   */
-  @GetMapping(path = "/{username}/following")
-  public ResponseEntity<List<FollowDto>> getFollowing(@RequestAttribute("userId") UUID userId,
-      @PathVariable String username) {
-    Set<User> following = followService.getFollowing(username);
+    // ==========================================
+    // MUTATIONS (POST)
+    // ==========================================
 
-    List<FollowDto> followingDto = followService.handleFollowBadges(userId, following);
+    /**
+     * Follows the user identified by {@code username} on behalf of the authenticated user.
+     *
+     * @param userId   the ID of the requesting user who is executing the follow action
+     * @param username the target username to be followed
+     * @return ResponseEntity with HTTP 200 OK and an empty body
+     */
+    @PostMapping(path = "/{username}/follow")
+    public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @PathVariable String username) {
+        followService.follow(userId, username);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-    return ResponseEntity.ok(followingDto);
-  }
-
-  /**
-   * Follows the user identified by {@code username} on behalf of the authenticated user.
-   *
-   * @return ResponseEntity with HTTP 200 OK and an empty body
-   */
-  @PostMapping(path = "/{username}/follow")
-  public ResponseEntity<Void> follow(@RequestAttribute UUID userId, @PathVariable String username) {
-
-    followService.follow(userId, username);
-
-    return new ResponseEntity<Void>(HttpStatus.OK);
-  }
-
-  /**
-   * Unfollows the user identified by {@code username} on behalf of the authenticated user.
-   *
-   * @return ResponseEntity with HTTP 200 OK and an empty body
-   */
-  @PostMapping(path = "/{username}/unfollow")
-  public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @PathVariable String username) {
-
-    followService.unfollow(userId, username);
-
-    return new ResponseEntity<Void>(HttpStatus.OK);
-  }
-
+    /**
+     * Unfollows the user identified by {@code username} on behalf of the authenticated user.
+     *
+     * @param userId   the ID of the requesting user who is executing the unfollow action
+     * @param username the target username to be unfollowed
+     * @return ResponseEntity with HTTP 200 OK and an empty body
+     */
+    @PostMapping(path = "/{username}/unfollow")
+    public ResponseEntity<Void> unfollow(@RequestAttribute UUID userId, @PathVariable String username) {
+        followService.unfollow(userId, username);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -11,6 +11,10 @@ import { CreateCommentPayload } from '@/app/(appshell)/(account)/[username]/[sho
  */
 const shoutApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // ==========================================
+    // QUERIES
+    // ==========================================
+
     /** Fetches a single shout by username and shout ID. */
     getShout: builder.query<Shout, { username: string; shoutId: string }>({
       query: ({ username, shoutId }) => `/shout/${username}/${shoutId}`,
@@ -23,8 +27,15 @@ const shoutApi = apiSlice.injectEndpoints({
       providesTags: ['User']
     }),
 
+    /** Fetches all images for a given username. */
     getAllImages: builder.query<string[], string>({
       query: (username) => `/shout/${username}/images`,
+      providesTags: ['User']
+    }),
+
+    /** Fetches all comments from a given Shout. */
+    getComments: builder.query<Shout[], string>({
+      query: (shoutId) => `/shout/${shoutId}/comment`,
       providesTags: ['User']
     }),
 
@@ -33,9 +44,35 @@ const shoutApi = apiSlice.injectEndpoints({
       query: (shoutId) => `/shout/${shoutId}/likedBy`
     }),
 
+    /** Fetches all quotes for a given Shout. */
+    getQuotes: builder.query<Shout[], string>({
+      query: (shoutId) => `/shout/${shoutId}/quote`,
+      providesTags: ['User']
+    }),
+
     /** Fetches the list of users who re-shouted a specific shout. */
     getReShoutedBy: builder.query<Follow[], string>({
       query: (shoutId) => `/shout/${shoutId}/reShoutedBy`
+    }),
+
+    /** Fetches all comments created by a specific user. */
+    getUserComments: builder.query<Shout[], string>({
+      query: (username) => `/shout/${username}/userComment`,
+      providesTags: ['User']
+    }),
+
+    // ==========================================
+    // MUTATIONS
+    // ==========================================
+
+    /** Adds a comment on a shout. */
+    commentOnShout: builder.mutation<Shout, CreateCommentPayload>({
+      query: (createComment) => ({
+        url: `/shout/${createComment.commentedShoutId}/comment`,
+        method: "POST",
+        body: createComment
+      }),
+      invalidatesTags: ['User']
     }),
 
     /** Creates a new shout post and invalidates the User cache. */
@@ -57,12 +94,30 @@ const shoutApi = apiSlice.injectEndpoints({
       invalidatesTags: ['User']
     }),
 
+    /** Removes a like from a shout. */
+    dislikeTheShout: builder.mutation<void, string>({
+      query: (shoutId) => ({
+        url: `/shout/${shoutId}/dislike`,
+        method: "POST"
+      }),
+    }),
+
     /** Sends a like action on a shout. */
     likeTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
         url: `/shout/${shoutId}/like`,
         method: "POST"
       }),
+    }),
+
+    /** Sends a quote action on a shout. */
+    quoteTheShout: builder.mutation<void, CreateShoutPlayoad>({
+      query: (createShout) => ({
+        url: `/shout/${createShout.shoutId}/quote`,
+        method: "POST",
+        body: createShout
+      }),
+      invalidatesTags: ['User']
     }),
 
     /** Sends a re-shout action on a shout. */
@@ -73,12 +128,13 @@ const shoutApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    /** Removes a like from a shout. */
-    dislikeTheShout: builder.mutation<void, string>({
+    /** Removes a quote from a shout. */
+    unQuoteTheShout: builder.mutation<void, string>({
       query: (shoutId) => ({
-        url: `/shout/${shoutId}/dislike`,
+        url: `/shout/${shoutId}/unQoute`,
         method: "POST"
       }),
+      invalidatesTags: ['User']
     }),
 
     /** Removes a re-shout from a shout. */
@@ -88,71 +144,28 @@ const shoutApi = apiSlice.injectEndpoints({
         method: "POST"
       }),
     }),
-
-     /** Sends a re-shout action on a shout. */
-    quoteTheShout: builder.mutation<void, CreateShoutPlayoad>({
-      query: (createShout) => ({
-        url: `/shout/${createShout.shoutId}/quote`,
-        method: "POST",
-        body: createShout
-      }),
-      invalidatesTags: ['User']
-    }),
-
-     unQuoteTheShout: builder.mutation<void, string>({
-      query: (shoutId) => ({
-        url: `/shout/${shoutId}/unQoute`,
-        method: "POST"
-      }),
-      invalidatesTags: ['User']
-    }),
-
-     /** Fetches all comments from a given Shout. */
-    getQuotes: builder.query<Shout[], string>({
-      query: (shoutId) => `/shout/${shoutId}/quote`,
-      providesTags: ['User']
-    }),
-
-    /** Fetches all comments from a given Shout. */
-    getComments: builder.query<Shout[], string>({
-      query: (shoutId) => `/shout/${shoutId}/comment`,
-      providesTags: ['User']
-    }),
-
-    /** Fetches all comments from a given Shout. */
-    getUserComments: builder.query<Shout[], string>({
-      query: (username) => `/shout/${username}/userComment`,
-      providesTags: ['User']
-    }),
-
-    /** Add a comment on a shout. */
-    commentOnShout: builder.mutation<Shout, CreateCommentPayload>({
-      query: (createComment) => ({
-        url: `/shout/${createComment.commentedShoutId}/comment`,
-        method: "POST",
-        body: createComment
-      }),
-      invalidatesTags: ['User']
-    }),
   }),
 });
 
 export const {
+  // Queries
+  useGetAllImagesQuery,
+  useGetCommentsQuery,
+  useGetLikedByQuery,
+  useGetQuotesQuery,
+  useGetReShoutedByQuery,
   useGetShoutQuery,
   useGetShoutsQuery,
-  useGetAllImagesQuery,
-  useGetLikedByQuery,
-  useGetReShoutedByQuery,
+  useGetUserCommentsQuery,
+
+  // Mutations
+  useCommentOnShoutMutation,
   useCreateShoutMutation,
   useDeleteShoutMutation,
-  useLikeTheShoutMutation,
-  useReShoutTheShoutMutation,
   useDislikeTheShoutMutation,
-  useUnShoutTheShoutMutation,
-  useGetCommentsQuery,
-  useGetUserCommentsQuery,
-  useCommentOnShoutMutation,
+  useLikeTheShoutMutation,
   useQuoteTheShoutMutation,
+  useReShoutTheShoutMutation,
   useUnQuoteTheShoutMutation,
-  useGetQuotesQuery
+  useUnShoutTheShoutMutation,
 } = shoutApi;

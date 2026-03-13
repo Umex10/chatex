@@ -20,7 +20,10 @@ const Following = () => {
   const { data: followers, isLoading } = useGetFollowingQuery(username);
 
   return (
-    <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
+    <div className='flex flex-col'>
+      {/* Renders the Follow list using the fetched following accounts */}
+      <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
+    </div>
   )
 }
 

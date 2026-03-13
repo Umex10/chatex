@@ -1,10 +1,10 @@
 package org.devtiro.chatex.controllers;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.responses.AuthResponseDto;
@@ -18,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.Cookie;
-
 /**
  * REST controller handling authentication operations.
  * Provides endpoints for user sign-up, sign-in, and access token generation.
@@ -29,108 +27,107 @@ import jakarta.servlet.http.Cookie;
 @RequiredArgsConstructor
 public class AuthController {
 
-        private final UserService userService;
-        private final AuthService authenticationService;
-        private final JwtService jwtService;
+    private final UserService userService;
+    private final AuthService authenticationService;
+    private final JwtService jwtService;
 
-        /**
-         * Handles user sign-up requests.
-         * Creates a new user account and returns authentication tokens.
-         *
-         * @return ResponseEntity containing the authentication response with access
-         *         token
-         */
-        @PostMapping(path = "/sign-up")
-        public ResponseEntity<AuthResponseDto> signUpAccount(
-                        @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto,
-                        HttpServletRequest request,
-                        HttpServletResponse response) {
-                User user = userService.createAccount(signUpAccountRequestDto);
+    /**
+     * Handles user sign-up requests.
+     * Creates a new user account and returns authentication tokens.
+     *
+     * @param signUpAccountRequestDto the payload containing sign-up details
+     * @param request                 the HTTP request
+     * @param response                the HTTP response to attach the refresh token cookie
+     * @return ResponseEntity containing the authentication response with the access token
+     */
+    @PostMapping(path = "/sign-up")
+    public ResponseEntity<AuthResponseDto> signUpAccount(
+            @Valid @RequestBody SignUpAccountRequestDto signUpAccountRequestDto,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        User user = userService.createAccount(signUpAccountRequestDto);
 
-                AuthResponseDto authResponseDto = createAuthResponseDto(user.getUsername(),
-                                response);
+        AuthResponseDto authResponseDto = createAuthResponseDto(user.getUsername(), response);
 
-                return new ResponseEntity<>(authResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(authResponseDto, HttpStatus.CREATED);
+    }
+
+    /**
+     * Handles user sign-in requests.
+     * Authenticates user credentials and returns authentication tokens.
+     *
+     * @param signUpAccountRequestDto the payload containing sign-in details
+     * @param request                 the HTTP request
+     * @param response                the HTTP response to attach the refresh token cookie
+     * @return ResponseEntity containing the authentication response with the access token
+     */
+    @PostMapping(path = "/sign-in")
+    public ResponseEntity<AuthResponseDto> signInAccount(
+            @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        UserDetails userDetails = authenticationService.authenticate(
+                signUpAccountRequestDto.getUsername(),
+                signUpAccountRequestDto.getKey());
+
+        AuthResponseDto authResponseDto = createAuthResponseDto(userDetails.getUsername(), response);
+
+        return ResponseEntity.ok(authResponseDto);
+    }
+
+    /**
+     * Creates a new access token using a valid refresh token.
+     * Validates the refresh token from cookies and generates a new access token.
+     *
+     * @param request  the HTTP request containing the refresh token cookie
+     * @param response the HTTP response
+     * @return ResponseEntity containing the authentication response with a new access token or an error status
+     */
+    @GetMapping(path = "/access-jwt")
+    public ResponseEntity<?> createAccessJwt(HttpServletRequest request, HttpServletResponse response) {
+
+        String refreshTk = jwtService.extractRefreshTk(request);
+
+        if (refreshTk == null || refreshTk.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("The refresh token is missing");
         }
 
-        /**
-         * Handles user sign-in requests.
-         * Authenticates user credentials and returns authentication tokens.
-         *
-         * @return ResponseEntity containing the authentication response with access
-         *         token
-         */
-        @PostMapping(path = "/sign-in")
-        public ResponseEntity<AuthResponseDto> signInAccount(
-                        @Valid @RequestBody SignInAccountRequestDto signUpAccountRequestDto,
-                        HttpServletRequest request,
-                        HttpServletResponse response) {
+        UserDetails userDetails = jwtService.validateTk(refreshTk);
 
-                UserDetails userDetails = authenticationService.authenticate(
-                                signUpAccountRequestDto.getUsername(),
-                                signUpAccountRequestDto.getKey());
+        AuthResponseDto authResponseDto = createAuthResponseDto(userDetails.getUsername(), null);
 
-                AuthResponseDto authResponseDto = createAuthResponseDto(userDetails.getUsername(),
-                                response);
+        return ResponseEntity.ok(authResponseDto);
+    }
 
-                return ResponseEntity.ok(authResponseDto);
+    /**
+     * Creates an authentication response DTO with access and refresh tokens.
+     * Generates an access token and optionally creates a refresh token cookie.
+     *
+     * @param username the username for which tokens are generated
+     * @param response pass {@code null} to skip cookie creation (e.g., for access-token-only refresh)
+     * @return AuthResponseDto containing the access token and expiration time
+     */
+    private AuthResponseDto createAuthResponseDto(String username, HttpServletResponse response) {
+
+        String accessTk = jwtService.createAccessTk(username, TkName.ACCESS);
+
+        if (response != null) {
+            String refreshTk = jwtService.createRefreshTk(username, TkName.REFRESH);
+
+            Cookie refreshCookie = new Cookie("refresh_jwt", refreshTk);
+            refreshCookie.setHttpOnly(true);
+            refreshCookie.setSecure(false);
+            refreshCookie.setPath("/");
+            refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+
+            response.addCookie(refreshCookie);
         }
 
-        /**
-         * Creates a new access token using a valid refresh token.
-         * Validates the refresh token from cookies and generates a new access token.
-         *
-         * @return ResponseEntity containing the authentication response or error status
-         */
-        @GetMapping(path = "/access-jwt")
-        public ResponseEntity<?> createAccessJwt(HttpServletRequest request,
-                        HttpServletResponse response) {
-
-                String refreshTk = jwtService.extractRefreshTk(request);
-
-                if (refreshTk == null || refreshTk.isEmpty()) {
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                        .body("The refresh token is missing");
-                }
-
-                UserDetails userDetails = jwtService.validateTk(refreshTk);
-
-                AuthResponseDto authResponseDto = createAuthResponseDto(userDetails.getUsername(),
-                                null);
-
-                return ResponseEntity.ok(authResponseDto);
-
-        }
-
-        /**
-         * Creates an authentication response DTO with access and refresh tokens.
-         * Generates access token and optionally creates refresh token cookie.
-         *
-         *                 pass {@code null} to skip cookie creation (e.g. for access-token-only refresh)
-         * @return AuthResponseDto containing the access token and expiration time
-         */
-        private AuthResponseDto createAuthResponseDto(
-                        String username,
-                        HttpServletResponse response) {
-
-                String accessTk = jwtService.createAccessTk(username,
-                                TkName.ACCESS);
-
-                if (response != null) {
-                        String refreshTk = jwtService.createRefreshTk(username, TkName.REFRESH);
-
-                        Cookie refreshCookie = new Cookie("refresh_jwt", refreshTk);
-                        refreshCookie.setHttpOnly(true);
-                        refreshCookie.setSecure(false);
-                        refreshCookie.setPath("/");
-                        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
-
-                        response.addCookie(refreshCookie);
-                }
-
-                return AuthResponseDto.builder()
-                                .accessJwt(accessTk)
-                                .expiresIn(15 * 60L)
-                                .build();
-        }
+        return AuthResponseDto.builder()
+                .accessJwt(accessTk)
+                .expiresIn(15 * 60L)
+                .build();
+    }
 }

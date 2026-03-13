@@ -14,7 +14,7 @@ export interface CreateCommentPayload {
 }
 
 /** Page displaying a single shout by its ID, resolved from the URL parameters. */
-const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
+const SingleShoutPage = ({ params }: { params: Promise<Record<string, string>> }) => {
   const resolvedParams = use(params);
 
   const segments = Object.values(resolvedParams);
@@ -40,4 +40,4 @@ const Page = ({ params }: { params: Promise<Record<string, string>> }) => {
   )
 }
 
-export default Page
+export default SingleShoutPage

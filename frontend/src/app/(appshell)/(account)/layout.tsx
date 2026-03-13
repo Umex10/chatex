@@ -3,7 +3,7 @@
  * Parallel-routes layout for the account section.
  * Renders the primary `children` slot alongside an optional `modal` intercepted-route slot.
  */
-export default function Layout({
+export default function AccountLayout({
   children,
   modal,
 }: {
