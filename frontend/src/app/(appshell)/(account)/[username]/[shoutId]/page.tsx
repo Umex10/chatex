@@ -2,7 +2,8 @@
 
 import RenderShouts from '@/components/feed/RenderShouts';
 import { useGetCommentsQuery, useGetShoutQuery } from '@redux/api/shoutApi';
-import React, { use } from 'react'
+import React from 'react'
+import { useParams } from 'next/navigation';
 import { Shout } from '@/types/Shout';
 import ReturnHeader from '@/components/layout/ReturnHeader';
 import { ShoutComposer } from '@/components/feed/CreateShout';
@@ -14,12 +15,10 @@ export interface CreateCommentPayload {
 }
 
 /** Page displaying a single shout by its ID, resolved from the URL parameters. */
-const SingleShoutPage = ({ params }: { params: Promise<Record<string, string>> }) => {
-  const resolvedParams = use(params);
-
-  const segments = Object.values(resolvedParams);
-  const shoutId = segments[segments.length - 1];
-  const username = segments[segments.length - 2];
+const SingleShoutPage = () => {
+  const params = useParams<{ username: string, shoutId: string }>();
+  const shoutId = params.shoutId;
+  const username = params.username;
 
   const { data: shout, isLoading: isLoadingShout } = useGetShoutQuery({ username, shoutId });
   const { data: comments, isLoading: isLoadingCommnets} = useGetCommentsQuery(shoutId);

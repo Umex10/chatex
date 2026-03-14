@@ -2,18 +2,17 @@
 
 import RenderShouts from '@/components/feed/RenderShouts';
 import { useGetQuotesQuery } from '@redux/api/shoutApi';
-import React, { use } from 'react'
+import React from 'react'
+import { useParams } from 'next/navigation';
 
 /**
  * Page displaying all quotes associated with a specific shout.
  * Fetches quotes and renders them using the RenderShouts component.
  */
-const QuotesPage = ({ params }: { params: Promise<Record<string, string>> }) => {
+const QuotesPage = () => {
 
-  const resolvedParams = use(params);
-
-  const segments = Object.values(resolvedParams);
-  const shoutId = segments[segments.length - 1];
+  const params = useParams<{ shoutId: string }>();
+  const shoutId = params.shoutId;
 
   const { data: quotes, isLoading } = useGetQuotesQuery(shoutId);
 

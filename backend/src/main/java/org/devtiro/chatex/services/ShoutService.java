@@ -75,6 +75,8 @@ public interface ShoutService {
    */
   void deleteShout(UUID shoutId);
 
+  Set<Shout> likedShouts(String username);
+
   /**
    * Adds a like from the given user to the given shout.
    */

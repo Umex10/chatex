@@ -1,21 +1,16 @@
 "use client"
 
-import OneShout from '@/components/feed/OneShout';
-import { RootState } from '@redux/store';
-import React, { use, useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react'
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetAllImagesQuery, useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
+import { useGetAllImagesQuery, useGetLikedByQuery, useGetLikedShoutsQuery, useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
 import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/userApi';
-import { useUnfollowUserMutation } from '@redux/api/followApi';
 import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useFollow } from '@/hooks/use-follow';
-import Image from 'next/image';
 import RenderShouts from '@/components/feed/RenderShouts';
 
 /**
@@ -26,14 +21,14 @@ import RenderShouts from '@/components/feed/RenderShouts';
  * Displays the user's banner, avatar, bio, join date, follower stats,
  * and a tabbed feed of their shouts, comments and media.
  */
-const ProfilePage = ({ params }: { params: Promise<{ username: string }> }) => {
+const Account = () => {
 
+  const params = useParams<{ username: string }>();
   const [activeTab, setActiveTab] = useState("shouts");
   const { data: meUser } = useGetUserQuery();
   const router = useRouter();
 
-  const resolvedUser = use(params);
-  const otherUsername = resolvedUser.username;
+  const otherUsername = params.username;
   const isOwnAccount = meUser?.username === otherUsername
 
   const { data: otherUser, isLoading, isError } = useGetUserByUsernameQuery(
@@ -53,9 +48,22 @@ const ProfilePage = ({ params }: { params: Promise<{ username: string }> }) => {
   const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
   const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
 
-  const { data: shouts, isLoading: isLoadingShouts } = useGetShoutsQuery(username);
-  const { data: userComments, isLoading: isLoadingUserComments } = useGetUserCommentsQuery(username);
-  const { data: images, isLoading: isLoadingImages } = useGetAllImagesQuery(username);
+  const { data: shouts, isLoading: isLoadingShouts } = useGetShoutsQuery(username, {
+    skip: activeTab !== "shouts"
+  });
+
+  const { data: userComments, isLoading: isLoadingUserComments } = useGetUserCommentsQuery(username, {
+    skip: activeTab !== "comments"
+  });
+
+  const { data: likedShouts, isLoading: isLoadingLikedShouts } = useGetLikedShoutsQuery(username, {
+    skip: activeTab !== "liked-shouts"
+  });
+
+  const { data: images, isLoading: isLoadingImages } = useGetAllImagesQuery(username, {
+    skip: activeTab !== "media"
+  });
+
 
   const { followText, onToggleFollow } = useFollow({ username, userFollowingTarget: isRequestingUserFollowing });
 
@@ -165,12 +173,16 @@ const ProfilePage = ({ params }: { params: Promise<{ username: string }> }) => {
       {/* Shout Feed Tabs */}
       <Tabs defaultValue="shouts" className="w-full"
         onValueChange={setActiveTab}>
-        <TabsList className='bg-background w-full grid grid-cols-3 h-14 p-0'>
+        <TabsList className='bg-background w-full grid grid-cols-4 h-14 p-0'>
           <TabsTrigger value="shouts" className={`flex-1 text-lg
             ${activeTab === "shouts" ? "underline decoration-2 underline-offset-20" : ""}`}>Shouts</TabsTrigger>
 
           <TabsTrigger value="comments" className={`flex-1 text-lg
             ${activeTab === "comments" ? "underline decoration-2 underline-offset-20" : ""}`}>Comments</TabsTrigger>
+
+          <TabsTrigger value="liked-shouts" className={`flex-1 text-lg
+            ${activeTab === "liked-shouts" ? "underline decoration-2 underline-offset-20" : ""}`}>Liked Shouts</TabsTrigger>
+
 
           <TabsTrigger value="media" className={`flex-1 text-lg
             ${activeTab === "media" ? "underline decoration-2 underline-offset-20" : ""}`}>Media</TabsTrigger>
@@ -183,6 +195,10 @@ const ProfilePage = ({ params }: { params: Promise<{ username: string }> }) => {
         {/* Replies Tab Content */}
         <TabsContent value="comments" className='m-0'>
           <RenderShouts isLoading={isLoadingShouts} shouts={userComments ? userComments : []}></RenderShouts>
+        </TabsContent>
+
+        <TabsContent value="liked-shouts" className='m-0'>
+          <RenderShouts isLoading={isLoadingLikedShouts} shouts={likedShouts ? likedShouts : []}></RenderShouts>
         </TabsContent>
         {/* Media Tab Content */}
         <TabsContent value="media" className='m-0'>
@@ -199,4 +215,4 @@ const ProfilePage = ({ params }: { params: Promise<{ username: string }> }) => {
   )
 }
 
-export default ProfilePage
+export default Account

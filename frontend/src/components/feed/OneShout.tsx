@@ -166,6 +166,8 @@ const OneShout = (data: Shout) => {
             <div className='flex flex-row gap-1'>
               <div onClick={(e) => e.stopPropagation()}>
                 <ShoutDetailsMenu
+                  likedByUrl={`/${username}/${id}/likedBy`}
+                  reShoutedByUrl={`/${username}/${id}/reShoutedBy/reShouts`}
                   onShowLikedBy={() => router.push(`/${username}/${id}/likedBy`)}
                   onShowReShoutedBy={() => router.push(`/${username}/${id}/reShoutedBy/reShouts`)}
                 />

@@ -37,7 +37,8 @@ public class ShoutController {
     // ==========================================
 
     /**
-     * Retrieves all shouts for the given username with engagement flags for the requesting user.
+     * Retrieves all shouts for the given username with engagement flags for the
+     * requesting user.
      *
      * @param username the target username whose shouts are being requested
      * @param userId   the ID of the requesting user
@@ -45,7 +46,7 @@ public class ShoutController {
      */
     @GetMapping(path = "/{username}")
     public ResponseEntity<List<ShoutDto>> getShouts(@PathVariable String username,
-                                                    @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         List<Shout> shouts = shoutService.getShouts(username, ShoutVariant.DEFAULT);
         List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
 
@@ -58,7 +59,8 @@ public class ShoutController {
     }
 
     /**
-     * Retrieves a single shout by its ID with engagement flags for the requesting user.
+     * Retrieves a single shout by its ID with engagement flags for the requesting
+     * user.
      *
      * @param shoutId the ID of the shout to fetch
      * @param userId  the ID of the requesting user
@@ -66,7 +68,7 @@ public class ShoutController {
      */
     @GetMapping(path = "/{username}/{shoutId}")
     public ResponseEntity<ShoutDto> getShout(@PathVariable UUID shoutId,
-                                             @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         Shout shout = shoutService.getShout(shoutId);
         ShoutDto shoutsDto = shoutMapper.toDto(shout);
 
@@ -97,7 +99,7 @@ public class ShoutController {
      */
     @GetMapping(path = "/{username}/userComment")
     public ResponseEntity<List<ShoutDto>> getUserComments(@PathVariable String username,
-                                                          @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         List<Shout> shouts = shoutService.getShouts(username, ShoutVariant.COMMENT);
         List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
 
@@ -110,15 +112,17 @@ public class ShoutController {
     }
 
     /**
-     * Retrieves all users who liked a specific shout, enriched with follow-status badges.
+     * Retrieves all users who liked a specific shout, enriched with follow-status
+     * badges.
      *
      * @param shoutId the ID of the evaluated shout
      * @param userId  the ID of the requesting user
-     * @return ResponseEntity containing a list of FollowDto representing users who liked the shout
+     * @return ResponseEntity containing a list of FollowDto representing users who
+     *         liked the shout
      */
     @GetMapping(path = "/{shoutId}/likedBy")
     public ResponseEntity<List<FollowDto>> getLikedBy(@PathVariable UUID shoutId,
-                                                      @RequestAttribute("userId") UUID userId) {
+            @RequestAttribute("userId") UUID userId) {
         Set<User> likedBy = shoutService.getLikedBy(shoutId);
         List<FollowDto> likedByDto = followService.handleFollowBadges(userId, likedBy);
 
@@ -126,15 +130,17 @@ public class ShoutController {
     }
 
     /**
-     * Retrieves all users who re-shouted a specific shout, enriched with follow-status badges.
+     * Retrieves all users who re-shouted a specific shout, enriched with
+     * follow-status badges.
      *
      * @param shoutId the ID of the evaluated shout
      * @param userId  the ID of the requesting user
-     * @return ResponseEntity containing a list of FollowDto representing users who re-shouted
+     * @return ResponseEntity containing a list of FollowDto representing users who
+     *         re-shouted
      */
     @GetMapping(path = "/{shoutId}/reShoutedBy")
     public ResponseEntity<List<FollowDto>> getReShoutedBy(@PathVariable UUID shoutId,
-                                                          @RequestAttribute("userId") UUID userId) {
+            @RequestAttribute("userId") UUID userId) {
         Set<User> reShoutedBy = shoutService.getReShoutedBy(shoutId);
         List<FollowDto> reShoutedByDto = followService.handleFollowBadges(userId, reShoutedBy);
 
@@ -150,7 +156,7 @@ public class ShoutController {
      */
     @GetMapping(path = "/{shoutId}/quote")
     public ResponseEntity<List<ShoutDto>> getQuotedBy(@PathVariable UUID shoutId,
-                                                      @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         List<Shout> quotes = shoutService.getQuotedBy(shoutId);
         List<ShoutDto> quotsDto = shoutMapper.toDtoList(quotes);
 
@@ -171,7 +177,7 @@ public class ShoutController {
      */
     @GetMapping(path = "/{shoutId}/comment")
     public ResponseEntity<List<ShoutDto>> getComments(@PathVariable UUID shoutId,
-                                                      @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         Shout shout = shoutService.getShout(shoutId);
         List<Shout> comments = shout.getComments();
         List<ShoutDto> shoutsDto = shoutMapper.toDtoList(comments);
@@ -189,15 +195,16 @@ public class ShoutController {
     // ==========================================
 
     /**
-     * Creates a new primary shout on behalf of the authenticated user.
+     * Creates a new main shout on behalf of the authenticated user.
      *
      * @param userId             the ID of the authenticated user creating the shout
      * @param createShoutRequest the payload with shout details (text, images, etc.)
-     * @return ResponseEntity containing the newly created ShoutDto with HTTP 201 status
+     * @return ResponseEntity containing the newly created ShoutDto with HTTP 201
+     *         status
      */
     @PostMapping
     public ResponseEntity<ShoutDto> createShout(@RequestAttribute UUID userId,
-                                                @RequestBody CreateShoutRequest createShoutRequest) {
+            @RequestBody CreateShoutRequest createShoutRequest) {
         Shout shout = shoutService.createShout(userId, createShoutRequest);
         ShoutDto shoutDto = shoutMapper.toDto(shout);
 
@@ -218,8 +225,8 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/comment")
     public ResponseEntity<ShoutDto> commentOnShout(@PathVariable UUID shoutId,
-                                                   @RequestBody CreateShoutRequest createShoutRequest,
-                                                   @RequestAttribute UUID userId) {
+            @RequestBody CreateShoutRequest createShoutRequest,
+            @RequestAttribute UUID userId) {
         Shout comment = shoutService.createComment(userId, shoutId, createShoutRequest);
         ShoutDto commentDto = shoutMapper.toDto(comment);
 
@@ -242,6 +249,21 @@ public class ShoutController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{username}/likedShouts")
+    public ResponseEntity<List<ShoutDto>> likedShouts(@PathVariable String username,
+            @RequestAttribute UUID userId) {
+
+        Set<Shout> likedShouts = shoutService.likedShouts(username);
+        List<ShoutDto> likedShoutsDto = shoutMapper.toDtoList(likedShouts);
+
+        likedShoutsDto.forEach(dto -> {
+            dto.setUserLikingTheShout(shoutService.isUserLikingTheShout(dto.getId(), userId));
+            dto.setUserReShoutingTheShout(shoutService.isUserReShoutingTheShout(dto.getId(), userId));
+        });
+
+        return new ResponseEntity<>(likedShoutsDto, HttpStatus.OK);
+    }
+
     /**
      * Adds a like from the authenticated user to the given shout.
      *
@@ -251,13 +273,14 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/like")
     public ResponseEntity<Void> likeShout(@PathVariable UUID shoutId,
-                                          @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         shoutService.likeTheShout(shoutId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * Removes a like previously placed by the authenticated user on the given shout.
+     * Removes a like previously placed by the authenticated user on the given
+     * shout.
      *
      * @param shoutId the ID of the shout to remove the like from
      * @param userId  the ID of the authenticated user
@@ -265,7 +288,7 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/dislike")
     public ResponseEntity<Void> dislikeShout(@PathVariable UUID shoutId,
-                                             @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         shoutService.dislikeTheShout(shoutId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -279,7 +302,7 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/reShout")
     public ResponseEntity<Void> reShoutTheShout(@PathVariable UUID shoutId,
-                                                @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         shoutService.reShoutTheShout(shoutId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -293,7 +316,7 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/unShout")
     public ResponseEntity<Void> unShoutTheShout(@PathVariable UUID shoutId,
-                                                @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         shoutService.unShoutTheShout(shoutId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -308,8 +331,8 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/quote")
     public ResponseEntity<Void> quoteTheShout(@PathVariable UUID shoutId,
-                                              @RequestAttribute UUID userId,
-                                              @RequestBody CreateShoutRequest createShoutRequest) {
+            @RequestAttribute UUID userId,
+            @RequestBody CreateShoutRequest createShoutRequest) {
         shoutService.quoteTheShout(shoutId, userId, createShoutRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -323,7 +346,7 @@ public class ShoutController {
      */
     @PostMapping(path = "/{shoutId}/unQuote")
     public ResponseEntity<Void> unQuoteTheShout(@PathVariable UUID shoutId,
-                                                @RequestAttribute UUID userId) {
+            @RequestAttribute UUID userId) {
         shoutService.unQuoteTheShout(shoutId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -252,9 +252,6 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
                     </div>
                   )}
                 </div>
-                <Button type="button" variant="ghost" size="icon" className="rounded-full h-9 w-9 [&_svg]:!size-5">
-                  <MapPin />
-                </Button>
               </div>
 
               {/* Submit Button */}

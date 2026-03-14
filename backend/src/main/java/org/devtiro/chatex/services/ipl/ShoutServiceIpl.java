@@ -119,14 +119,20 @@ public class ShoutServiceIpl implements ShoutService {
     shoutRep.delete(shout);
   }
 
+  @Override
+  public Set<Shout> likedShouts(String username) {
+      User user = userRep.findByUsername(username)
+        .orElseThrow(() -> new EntityNotFoundException("User with username " + username + " not found"));
+
+        return user.getLikedShouts();
+  }
+
   /** {@inheritDoc} */
   @Override
   public void likeTheShout(UUID shoutId, UUID userId) {
     Shout shout = findShoutOrThrow(shoutId);
 
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+    User user = findUserOrThrow(userId);
 
     shout.getLikedBy().add(user);
     shoutRep.save(shout);
@@ -140,9 +146,7 @@ public class ShoutServiceIpl implements ShoutService {
   public void dislikeTheShout(UUID shoutId, UUID userId) {
     Shout shout = findShoutOrThrow(shoutId);
 
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+   User user = findUserOrThrow(userId);
 
     shout.getLikedBy().remove(user);
 
@@ -156,9 +160,7 @@ public class ShoutServiceIpl implements ShoutService {
   public void reShoutTheShout(UUID shoutId, UUID userId) {
     Shout shout = findShoutOrThrow(shoutId);
 
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+    User user = findUserOrThrow(userId);
 
     shout.getReShoutedBy().add(user);
     shoutRep.save(shout);
@@ -172,9 +174,7 @@ public class ShoutServiceIpl implements ShoutService {
   public void unShoutTheShout(UUID shoutId, UUID userId) {
     Shout shout = findShoutOrThrow(shoutId);
 
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+   User user = findUserOrThrow(userId);
 
     shout.getReShoutedBy().remove(user);
     shoutRep.save(shout);
@@ -187,9 +187,7 @@ public class ShoutServiceIpl implements ShoutService {
   public void quoteTheShout(UUID shoutId, UUID userId, CreateShoutRequest createShoutRequest) {
     Shout shout = findShoutOrThrow(shoutId);
 
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+    User user = findUserOrThrow(userId);
 
     Shout quote = Shout.builder()
         .user(user)
@@ -216,9 +214,7 @@ public class ShoutServiceIpl implements ShoutService {
     Shout quote = findShoutOrThrow(shoutId);
     Shout quotedShout = quote.getQuotedShout();
 
-    User user = userRep.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
-            " was not found"));
+    User user = findUserOrThrow(userId);
 
     quotedShout.getQuotedBy().remove(quote);
 
@@ -226,7 +222,6 @@ public class ShoutServiceIpl implements ShoutService {
 
     shoutRep.delete(quote);
   }
-
 
   @Override
   public List<Shout> getQuotedBy(UUID shoutId) {
@@ -256,6 +251,5 @@ public class ShoutServiceIpl implements ShoutService {
     return shoutRep.findById(shoutId)
         .orElseThrow(() -> new EntityNotFoundException("Shout with id " + shoutId + " not found"));
   }
-
 
 }

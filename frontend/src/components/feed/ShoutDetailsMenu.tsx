@@ -4,11 +4,16 @@ import { Ellipsis, Heart, Repeat2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Button } from "../ui/button"
 
+import Link from "next/link"
+
 interface ShoutDetailsMenuProps {
-  /** Callback to navigate to liked by page */
-  onShowLikedBy: () => void
-  /** Callback to navigate to re-shouted by page */
-  onShowReShoutedBy: () => void
+  /** URL to navigate to liked by page */
+  likedByUrl?: string
+  /** URL to navigate to re-shouted by page */
+  reShoutedByUrl?: string
+  /** Fallback callbacks if URLs are not provided */
+  onShowLikedBy?: () => void
+  onShowReShoutedBy?: () => void
 }
 
 /**
@@ -17,7 +22,7 @@ interface ShoutDetailsMenuProps {
  * with two actions: "Liked by" and "Re-shouted by".
  * Automatically closes when the user clicks outside.
  */
-export function ShoutDetailsMenu({ onShowLikedBy, onShowReShoutedBy }: ShoutDetailsMenuProps) {
+export function ShoutDetailsMenu({ likedByUrl, reShoutedByUrl, onShowLikedBy, onShowReShoutedBy }: ShoutDetailsMenuProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -45,28 +50,54 @@ export function ShoutDetailsMenu({ onShowLikedBy, onShowReShoutedBy }: ShoutDeta
 
       {/* Dropdown menu */}
       {open && (
-        <div className="absolute bottom-full right-0 mb-1 w-48 rounded-lg border border-border bg-background shadow-lg z-50">
+        <div className="absolute bottom-full right-0 mb-1 w-48 flex flex-col rounded-lg border border-border bg-background shadow-lg z-50 overflow-hidden">
           {/* Liked by */}
-          <Button
-            onClick={() => { setOpen(false); onShowLikedBy(); }}
-            className="flex w-full items-center gap-3 px-3 py-2.5 text-base rounded-lg
-              hover:bg-secondary transition-colors bg-transparent justify-start
-              text-pink-500"
-          >
-            <Heart className="w-4 h-4" />
-            Liked by
-          </Button>
+          {likedByUrl ? (
+            <Link
+              href={likedByUrl}
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center gap-3 px-3 py-2.5 text-base
+                hover:bg-secondary transition-colors bg-transparent justify-start
+                text-pink-500"
+            >
+              <Heart className="w-4 h-4" />
+              Liked by
+            </Link>
+          ) : (
+            <Button
+              onClick={() => { setOpen(false); onShowLikedBy?.(); }}
+              className="flex w-full items-center gap-3 px-3 py-2.5 text-base rounded-none
+                hover:bg-secondary transition-colors bg-transparent justify-start
+                text-pink-500"
+            >
+              <Heart className="w-4 h-4" />
+              Liked by
+            </Button>
+          )}
 
           {/* Re-shouted by */}
-          <Button
-            onClick={() => { setOpen(false); onShowReShoutedBy(); }}
-            className="flex w-full items-center gap-3 px-3 py-2.5 text-base rounded-lg
-              hover:bg-secondary transition-colors bg-transparent justify-start
-              text-green-400"
-          >
-            <Repeat2 className="w-4 h-4" />
-            Re-shouted by
-          </Button>
+          {reShoutedByUrl ? (
+            <Link
+              href={reShoutedByUrl}
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center gap-3 px-3 py-2.5 text-base
+                hover:bg-secondary transition-colors bg-transparent justify-start
+                text-green-400"
+            >
+              <Repeat2 className="w-4 h-4" />
+              Re-shouted by
+            </Link>
+          ) : (
+            <Button
+              onClick={() => { setOpen(false); onShowReShoutedBy?.(); }}
+              className="flex w-full items-center gap-3 px-3 py-2.5 text-base rounded-none
+                hover:bg-secondary transition-colors bg-transparent justify-start
+                text-green-400"
+            >
+              <Repeat2 className="w-4 h-4" />
+              Re-shouted by
+            </Button>
+          )}
         </div>
       )}
     </div>

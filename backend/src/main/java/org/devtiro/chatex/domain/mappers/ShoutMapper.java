@@ -1,6 +1,7 @@
 package org.devtiro.chatex.domain.mappers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.devtiro.chatex.domain.dtos.responses.CommentDto;
 import org.devtiro.chatex.domain.dtos.responses.QuoteDto;
@@ -68,6 +69,8 @@ public interface ShoutMapper {
    * @return a list of mapped ShoutDto objects
    */
   List<ShoutDto> toDtoList(List<Shout> shouts);
+
+  List<ShoutDto> toDtoList(Set<Shout> shouts);
 
   /**
    * Counts the number of the given List or Set.

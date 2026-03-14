@@ -1,13 +1,13 @@
 "use client"
 
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import ReusableTabsList from '@/components/layout/ReusableTabsList';
 import { useGetQuotesQuery, useGetReShoutedByQuery, useGetShoutsQuery } from '@redux/api/shoutApi';
 import RenderShouts from '@/components/feed/RenderShouts';
 import RenderFollowList from '@/components/follow/RenderFollowList';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import ReturnHeader from '@/components/layout/ReturnHeader';
 
 export type CreateShoutPlayoad = { shoutId?: string, text: string; images: string[] };
@@ -17,14 +17,13 @@ export type CreateShoutPlayoad = { shoutId?: string, text: string; images: strin
  * Layout for the re-shouts and quotes activity tab group.
  * Renders a sticky return header and navigation tabs for re-shouts and quotes.
  */
-const ActivityByLayout = ({ params, children }: { params: Promise<Record<string, string>>, children: React.ReactNode }) => {
+const ActivityByLayout = ({ children }: { children: React.ReactNode }) => {
 
-  const resolvedParams = use(params);
+  const params = useParams<{ username: string, shoutId: string }>();
+  const shoutId = params.shoutId;
+  const username = params.username;
+
   const [activeTab, setActiveTab] = useState("reShoutedBy");
-
-  const segments = Object.values(resolvedParams);
-  const shoutId = segments[segments.length - 1];
-  const username = segments[segments.length - 2];
 
   const router = useRouter();
 

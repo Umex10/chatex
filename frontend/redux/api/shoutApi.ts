@@ -27,6 +27,12 @@ const shoutApi = apiSlice.injectEndpoints({
       providesTags: ['User']
     }),
 
+     getLikedShouts: builder.query<Shout[], string>({
+      query: (username) => `/shout/${username}/likedShouts`,
+      providesTags: ['User']
+    }),
+
+
     /** Fetches all images for a given username. */
     getAllImages: builder.query<string[], string>({
       query: (username) => `/shout/${username}/images`,
@@ -156,6 +162,7 @@ export const {
   useGetReShoutedByQuery,
   useGetShoutQuery,
   useGetShoutsQuery,
+  useGetLikedShoutsQuery,
   useGetUserCommentsQuery,
 
   // Mutations

@@ -4,17 +4,16 @@ import RenderShouts from '@/components/feed/RenderShouts';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 import ReturnHeader from '@/components/layout/ReturnHeader';
 import { useGetQuotesQuery, useGetReShoutedByQuery } from '@redux/api/shoutApi';
-import React, { use } from 'react'
+import React from 'react'
+import { useParams } from 'next/navigation';
 
 /**
  * Page displaying all users who re-shouted a specific shout.
  */
-const ReShoutsPage = ({ params }: { params: Promise<Record<string, string>> }) => {
+const ReShoutsPage = () => {
 
-  const resolvedParams = use(params);
-
-  const segments = Object.values(resolvedParams);
-  const shoutId = segments[segments.length - 1];
+  const params = useParams<{ shoutId: string }>();
+  const shoutId = params.shoutId;
 
   const { data: reShoutedUsers, isLoading } = useGetReShoutedByQuery(shoutId);
 
