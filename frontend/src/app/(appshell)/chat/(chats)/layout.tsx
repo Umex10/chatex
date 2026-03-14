@@ -13,18 +13,23 @@ const ChatPage = ({children} : {children: React.ReactNode}) => {
    const [activeTab, setActiveTab] = useState("messages");
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex-1 h-full w-full flex flex-col'>
 
-      <div className='flex flex-row items-center px-2 md:py-2'>
-        <h2 className='text-2xl font-bold flex-1'>Chat</h2>
-        <Button variant="secondary" size="icon" className="flex justify-end
-        bg-transparent w-12 h-12">
-          <Settings />
-        </Button>
-      </div>
+      {/* Header Form */}
+      <div className='flex flex-row items-center justify-between px-4 py-3 gap-6'>
+        
+        <div className='flex flex-row items-center gap-3 flex-1 justify-end'>
+          {/* Search Input - Limited Width on larger screens */}
+          <div className='w-full max-w-sm'>
+             <SearchInput />
+          </div>
 
-      <div className='flex flex-row items-center px-2 md:py-2'>
-       <SearchInput></SearchInput>
+          {/* Settings Icon */}
+          <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary">
+            <Settings className="w-5 h-5 text-muted-foreground" />
+          </Button>
+        </div>
+
       </div>
 
       <Tabs defaultValue={activeTab} className="w-full" onValueChange={setActiveTab}>
@@ -46,8 +51,8 @@ const ChatPage = ({children} : {children: React.ReactNode}) => {
           ]}
         />
         {/* Tab Content */}
-        <TabsContent value="messages" className='m-0 flex-1 sm:border'>{children}</TabsContent>
-        <TabsContent value="requests" className='m-0 flex-1 sm:border'>{children}</TabsContent>
+        <TabsContent value="messages" className='h-full m-0 flex-1 sm:border'>{children}</TabsContent>
+        <TabsContent value="requests" className='h-full m-0 flex-1 sm:border'>{children}</TabsContent>
       </Tabs>
 
     </div>

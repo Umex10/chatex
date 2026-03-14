@@ -1,11 +1,22 @@
 import React from 'react'
 
-const layout = ({ children }: Readonly<{
-  children?: React.ReactNode
-}>) => {
+const layout = ({
+  children,
+  modal,
+}: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) => {
   return (
-    <div>
-      {children}
+    <div className='w-full h-full flex flex-row'>
+
+      <div className='w-full md:w-[40%] md:border-x h-full'>
+        {children}
+      </div>
+
+      <div className='hidden md:flex w-[60%] border-x h-full'>
+        {modal}
+      </div>
     </div>
   )
 }

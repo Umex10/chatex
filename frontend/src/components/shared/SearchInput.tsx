@@ -7,6 +7,7 @@ import { useSearchFollowQuery, useSearchRecommendFollowsQuery } from '@redux/api
 import FollowInstance from '../follow/FollowInstance';
 import FollowInstanceSkeleton from '../follow/FollowInstanceSkeleton';
 import { Skeleton } from '../ui/skeleton';
+import { useRouter } from 'next/navigation';
 
 const SearchInput = () => {
 
@@ -14,6 +15,8 @@ const SearchInput = () => {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const router = useRouter();
 
   const { data: searchedUsers, isLoading: isLoadingSearchedUsers } = useSearchFollowQuery(debouncedQuery, {
     skip: debouncedQuery.length < 2
@@ -128,7 +131,13 @@ const SearchInput = () => {
                 </>
               ) : (
                 searchedUsers?.map(user => (
-                  <FollowInstance {...user} key={user.username}></FollowInstance>
+                  <li key={user.username} onClick={(e) => {
+                    router.push(`/chat/messages/${user.id}`);
+                    setIsOpen(false);
+                    e.stopPropagation();
+                  }}>
+                    <FollowInstance {...user}></FollowInstance>
+                  </li>
                 ))
               )}
             </ul>

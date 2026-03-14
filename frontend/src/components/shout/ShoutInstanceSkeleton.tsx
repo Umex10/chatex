@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
  * Skeleton loader for OneShout component.
  * Displays animated placeholder while shout data is loading.
  */
-export function OneShoutSkeleton() {
+export function ShoutInstanceSkeleton() {
   return (
     <div className='relative p-3 w-full border-y'>
       {/* row layout: avatar column + content column */}

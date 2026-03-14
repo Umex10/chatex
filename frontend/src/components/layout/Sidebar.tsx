@@ -52,14 +52,16 @@ export function AppSidebar() {
   const isMobile = useIsMobile();
 
   const router = useRouter();
-  const path = usePathname();
+  const url = usePathname();
   const { data: user, isLoading } = useGetUserQuery(undefined);
 
+  // keyUrl needed, to highlight current icon also, if the route has more than one route interntally.
+  // chat has chat/messages and chat/requests
   const navItems = [
-    { title: "Home", href: "/home", icon: Home, dataTestId: "home-icon" },
-    { title: "Search", href: "/search", icon: Search, dataTestId: "search-icon"  },
-    { title: "Chat", href: "/chat/messages", icon: Mail, dataTestId: "chat-icon"  },
-    { title: "Account", href: `/${user?.username}`, icon: User, dataTestId: "account-icon"  },
+    { title: "Home", href: "/home", keyUrl: "/home", icon: Home, dataTestId: "home-icon" },
+    { title: "Search", href: "/search", keyUrl: "/search", icon: Search, dataTestId: "search-icon" },
+    { title: "Chat", href: "/chat/messages", keyUrl: "/chat", icon: Mail, dataTestId: "chat-icon" },
+    { title: "Account", href: `/${user?.username}`, keyUrl: `/${user?.username}`, icon: User, dataTestId: "account-icon" },
   ]
 
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";
@@ -158,34 +160,39 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu className="gap-0">
-                {navItems.map((item) => (
-                  <SidebarMenuItem key={item.title} onClick={() => {
-                    if (isMobile) toggleSidebar();
-                  }}>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={item.title}
-                      className="h-12 px-2 py-8 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!py-8 group-data-[collapsible=icon]:!w-12"
-                    >
-                      <Link href={item.href}
-                        onClick={(e) => {
-                          if (`${path}` === item.href) {
-                            e.preventDefault();
-                          }
-                        }}
-                        data-testid={item.dataTestId}>
-                        <item.icon
-                          className={cn(
-                            "transition-all",
-                            path === item.href ? "text-foreground" : "text-muted-foreground"
-                          )}
-                          strokeWidth={path === item.href ? 2.5 : 2}
-                        />
-                        <span className={`text-xl ${path === item.href ? "text-foreground" : "text-muted-foreground"}`}>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {navItems.map((item) => {
+                  
+                  const isActive = url.includes(item.keyUrl);
+
+                  return (
+                    <SidebarMenuItem key={item.title} onClick={() => {
+                      if (isMobile) toggleSidebar();
+                    }}>
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={item.title}
+                        className="h-12 px-2 py-8 group-data-[collapsible=icon]:!h-12 group-data-[collapsible=icon]:!py-8 group-data-[collapsible=icon]:!w-12"
+                      >
+                        <Link href={item.href}
+                          onClick={(e) => {
+                            if (isActive) {
+                              e.preventDefault();
+                            }
+                          }}
+                          data-testid={item.dataTestId}>
+                          <item.icon
+                            className={cn(
+                              "transition-all",
+                             isActive ? "text-foreground" : "text-muted-foreground"
+                            )}
+                            strokeWidth={isActive ? 2.5 : 2}
+                          />
+                          <span className={isActive ? "text-foreground" : "text-muted-foreground"}>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
 
@@ -239,7 +246,7 @@ export function AppSidebar() {
                       {user?.name ?? "Load..."}
                     </span>
                     <span className="text-base text-gray-500 truncate w-full"
-                    data-testid="username-in-sidebar">
+                      data-testid="username-in-sidebar">
                       {user?.username ? `@${user.username}` : "@..."}
                     </span>
                   </div>

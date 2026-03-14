@@ -1,0 +1,202 @@
+"use client"
+
+import React, { useState, useRef, useEffect } from 'react'
+import { Plus, Image as ImageIcon, Smile, MoreHorizontal, BadgeCheck, SquareAsterisk } from 'lucide-react'
+import { useTheme } from "next-themes"
+import data from "@emoji-mart/data"
+import Picker from "@emoji-mart/react"
+import { Button } from '@/components/ui/button'
+import Avatar from '@/components/account/Avatar'
+import Image from 'next/image'
+import { User } from '@/types/User'
+import { useRouter } from 'next/navigation'
+import { joinedAccountDate } from '@/utils/joinedDate'
+
+export interface ChatMessage {
+  id: string;
+  text: string;
+  createdAt: string;
+  username: string;
+  avatar: string;
+  isMe: boolean;
+  image?: string;
+}
+
+interface ChatConversationProps {
+  messages: ChatMessage[];
+  chatUser: User | undefined
+}
+
+export default function ChatConversation({ messages, chatUser }: ChatConversationProps) {
+  const [inputText, setInputText] = useState("")
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+
+  const { resolvedTheme } = useTheme()
+  const emojiRef = useRef<HTMLDivElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const router = useRouter();
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
+  }, [messages])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false)
+      }
+    }
+    if (showEmojiPicker) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [showEmojiPicker])
+
+  const handleEmojiSelect = (emoji: { native: string }) => {
+    setInputText((prev) => prev + emoji.native)
+  }
+
+  const formatTime = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  return (
+    <div className='flex flex-col h-full w-full bg-black text-white'>
+      {/* Header */}
+      <div className='flex flex-row items-center justify-between px-4 py-3'>
+        <div className='flex items-center gap-3'>
+          <div className='w-14 h-14 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center'>
+            <Avatar avatar={chatUser?.avatar ? "" : ""} />
+          </div>
+          <div className='flex items-center gap-1 font-bold text-xl'>
+            {chatUser?.name}
+            <BadgeCheck className="w-5 h-5 text-yellow-500 fill-current" />
+            <SquareAsterisk className="w-4 h-4 text-gray-400" />
+          </div>
+        </div>
+        <Button variant="ghost" size="icon" className="text-gray-400 hover:bg-white/10 rounded-full">
+          <MoreHorizontal className="w-5 h-5" />
+        </Button>
+      </div>
+
+      {/* Messages Area */}
+      <div className='flex-1 overflow-y-auto p-4 flex flex-col gap-6 relative'>
+
+        {/* Profile Info Center */}
+        <div className='flex flex-col items-center justify-center mt-6 mb-8 gap-1'>
+          <div className='w-14 h-14 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center mb-2'>
+            <Avatar avatar={chatUser?.avatar ? "" : ""} />
+          </div>
+          <div className='flex items-center gap-1 font-bold text-xl'>
+            {chatUser?.username}
+            <BadgeCheck className="w-5 h-5 text-yellow-500 fill-current" />
+            <SquareAsterisk className="w-4 h-4 text-gray-400" />
+          </div>
+          <span className='text-gray-500 text-base'>@{chatUser?.username}</span>
+          <span className='text-gray-500 text-base'>{joinedAccountDate(chatUser?.createdAt ?? "")}</span>
+
+          <Button variant="outline" className="mt-4 rounded-full bg-white text-black 
+          font-bold px-6 py-2 border-none"
+            onClick={() => router.push(`/${chatUser?.username}`)}>
+            Account anzeigen
+          </Button>
+        </div>
+
+        <div className="flex justify-center mb-4">
+          <span className="text-gray-500 text-sm font-medium">Today</span>
+        </div>
+
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`flex flex-col w-full ${msg.isMe ? 'items-end' : 'items-start'}`}
+          >
+            <div
+              className={`px-4 py-2.5 max-w-[85%] sm:max-w-[60%] ${msg.isMe
+                  ? 'bg-violet-600 text-white rounded-t-3xl rounded-bl-3xl rounded-br-sm'
+                  : 'bg-emerald-600 text-white rounded-t-3xl rounded-br-3xl rounded-bl-sm'
+                }`}
+            >
+              {msg.image && (
+                <Image src={msg.image} alt="attached" className="max-w-full rounded-md mb-2 object-contain"
+                  width={200}
+                  height={200} />
+              )}
+              {msg.text && (
+                <div className="flex items-end gap-2 text-[15px]">
+                  <span className="break-words whitespace-pre-wrap leading-tight">{msg.text}</span>
+                  {/* Dazn style inline time on messages */}
+                  {msg.isMe && (
+                    <span className="text-[11px] opacity-80 mb-[-2px] whitespace-nowrap ml-1 font-medium">
+                      {formatTime(msg.createdAt)} <BadgeCheck className="w-3 h-3 inline ml-0.5 opacity-90 fill-current" />
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Toolbar / Input Area */}
+      <div className='p-3 px-4 pb-4 border-t border-white/10 bg-black'>
+        <div className='flex items-center gap-2 w-full'>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full w-10 h-10 bg-zinc-800/80 hover:bg-zinc-700 
+            text-gray-200 flex-shrink-0"
+            onClick={() => fileRef.current?.click()}
+          >
+            <ImageIcon className="w-5 h-5" />
+          </Button>
+
+          <div className="relative flex-shrink-0" ref={emojiRef}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="rounded-full w-10 h-10 bg-zinc-800/80 hover:bg-zinc-700 text-gray-200"
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+            >
+              <Smile className="w-5 h-5" />
+            </Button>
+            {showEmojiPicker && (
+              <div className="absolute bottom-full left-0 mb-3 z-50">
+                <Picker
+                  data={data}
+                  onEmojiSelect={handleEmojiSelect}
+                  theme={resolvedTheme === "dark" ? "dark" : "light"}
+                  previewPosition="none"
+                />
+              </div>
+            )}
+          </div>
+
+          <input
+            type="file"
+            ref={fileRef}
+            className="hidden"
+            accept="image/*"
+          />
+
+          <div className="flex-1 bg-zinc-800/80 rounded-full px-4 py-2.5 flex flex-row items-center border border-transparent focus-within:border-[#1d9bf0]">
+            <input
+              type="text"
+              className='w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-white placeholder:text-gray-500'
+              placeholder='Message'
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+            />
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )
+}

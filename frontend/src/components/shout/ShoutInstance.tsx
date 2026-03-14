@@ -33,7 +33,7 @@ function formatCount(n: number): string {
  * Renders a single shout card with the author's avatar, name, optional verified badge,
  * username, timestamp, post text, media image and engagement action counters.
  */
-const OneShout = (data: Shout) => {
+const ShoutInstance = (data: Shout) => {
 
   const { id, text, images, userLikingTheShout, userReShoutingTheShout,
     avatar, likesCount, reShoutsCount, commentsCount, name, username, createdAt,
@@ -344,4 +344,4 @@ const OneShout = (data: Shout) => {
   )
 }
 
-export default OneShout
+export default ShoutInstance

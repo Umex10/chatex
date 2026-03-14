@@ -1,6 +1,6 @@
 "use client"
 
-import OneShout from '@/components/shout/OneShout'
+import ShoutInstance from '@/components/shout/ShoutInstance'
 import React, { useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

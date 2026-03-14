@@ -1,8 +1,8 @@
 import React from 'react'
 import { Shout } from '@/types/Shout'
 import Spinner from '../shared/Spinner'
-import OneShout from './OneShout'
-import { OneShoutSkeleton } from './OneShoutSkeleton'
+import ShoutInstance from './ShoutInstance'
+import { ShoutInstanceSkeleton } from './ShoutInstanceSkeleton'
 
 /** Props for the RenderShouts component. */
 interface RenderShoutsArgs {
@@ -21,14 +21,14 @@ const RenderShouts = ({ shouts, isLoading }: RenderShoutsArgs) => {
       {isLoading && (
         <div>
           {[...Array(5)].map((_, i) => (
-            <OneShoutSkeleton key={`skeleton-${i}`} />
+            <ShoutInstanceSkeleton key={`skeleton-${i}`} />
           ))}
         </div>
       )}
 
       {/* Loaded state: display actual shout cards */}
       {!isLoading && shouts && shouts.length > 0 && shouts.map((shout, index) => (
-        <OneShout {...shout} key={shout.createdAt + index} />
+        <ShoutInstance {...shout} key={shout.createdAt + index} />
       ))}
 
       {/* Empty state: when no shouts exist */}
