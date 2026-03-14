@@ -1,15 +1,15 @@
 "use client"
 
-import OneShout from '@/components/feed/OneShout'
+import OneShout from '@/components/shout/OneShout'
 import React, { useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
-import { CreateShout, ShoutComposer } from '@/components/feed/CreateShout';
+import { CreateShout, ShoutComposer } from '@/components/shout/CreateShout';
 import { PencilLine } from 'lucide-react';
 import { useGetShoutsQuery } from '@redux/api/shoutApi';
 import { useGetUserQuery } from '@redux/api/userApi';
-import RenderShouts from '@/components/feed/RenderShouts';
+import RenderShouts from '@/components/shout/RenderShouts';
 
 export type CreateShoutPlayoad = { shoutId?: string, text: string; images: string[] };
 

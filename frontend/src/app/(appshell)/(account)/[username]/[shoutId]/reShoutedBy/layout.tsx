@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import ReusableTabsList from '@/components/layout/ReusableTabsList';
 import { useGetQuotesQuery, useGetReShoutedByQuery, useGetShoutsQuery } from '@redux/api/shoutApi';
-import RenderShouts from '@/components/feed/RenderShouts';
+import RenderShouts from '@/components/shout/RenderShouts';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 import { useParams, useRouter } from 'next/navigation';
 import ReturnHeader from '@/components/layout/ReturnHeader';

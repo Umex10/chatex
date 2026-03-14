@@ -28,7 +28,7 @@ import { SignOutMenu } from "../auth/SignOutMenu"
 import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { CreateShout } from "../feed/CreateShout"
+import { CreateShout } from "../shout/CreateShout"
 import { usePathname, useRouter } from "next/navigation"
 import { CldImage } from 'next-cloudinary';
 import { useGetUserQuery } from "@redux/api/userApi"
@@ -58,7 +58,7 @@ export function AppSidebar() {
   const navItems = [
     { title: "Home", href: "/home", icon: Home, dataTestId: "home-icon" },
     { title: "Search", href: "#", icon: Search, dataTestId: "search-icon"  },
-    { title: "Messages", href: "#", icon: Mail, dataTestId: "message-icon"  },
+    { title: "Chat", href: "/chat/messages", icon: Mail, dataTestId: "chat-icon"  },
     { title: "Account", href: `/${user?.username}`, icon: User, dataTestId: "account-icon"  },
     { title: "More", href: "#", icon: MoreHorizontal, dataTestId: "more-icon"  },
   ]

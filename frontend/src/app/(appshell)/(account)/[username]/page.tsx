@@ -11,7 +11,7 @@ import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation';
 import { useFollow } from '@/hooks/use-follow';
-import RenderShouts from '@/components/feed/RenderShouts';
+import RenderShouts from '@/components/shout/RenderShouts';
 
 /**
  * Dynamic user Account page.
@@ -21,7 +21,7 @@ import RenderShouts from '@/components/feed/RenderShouts';
  * Displays the user's banner, avatar, bio, join date, follower stats,
  * and a tabbed feed of their shouts, comments and media.
  */
-const Account = () => {
+const AccountPage = () => {
 
   const params = useParams<{ username: string }>();
   const [activeTab, setActiveTab] = useState("shouts");
@@ -215,4 +215,4 @@ const Account = () => {
   )
 }
 
-export default Account
+export default AccountPage

@@ -1,6 +1,6 @@
 "use client"
 
-import RenderShouts from '@/components/feed/RenderShouts';
+import RenderShouts from '@/components/shout/RenderShouts';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 import ReturnHeader from '@/components/layout/ReturnHeader';
 import { useGetQuotesQuery, useGetReShoutedByQuery } from '@redux/api/shoutApi';

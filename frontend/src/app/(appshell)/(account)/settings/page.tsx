@@ -17,13 +17,10 @@ export default function SettingsPage() {
   const router = useRouter()
   const { data: me } = useGetUserQuery(undefined)
 
-  // Build a resolved Promise<{ username }> that AccountPage expects as `params`
-  const params = Promise.resolve({ username: me?.username ?? "" })
-
   return (
     <>
       {/* Account page — visible behind the dialog */}
-      {me && <AccountPage params={params} />}
+      {me && <AccountPage />}
 
       {/* Settings Dialog */}
       <Dialog open={true} onOpenChange={() => router.push(`/${me?.username ?? ""}`)}>
