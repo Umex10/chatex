@@ -57,10 +57,9 @@ export function AppSidebar() {
 
   const navItems = [
     { title: "Home", href: "/home", icon: Home, dataTestId: "home-icon" },
-    { title: "Search", href: "#", icon: Search, dataTestId: "search-icon"  },
+    { title: "Search", href: "/search", icon: Search, dataTestId: "search-icon"  },
     { title: "Chat", href: "/chat/messages", icon: Mail, dataTestId: "chat-icon"  },
     { title: "Account", href: `/${user?.username}`, icon: User, dataTestId: "account-icon"  },
-    { title: "More", href: "#", icon: MoreHorizontal, dataTestId: "more-icon"  },
   ]
 
   const avatar = user?.avatar ? user?.avatar : "user-avatar_yr4qhg";

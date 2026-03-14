@@ -1,5 +1,6 @@
 package org.devtiro.chatex.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,8 @@ public class UserController {
 
     /**
      * Retrieves the currently authenticated user's profile.
-     * The user ID is resolved from the JWT token via the request attribute set by the filter.
+     * The user ID is resolved from the JWT token via the request attribute set by
+     * the filter.
      *
      * @param userId the ID of the authenticated user
      * @return ResponseEntity containing the user's profile data
@@ -54,7 +56,7 @@ public class UserController {
      */
     @GetMapping(path = "/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@RequestAttribute UUID userId,
-                                                     @PathVariable String username) {
+            @PathVariable String username) {
         User user = userService.findByUsername(username);
         UserDto userDto = userMapper.toDto(user);
 
@@ -70,7 +72,8 @@ public class UserController {
 
     /**
      * Updates the currently authenticated user's profile with the provided data.
-     * Only specific fields can be updated, such as name, bio, location, and website.
+     * Only specific fields can be updated, such as name, bio, location, and
+     * website.
      *
      * @param userId        the ID of the authenticated user
      * @param updateUserDto the DTO containing the fields to update
@@ -78,7 +81,7 @@ public class UserController {
      */
     @PatchMapping
     public ResponseEntity<UserDto> updateUser(@RequestAttribute("userId") UUID userId,
-                                              @RequestBody UpdateUserDto updateUserDto) {
+            @RequestBody UpdateUserDto updateUserDto) {
         User userToUpdate = userService.findById(userId);
         User updatedUser = userService.updateUser(userToUpdate, updateUserDto);
         UserDto userDto = userMapper.toDto(updatedUser);

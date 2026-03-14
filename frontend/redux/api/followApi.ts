@@ -52,6 +52,15 @@ const followApi = apiSlice.injectEndpoints({
       query: (username) => `/follow/${username}/followers`
     }),
 
+
+    searchFollow: builder.query<Follow[], string>({
+      query: (searchQuery) => `/follow/searchFollows?query=${searchQuery}`
+    }),
+
+    searchRecommendFollows: builder.query<Follow[], string>({
+      query: (searchQuery) => `/follow/searchRecommendations?query=${searchQuery}`
+    }),
+
     /** Fetches the list of accounts the given username is following. */
     getFollowing: builder.query<Follow[], string>({
       query: (username) => `/follow/${username}/following`
@@ -63,5 +72,7 @@ export const {
   useFollowUserMutation,
   useUnfollowUserMutation,
   useGetFollowersQuery,
+  useSearchFollowQuery,
+  useSearchRecommendFollowsQuery,
   useGetFollowingQuery,
 } = followApi;

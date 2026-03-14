@@ -6,6 +6,7 @@ import { Search, Settings } from 'lucide-react'
 import React, { useState } from 'react'
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import ReusableTabsList from '@/components/layout/ReusableTabsList'
+import SearchInput from '@/components/shared/SearchInput'
 
 const ChatPage = ({children} : {children: React.ReactNode}) => {
 
@@ -23,16 +24,7 @@ const ChatPage = ({children} : {children: React.ReactNode}) => {
       </div>
 
       <div className='flex flex-row items-center px-2 md:py-2'>
-        <div className="relative flex-1">
-          <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-            <Search className="w-4 h-4 text-muted-foreground" />
-          </div>
-          <Input
-            type="text"
-            className="block p-6 pl-10 w-full text-base rounded-full border-none bg-secondary"
-            placeholder="Suche..."
-          />
-        </div>
+       <SearchInput></SearchInput>
       </div>
 
       <Tabs defaultValue={activeTab} className="w-full" onValueChange={setActiveTab}>

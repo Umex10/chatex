@@ -22,8 +22,7 @@ import { cn } from "@/lib/utils"
 const navItems = [
   { icon: Home, href: "/home" },
   { icon: Search, href: "/search" },
-  { icon: Bell, href: "/notifications" },
-  { icon: Mail, href: "/messages" },
+  { icon: Mail, href: "/chat/messages" },
   { icon: User, href: "/account" },
 ]
 

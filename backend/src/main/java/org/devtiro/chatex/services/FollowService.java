@@ -9,7 +9,8 @@ import org.devtiro.chatex.domain.entities.User;
 
 /**
  * Service interface for follow relationship operations.
- * Provides methods for managing and querying follow/unfollow actions between users.
+ * Provides methods for managing and querying follow/unfollow actions between
+ * users.
  */
 public interface FollowService {
 
@@ -21,6 +22,9 @@ public interface FollowService {
      */
     Set<User> getFollowers(String username);
 
+    Set<User> searchFollowResultByUsername(String username, UUID userId);
+
+    Set<User> searchFollowRecommendationByUsername(String username, UUID userId);
     /**
      * Returns all users that the user with the given username is following.
      * Loads the following list via a JOIN FETCH query to avoid lazy-loading issues.
@@ -46,7 +50,8 @@ public interface FollowService {
     /**
      * Checks whether the requesting user is already following the target user.
      *
-     * @return {@code true} if the requesting user follows the target, {@code false} otherwise
+     * @return {@code true} if the requesting user follows the target, {@code false}
+     *         otherwise
      */
     boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId);
 
@@ -67,7 +72,8 @@ public interface FollowService {
     Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList);
 
     /**
-     * Enriches a set of users with follow-status badges relative to the requesting user.
+     * Enriches a set of users with follow-status badges relative to the requesting
+     * user.
      * Performs batch lookups to avoid the n+1 problem when rendering follow lists.
      *
      * @return a list of FollowDto entries with badge flags set

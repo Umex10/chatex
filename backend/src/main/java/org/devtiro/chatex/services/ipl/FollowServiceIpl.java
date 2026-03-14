@@ -34,13 +34,32 @@ public class FollowServiceIpl implements FollowService {
      *
      * @return a Set of User entities that follow the target user
      * @throws EntityNotFoundException if no user exists with the given username
-     */ 
+     */
     @Override
     public Set<User> getFollowers(String username) {
         User user = userRep.findByUsernameWithFollowers(username).orElseThrow(
                 () -> new EntityNotFoundException("The user with the username: " + username + " was not found"));
 
         return user.getFollowers();
+    }
+
+    @Override
+    public Set<User> searchFollowResultByUsername(String username, UUID userId) {
+
+        User me = userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+
+        return userRep.findByUsernameContainingIgnoreCaseAndUsernameNot(username, me.getUsername());
+    }
+
+    @Override
+    public Set<User> searchFollowRecommendationByUsername(String username, UUID userId) {
+        User me = userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+
+        return userRep.findByUsernameContainingIgnoreCaseAndUsernameNot(username, me.getUsername());
     }
 
     /**

@@ -9,11 +9,10 @@ import { AppSidebar } from "@/components/layout/Sidebar"
 import { CustomTrigger } from '@/components/layout/CustomTrigger'
 import { Button } from '@/components/ui/button'
 
-import { Award, Search } from "lucide-react";
 import NavMenu from '@/components/layout/NavMenu'
 import Image from 'next/image'
-import { Input } from '@/components/ui/input'
 import { usePathname } from 'next/navigation'
+import SearchInput from '@/components/shared/SearchInput'
 const XL_BREAKPOINT = 1280
 
 /**
@@ -41,6 +40,7 @@ export const Layout = ({
   const pathname = usePathname();
 
   const isChatPage = pathname.startsWith('/chat');
+  const isSearchPage = pathname.startsWith('/search');
 
   useEffect(() => {
     const handleResize = () => {
@@ -103,16 +103,14 @@ export const Layout = ({
               {!isChatPage && (
                 <aside className='hidden sticky top-0 flex-col py-4 gap-4 h-screen lg:flex w-[350px]'>
                   {/* search input with left icon */}
-                  <div className="relative">
-                    <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                      <Search className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                    <Input
-                      type="text"
-                      className="block p-2.5 pl-10 w-full text-sm rounded-full border-none bg-secondary"
-                      placeholder="Suche..."
-                    />
-                  </div>
+
+                  {!isSearchPage ? (
+                    <SearchInput></SearchInput>
+                  ) : (
+
+                    <div className='h-1 w-full bg-violet-500 '></div>
+
+                  )}
 
                   {/* trends section with list items and show-more action */}
                   <section className="overflow-hidden rounded-2xl bg-secondary/50">
@@ -138,7 +136,7 @@ export const Layout = ({
                   </section>
 
                   <section className="overflow-hidden rounded-2xl bg-secondary/50">
-                    <h2 className="py-3 px-4 text-xl font-extrabold">Trends für dich</h2>
+                    <h2 className="py-3 px-4 text-xl font-extrabold">Trends for you</h2>
 
                     <div className="flex flex-col">
                       {[
