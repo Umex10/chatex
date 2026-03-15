@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import SearchInput from '@/components/shared/SearchInput';
-import RecommendationInstance from '@/components/chat/RecommendationInstance';
+import RecentlyViewedUser from '@/components/chat/RecentlyViewedInstance';
 import { useGetRecentlyViewedUsersQuery } from '@redux/api/userApi';
 
 const DefaultChatView = () => {
@@ -44,11 +44,11 @@ const DefaultChatView = () => {
           <SearchInput />
 
           <div className=''>
-            <h3>Recommendations</h3>
+            <h3>Recently viewed Users by you</h3>
 
             <ul className='overflow-y-scroll max-h-[40vh]'>
               {recentlyViewedUsers?.map(user => (
-                <RecommendationInstance key={user.username} {...user}></RecommendationInstance>
+                <RecentlyViewedUser key={user.username} {...user}></RecentlyViewedUser>
               ))}
             </ul>
           </div>

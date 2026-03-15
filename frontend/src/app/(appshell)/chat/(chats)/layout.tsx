@@ -24,7 +24,7 @@ const ChatPage = ({children} : {children: React.ReactNode}) => {
              <SearchInput />
           </div>
 
-          {/* Settings Icon */}
+          {/* Settings */}
           <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary">
             <Settings className="w-5 h-5 text-muted-foreground" />
           </Button>

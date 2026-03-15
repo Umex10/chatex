@@ -143,7 +143,7 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
       </div>
 
       {/* Toolbar / Input Area */}
-      <div className='p-3 px-4 pb-4 border-t border-white/10 bg-black'>
+      <div className='p-3 px-4 pb-4 border-t border-white/10 bg-gradient-to-b from-violet-600/50 to-slate-800'>
         <div className='flex items-center gap-2 w-full'>
 
           <Button

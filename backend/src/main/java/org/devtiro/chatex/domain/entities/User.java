@@ -114,4 +114,9 @@ public class User {
     @Builder.Default
     private Set<User> recentlyViewed = new HashSet<>();
 
+    @OneToMany(mappedBy = "chatUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Chat> chats = new HashSet<>();
+
+
 }

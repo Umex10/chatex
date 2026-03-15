@@ -20,7 +20,7 @@ import lombok.*;
 @Entity
 @Table(name = "shouts")
 @Data
-@Builder(toBuilder = true)
+@Builder(toBuilder = true) // Gives us the ability to create a new Instance with some existing info
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

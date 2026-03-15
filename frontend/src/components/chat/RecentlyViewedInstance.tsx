@@ -10,7 +10,7 @@ interface RecommendationArgs {
   avatar: string,
 }
 
-const RecommendationInstance = ({name, username, avatar}: RecommendationArgs) => {
+const RecentlyViewedUser = ({name, username, avatar}: RecommendationArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
   const router = useRouter();
@@ -18,7 +18,9 @@ const RecommendationInstance = ({name, username, avatar}: RecommendationArgs) =>
   return (
     <div className='w-full py-2 flex flex-row items-center gap-2 hover:bg-gray-800 
     transition ease-out duration-400'
-      onClick={() => router.push(`/${username}`)}>
+      onClick={() => {
+        
+      }}>
 
       {/* Avatar */}
       <div className="relative w-15 h-15 rounded-full border-4 border-black 
@@ -53,4 +55,4 @@ const RecommendationInstance = ({name, username, avatar}: RecommendationArgs) =>
   )
 }
 
-export default RecommendationInstance
+export default RecentlyViewedUser

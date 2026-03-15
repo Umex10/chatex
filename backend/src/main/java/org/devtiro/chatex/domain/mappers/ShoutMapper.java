@@ -24,7 +24,7 @@ public interface ShoutMapper {
    * Maps a Shout entity to a ShoutDto response object.
    * Author info is flattened from the nested User, and engagement counts are
    * computed via named helper methods. The {@code userLikingTheShout} and
-   * {@code userReShoutingTheShout} flags are intentionally ignored here and must
+   * {@code userReShoutingTheShout} flags are intentionally inored here and must
    * be set manually after mapping.
    *
    * @return the mapped ShoutDto

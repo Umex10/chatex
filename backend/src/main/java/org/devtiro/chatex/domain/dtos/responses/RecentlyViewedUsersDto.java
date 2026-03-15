@@ -1,10 +1,5 @@
 package org.devtiro.chatex.domain.dtos.responses;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
-import org.devtiro.chatex.domain.entities.Message;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,13 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatDto {
+public class RecentlyViewedUsersDto {
 
-  private UUID id;
   private String name;
   private String username;
   private String avatar;
-  private LocalDate createdUserAt;
-  private Message lastMessage;
 
 }
