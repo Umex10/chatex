@@ -30,6 +30,10 @@ const userApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['User']
     }),
+
+    getRecentlyViewedUsers: builder.query<User[], void>({
+      query: () => "/user/recentlyViewedUsers",
+    }),
   }),
 });
 
@@ -37,4 +41,5 @@ export const {
   useGetUserQuery,
   useGetUserByUsernameQuery,
   useUpdateUserMutation,
+  useGetRecentlyViewedUsersQuery
 } = userApi;

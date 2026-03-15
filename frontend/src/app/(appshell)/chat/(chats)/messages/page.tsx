@@ -1,14 +1,20 @@
 "use client"
 
-import Message from '@/components/chat/Message'
+import ChatInstance from '@/components/chat/ChatInstance'
 import React from 'react'
 
 const page = () => {
   return (
-    <div className='p-3 border-y'>
-      <div className=''>
-
-      </div>
+    <div>
+      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
+      lastMessageCreatedAt='2026-03-03'></ChatInstance>
+      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
+      lastMessageCreatedAt='2026-03-03'></ChatInstance>
+      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
+      lastMessageCreatedAt='2026-03-03'></ChatInstance>
+      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
+      lastMessageCreatedAt='2026-03-03'></ChatInstance>
+      
     </div>
   )
 }

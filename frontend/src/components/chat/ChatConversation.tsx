@@ -64,7 +64,7 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
   }
 
   return (
-    <div className='flex flex-col h-full w-full bg-black text-white'>
+    <div className='flex flex-col h-full w-full text-white'>
       {/* Header */}
       <div className='flex flex-row items-center justify-between px-4 py-3'>
         <div className='flex items-center gap-3'>

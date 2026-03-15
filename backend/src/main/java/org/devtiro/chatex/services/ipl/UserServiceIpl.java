@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -130,6 +131,25 @@ public class UserServiceIpl implements UserService {
 
         return userRep.save(userToUpdate);
 
+    }
+
+    @Override
+    public Set<User> getRecentlyViewedUsers(UUID userId) {
+        User me = userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+
+        return me.getRecentlyViewed();
+    }
+
+    @Override
+    public void addUserToRecentlyViewedUsersList(User targetUser, UUID userId) {
+        User me = userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+        me.getRecentlyViewed().add(targetUser);
+
+        userRep.save(me);
     }
 
 }

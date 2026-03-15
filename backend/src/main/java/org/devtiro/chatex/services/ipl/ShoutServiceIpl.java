@@ -9,9 +9,11 @@ import org.devtiro.chatex.domain.dtos.requests.CreateShoutRequest;
 import org.devtiro.chatex.domain.entities.Shout;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.domain.enums.ShoutVariant;
+import org.devtiro.chatex.events.UserInteractionEvent;
 import org.devtiro.chatex.reps.ShoutRep;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.ShoutService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +30,8 @@ public class ShoutServiceIpl implements ShoutService {
 
   private final ShoutRep shoutRep;
   private final UserRep userRep;
+
+  private final ApplicationEventPublisher eventPublisher;
 
   /** {@inheritDoc} */
   @Override
@@ -121,10 +125,10 @@ public class ShoutServiceIpl implements ShoutService {
 
   @Override
   public Set<Shout> likedShouts(String username) {
-      User user = userRep.findByUsername(username)
+    User user = userRep.findByUsername(username)
         .orElseThrow(() -> new EntityNotFoundException("User with username " + username + " not found"));
 
-        return user.getLikedShouts();
+    return user.getLikedShouts();
   }
 
   /** {@inheritDoc} */
@@ -139,6 +143,8 @@ public class ShoutServiceIpl implements ShoutService {
 
     user.getLikedShouts().add(shout);
     userRep.save(user);
+
+    eventPublisher.publishEvent(new UserInteractionEvent(shout.getUser(), userId));
   }
 
   /** {@inheritDoc} */
@@ -146,13 +152,15 @@ public class ShoutServiceIpl implements ShoutService {
   public void dislikeTheShout(UUID shoutId, UUID userId) {
     Shout shout = findShoutOrThrow(shoutId);
 
-   User user = findUserOrThrow(userId);
+    User user = findUserOrThrow(userId);
 
     shout.getLikedBy().remove(user);
 
     shoutRep.save(shout);
     user.getLikedShouts().remove(shout);
     userRep.save(user);
+
+    eventPublisher.publishEvent(new UserInteractionEvent(shout.getUser(), userId));
   }
 
   /** {@inheritDoc} */
@@ -167,6 +175,8 @@ public class ShoutServiceIpl implements ShoutService {
 
     user.getReShoutedShouts().add(shout);
     userRep.save(user);
+
+    eventPublisher.publishEvent(new UserInteractionEvent(shout.getUser(), userId));
   }
 
   /** {@inheritDoc} */
@@ -174,13 +184,15 @@ public class ShoutServiceIpl implements ShoutService {
   public void unShoutTheShout(UUID shoutId, UUID userId) {
     Shout shout = findShoutOrThrow(shoutId);
 
-   User user = findUserOrThrow(userId);
+    User user = findUserOrThrow(userId);
 
     shout.getReShoutedBy().remove(user);
     shoutRep.save(shout);
 
     user.getReShoutedShouts().remove(shout);
     userRep.save(user);
+
+    eventPublisher.publishEvent(new UserInteractionEvent(shout.getUser(), userId));
   }
 
   @Override

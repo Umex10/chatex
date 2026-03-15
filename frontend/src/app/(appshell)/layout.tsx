@@ -58,7 +58,7 @@ export const Layout = ({
     <AuthProvider>
       {/* controls desktop/tablet sidebar open/collapsed state */}
       <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <div className='w-full max-w-[1500px] flex mx-auto relative'>
+        <div className='w-full max-w-[1400px] flex mx-auto relative'>
           <AppSidebar />
 
           {/* content area that sits next to the sidebar */}

@@ -1,6 +1,6 @@
 "use client"
 
-import Message from '@/components/chat/Message'
+import ChatInstance from '@/components/chat/ChatInstance'
 import React from 'react'
 
 const page = () => {

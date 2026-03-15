@@ -19,7 +19,7 @@ const ChatPage = ({children} : {children: React.ReactNode}) => {
       <div className='flex flex-row items-center justify-between px-4 py-3 gap-6'>
         
         <div className='flex flex-row items-center gap-3 flex-1 justify-end'>
-          {/* Search Input - Limited Width on larger screens */}
+          {/* Search Input */}
           <div className='w-full max-w-sm'>
              <SearchInput />
           </div>
@@ -51,8 +51,8 @@ const ChatPage = ({children} : {children: React.ReactNode}) => {
           ]}
         />
         {/* Tab Content */}
-        <TabsContent value="messages" className='h-full m-0 flex-1 sm:border'>{children}</TabsContent>
-        <TabsContent value="requests" className='h-full m-0 flex-1 sm:border'>{children}</TabsContent>
+        <TabsContent value="messages" className='m-0 flex-1 sm:border'>{children}</TabsContent>
+        <TabsContent value="requests" className='m-0 flex-1 sm:border'>{children}</TabsContent>
       </Tabs>
 
     </div>

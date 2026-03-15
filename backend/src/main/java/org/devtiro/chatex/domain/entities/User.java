@@ -79,9 +79,7 @@ public class User {
      * self-reference).
      */
     @ManyToMany
-    @JoinTable(name = "user_follows", 
-    joinColumns = @JoinColumn(name = "follower_id"), 
-    inverseJoinColumns = @JoinColumn(name = "following_id"))
+    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "following_id"))
     @Builder.Default
     private Set<User> following = new HashSet<>();
 
@@ -94,17 +92,26 @@ public class User {
     private Set<User> followers = new HashSet<>();
 
     /**
-     * The set of shouts this user has liked (inverse side of the shout-likes M:N relationship).
+     * The set of shouts this user has liked (inverse side of the shout-likes M:N
+     * relationship).
      */
     @Builder.Default
     @ManyToMany(mappedBy = "likedBy")
     private Set<Shout> likedShouts = new HashSet<>();
 
     /**
-     * The set of shouts this user has re-shouted (inverse side of the shout-reShouts M:N relationship).
+     * The set of shouts this user has re-shouted (inverse side of the
+     * shout-reShouts M:N relationship).
      */
     @Builder.Default
     @ManyToMany(mappedBy = "reShoutedBy")
     private Set<Shout> reShoutedShouts = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_recent_visits", 
+    joinColumns = @JoinColumn(name = "viewer_id"), 
+    inverseJoinColumns = @JoinColumn(name = "viewed_user_id"))
+    @Builder.Default
+    private Set<User> recentlyViewed = new HashSet<>();
 
 }

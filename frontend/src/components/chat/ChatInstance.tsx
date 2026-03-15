@@ -11,7 +11,7 @@ interface MessageArgs {
   lastMessageCreatedAt: string
 }
 
-const Message = ({ avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
+const ChatInstance = ({ avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
@@ -55,4 +55,4 @@ const Message = ({ avatar, name, lastMessage, lastMessageCreatedAt }: MessageArg
   )
 }
 
-export default Message
+export default ChatInstance

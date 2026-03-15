@@ -1,12 +1,15 @@
 package org.devtiro.chatex.controllers;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
+import org.devtiro.chatex.domain.dtos.responses.ChatDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
+import org.devtiro.chatex.domain.mappers.ChatMapper;
 import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.UserService;
@@ -26,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final FollowService followService;
     private final UserMapper userMapper;
+    private final ChatMapper chatMapper;
 
     // ==========================================
     // QUERIES (GET)
@@ -86,5 +90,15 @@ public class UserController {
         User updatedUser = userService.updateUser(userToUpdate, updateUserDto);
         UserDto userDto = userMapper.toDto(updatedUser);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/recentlyViewedUsers")
+    public ResponseEntity<List<ChatDto>> getRecentlyViewedUsers(@RequestAttribute UUID userId) {
+
+        Set<User> recentlyViewedUsers = userService.getRecentlyViewedUsers(userId);
+
+        List<ChatDto> recentlyViewedusersDto = chatMapper.toDtoList(recentlyViewedUsers);
+
+        return new ResponseEntity<>(recentlyViewedusersDto, HttpStatus.OK);
     }
 }
