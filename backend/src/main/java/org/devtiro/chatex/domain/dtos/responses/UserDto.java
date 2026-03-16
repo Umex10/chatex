@@ -31,5 +31,7 @@ public class UserDto {
   private String bio;
   private String location;
   private String website;
+  private boolean userSilencingTarget;
+  private boolean targetSilencingUser;
   
 }

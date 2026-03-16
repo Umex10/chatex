@@ -46,4 +46,12 @@ public interface UserService {
 
     void addUserToRecentlyViewedUsersList(User targetUser, UUID userId);
 
+    void silenceUser(String username, UUID userId);
+    
+    void unSilenceUser(String username, UUID userId);
+
+    boolean isUserSilencingTarget(String username, UUID userId);
+
+    boolean isTargetSilencingUser(String username, UUID userId);
+
 }

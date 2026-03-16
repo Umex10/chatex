@@ -13,5 +13,8 @@ export interface User {
   banner: string,
   bio: string,
   location: string,
-  website: string
+  website: string,
+  userSilencingTarget: boolean,
+  targetSilencingUser: boolean,
+  
 }

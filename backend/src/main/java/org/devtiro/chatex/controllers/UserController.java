@@ -67,6 +67,12 @@ public class UserController {
         boolean isUserFollowingTarget = followService.isUserFollowingTarget(username, userId);
         userDto.setUserFollowingTarget(isUserFollowingTarget);
 
+        boolean isUserSilencingTarget = userService.isUserSilencingTarget(username, userId);
+        boolean isTargetSilencingUser = userService.isTargetSilencingUser(username, userId);
+
+        userDto.setUserSilencingTarget(isUserSilencingTarget);
+        userDto.setTargetSilencingUser(isTargetSilencingUser);
+
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
@@ -97,8 +103,29 @@ public class UserController {
 
         Set<User> recentlyViewedUsers = userService.getRecentlyViewedUsers(userId);
 
-        List<RecentlyViewedUsersDto> recentlyViewedusersDto = recentlyViewedUsersDtoMapper.toDtoList(recentlyViewedUsers);
+        List<RecentlyViewedUsersDto> recentlyViewedusersDto = recentlyViewedUsersDtoMapper
+                .toDtoList(recentlyViewedUsers);
 
         return new ResponseEntity<>(recentlyViewedusersDto, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/{username}/silence")
+    public ResponseEntity<Void> silenceUser(@PathVariable String username,
+         @RequestAttribute UUID userId) {
+
+        userService.silenceUser(username, userId);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+
+    }
+
+    @PostMapping(path = "/{username}/unSilence")
+    public ResponseEntity<Void> unSilenceUser(@PathVariable String username,
+         @RequestAttribute UUID userId) {
+
+        userService.unSilenceUser(username, userId);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+
     }
 }

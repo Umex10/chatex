@@ -26,6 +26,8 @@ public interface UserMapper {
   @Mapping(target = "followersCount", source = "followers", qualifiedByName = "calculateFollowersCount")
   @Mapping(target = "followingCount", source = "following", qualifiedByName = "calculateFollowingCount")
   @Mapping(target = "userFollowingTarget", ignore = true)
+  @Mapping(target = "userSilencingTarget", ignore = true)
+  @Mapping(target = "targetSilencingUser", ignore = true)
   UserDto toDto(User user);
 
   /**

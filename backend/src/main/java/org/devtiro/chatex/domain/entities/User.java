@@ -108,10 +108,17 @@ public class User {
     private Set<Shout> reShoutedShouts = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(name = "user_recent_visits", 
-    joinColumns = @JoinColumn(name = "viewer_id"), 
-    inverseJoinColumns = @JoinColumn(name = "viewed_user_id"))
+    @JoinTable(name = "user_recent_visits", joinColumns = @JoinColumn(name = "viewer_id"), inverseJoinColumns = @JoinColumn(name = "viewed_user_id"))
     @Builder.Default
     private Set<User> recentlyViewed = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_silenced", joinColumns = @JoinColumn(name = "silencer_id"), inverseJoinColumns = @JoinColumn(name = "silenced_id"))
+    @Builder.Default
+    private Set<User> silencedUsers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "silencedUsers")
+    @Builder.Default
+    private Set<User> silencedBy = new HashSet<>();
 
 }

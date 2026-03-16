@@ -34,6 +34,22 @@ const userApi = apiSlice.injectEndpoints({
     getRecentlyViewedUsers: builder.query<User[], void>({
       query: () => "/user/recentlyViewedUsers",
     }),
+
+    silenceUser: builder.mutation<void, string>({
+      query: (username) => ({
+        url: `/user/${username}/silence`,
+        method: "POST"
+      }),
+      invalidatesTags: ['User']
+    }),
+
+     unSilenceUser: builder.mutation<void, string>({
+      query: (username) => ({
+        url: `/user/${username}/unSilence`,
+        method: "POST"
+      }),
+      invalidatesTags: ['User']
+    }),
   }),
 });
 
@@ -41,5 +57,7 @@ export const {
   useGetUserQuery,
   useGetUserByUsernameQuery,
   useUpdateUserMutation,
-  useGetRecentlyViewedUsersQuery
+  useGetRecentlyViewedUsersQuery,
+  useSilenceUserMutation,
+  useUnSilenceUserMutation
 } = userApi;

@@ -152,4 +152,48 @@ public class UserServiceIpl implements UserService {
         userRep.save(me);
     }
 
+    @Override
+    public void silenceUser(String username, UUID userId) {
+        User me = userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+
+        User userToSilence = userRep.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the username: " + username +
+                        " was not found"));
+
+        me.getSilencedUsers().add(userToSilence);
+        userToSilence.getSilencedBy().add(me);
+
+        userRep.save(me);
+        userRep.save(userToSilence);
+    }
+
+    @Override
+    public void unSilenceUser(String username, UUID userId) {
+        User me = userRep.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the userid: " + userId +
+                        " was not found"));
+
+        User userToSilence = userRep.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("The user with the username: " + username +
+                        " was not found"));
+
+        me.getSilencedUsers().remove(userToSilence);
+        userToSilence.getSilencedBy().remove(me);
+
+        userRep.save(me);
+        userRep.save(userToSilence);
+    }
+
+    @Override
+    public boolean isUserSilencingTarget(String username, UUID userId) {
+        return userRep.isUserSilencingTarget(username, userId);
+    }
+
+    @Override
+    public boolean isTargetSilencingUser(String username, UUID userId) {
+        return userRep.isTargetSilencingUser(username, userId);
+    }
+
 }

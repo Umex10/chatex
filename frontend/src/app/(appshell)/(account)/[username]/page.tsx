@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useState } from 'react'
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, Volume2, VolumeX } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
 import { useGetAllImagesQuery, useGetLikedByQuery, useGetLikedShoutsQuery, useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
-import { useGetUserByUsernameQuery, useGetUserQuery } from '@redux/api/userApi';
+import { useGetUserByUsernameQuery, useGetUserQuery, useSilenceUserMutation, useUnSilenceUserMutation } from '@redux/api/userApi';
 import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation';
@@ -47,6 +47,31 @@ const AccountPage = () => {
   const followersCount = userToShow?.followersCount ? userToShow?.followersCount : 0;
   const followingCount = userToShow?.followingCount ? userToShow?.followingCount : 0;
   const isRequestingUserFollowing = userToShow?.userFollowingTarget ? userToShow?.userFollowingTarget : false;
+
+  // Add silenced flags based on the user object state
+  const isTargetSilencingUser = userToShow?.targetSilencingUser ?? false; // Did they silence me?
+  const isUserSilencingTarget = userToShow?.userSilencingTarget ?? false; // Did I silence them?
+
+  const [silenceUserMutation] = useSilenceUserMutation();
+  const [unSilenceUserMutation] = useUnSilenceUserMutation();
+
+  const handleSilenceToggle = async () => {
+
+    try {
+
+      if (isUserSilencingTarget) {
+        await unSilenceUserMutation(username).unwrap();
+      } else {
+        await silenceUserMutation(username).unwrap();
+
+      }
+
+    } catch (error: any) {
+      const errorMessage = error?.message || "An error occurred while silencing the user";
+      console.error(errorMessage);
+    }
+
+  };
 
   const { data: shouts, isLoading: isLoadingShouts } = useGetShoutsQuery(username, {
     skip: activeTab !== "shouts"
@@ -149,8 +174,8 @@ const AccountPage = () => {
           </div>
         </div>
 
-        {/* Edit Account / Follow Button */}
-        <div className='h-full flex justify-end items-start'>
+        {/* Edit Account / Follow Button / Silence */}
+        <div className='h-full flex justify-end items-center gap-2'>
 
           <Link href="/settings" className={`${isOwnAccount ? "" : "hidden"}
               rounded-xl px-3 py-2 border text-base font-bold`}
@@ -158,59 +183,86 @@ const AccountPage = () => {
             Account bearbeiten
           </Link>
 
-          <Button variant={!isRequestingUserFollowing ? "outline" : "secondary"}
-            className={`${isOwnAccount ? "hidden" : ""}
-              rounded-xl px-3 py-2 border text-base font-bold`}
-            data-testid="follow-btn"
-            onClick={onToggleFollow}>
-            {followText}
-          </Button>
+          {!isOwnAccount && (
+            <>
+              {/* Silence user toggle button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSilenceToggle}
+                title={isUserSilencingTarget ? "Unsilence user" : "Silence user"}
+                className="rounded-full"
+              >
+                {isUserSilencingTarget ? <VolumeX className="w-6 h-6 text-red-500" /> : <Volume2 className="w-6 h-6 opacity-70" />}
+              </Button>
+
+              <Button variant={!isRequestingUserFollowing ? "outline" : "secondary"}
+                className="rounded-xl px-3 py-2 border text-base font-bold"
+                data-testid="follow-btn"
+                onClick={onToggleFollow}>
+                {followText}
+              </Button>
+            </>
+          )}
 
         </div>
 
       </div>
 
-      {/* Shout Feed Tabs */}
-      <Tabs defaultValue="shouts" className="w-full"
-        onValueChange={setActiveTab}>
-        <TabsList className='bg-background w-full grid grid-cols-4 h-14 p-0'>
-          <TabsTrigger value="shouts" className={`flex-1 text-lg
+      {/* Content Restriction based on Silencing */}
+      {isTargetSilencingUser ? (
+        <div className="w-full flex-1 flex flex-col items-center justify-center opacity-60 mt-20">
+          <VolumeX className="w-16 h-16 mb-4" />
+          <h2 className="text-2xl font-bold">You are silenced</h2>
+          <p className="text-base text-center mt-2 max-w-md">
+            You have been silenced by this user. You can no longer view their content or activity.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Shout Feed Tabs */}
+          <Tabs defaultValue="shouts" className="w-full"
+            onValueChange={setActiveTab}>
+            <TabsList className='bg-background w-full grid grid-cols-4 h-14 p-0'>
+              <TabsTrigger value="shouts" className={`flex-1 text-lg
             ${activeTab === "shouts" ? "underline decoration-2 underline-offset-20" : ""}`}>Shouts</TabsTrigger>
 
-          <TabsTrigger value="comments" className={`flex-1 text-lg
+              <TabsTrigger value="comments" className={`flex-1 text-lg
             ${activeTab === "comments" ? "underline decoration-2 underline-offset-20" : ""}`}>Comments</TabsTrigger>
 
-          <TabsTrigger value="liked-shouts" className={`flex-1 text-lg
+              <TabsTrigger value="liked-shouts" className={`flex-1 text-lg
             ${activeTab === "liked-shouts" ? "underline decoration-2 underline-offset-20" : ""}`}>Liked Shouts</TabsTrigger>
 
 
-          <TabsTrigger value="media" className={`flex-1 text-lg
+              <TabsTrigger value="media" className={`flex-1 text-lg
             ${activeTab === "media" ? "underline decoration-2 underline-offset-20" : ""}`}>Media</TabsTrigger>
 
-        </TabsList>
-        {/* Shouts Tab Content */}
-        <TabsContent value="shouts" className='m-0'>
-          <RenderShouts isLoading={isLoadingShouts} shouts={shouts ? shouts : []}></RenderShouts>
-        </TabsContent>
-        {/* Replies Tab Content */}
-        <TabsContent value="comments" className='m-0'>
-          <RenderShouts isLoading={isLoadingShouts} shouts={userComments ? userComments : []}></RenderShouts>
-        </TabsContent>
+            </TabsList>
+            {/* Shouts Tab Content */}
+            <TabsContent value="shouts" className='m-0'>
+              <RenderShouts isLoading={isLoadingShouts} shouts={shouts ? shouts : []}></RenderShouts>
+            </TabsContent>
+            {/* Replies Tab Content */}
+            <TabsContent value="comments" className='m-0'>
+              <RenderShouts isLoading={isLoadingShouts} shouts={userComments ? userComments : []}></RenderShouts>
+            </TabsContent>
 
-        <TabsContent value="liked-shouts" className='m-0'>
-          <RenderShouts isLoading={isLoadingLikedShouts} shouts={likedShouts ? likedShouts : []}></RenderShouts>
-        </TabsContent>
-        {/* Media Tab Content */}
-        <TabsContent value="media" className='m-0'>
-          <div className='grid grid-cols-3'>
-            {images?.map((img, index) => (
-              <div key={img + index} className="relative aspect-square">
-                <CldImage fill src={img} alt={img} crop="fill" format="auto" quality="auto" sizes="200px" className="object-cover" />
+            <TabsContent value="liked-shouts" className='m-0'>
+              <RenderShouts isLoading={isLoadingLikedShouts} shouts={likedShouts ? likedShouts : []}></RenderShouts>
+            </TabsContent>
+            {/* Media Tab Content */}
+            <TabsContent value="media" className='m-0'>
+              <div className='grid grid-cols-3'>
+                {images?.map((img, index) => (
+                  <div key={img + index} className="relative aspect-square">
+                    <CldImage fill src={img} alt={img} crop="fill" format="auto" quality="auto" sizes="200px" className="object-cover" />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
+            </TabsContent>
+          </Tabs>
+        </>
+      )}
     </div>
   )
 }
