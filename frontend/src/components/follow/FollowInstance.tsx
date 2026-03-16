@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Ellipsis } from 'lucide-react'
 import { CldImage } from 'next-cloudinary'
-import type { Follow as FollowInstance } from '@/types/Follow'
+import type { Follow } from '@/types/Follow'
 import { useFollow } from '@/hooks/use-follow'
 import { useRouter } from 'next/navigation'
 
@@ -14,17 +14,19 @@ import { useRouter } from 'next/navigation'
  * and a "Follows you" badge when the listed user is following the current user.
  * Clicking the row navigates to the listed user's account page.
  */
-const FollowInstance = ({ name, username, bio, avatar, userFollowingTarget, targetFollowingUser }: Omit<FollowInstance, "id">) => {
+
+const FollowInstance = ({ name, username, bio, avatar,
+    userFollowingTarget, targetFollowingUser }: Omit<Follow, "id">) => {
 
   // src must be defined
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
-  const { followText, onToggleFollow } = useFollow({username, userFollowingTarget});
+  const { followText, onToggleFollow } = useFollow({ username, userFollowingTarget });
   const router = useRouter();
 
   return (
     <div className='w-full px-3 py-5 flex flex-row items-start gap-2 hover:bg-gray-800 
     transition ease-out duration-400'
-    onClick={() => router.push(`/${username}`)}>
+      onClick={() => router.push(`/${username}`)}>
 
       {/* Avatar */}
       <div className="relative w-13 h-13 rounded-full border-4 border-black 
@@ -52,12 +54,12 @@ const FollowInstance = ({ name, username, bio, avatar, userFollowingTarget, targ
             <div className='flex flex-row items-center gap-1'>
               <span className='max-w-[80px] truncate 
             md:max-w-none md:whitespace-normal'
-            data-testid="username-in-list">@{username}</span>
+                data-testid="username-in-list">@{username}</span>
 
               {/* "Follows You" Badge */}
               {targetFollowingUser &&
-              <span className='p-1 bg-gray-800 text-xs'>Follows you</span>}
-              
+                <span className='p-1 bg-gray-800 text-xs'>Follows you</span>}
+
 
             </div>
           </div>
@@ -66,8 +68,8 @@ const FollowInstance = ({ name, username, bio, avatar, userFollowingTarget, targ
           <div className='flex-1 flex flex-row gap-2 items-center'>
             <Button variant={!userFollowingTarget ? "outline" : "secondary"}
               className={"flex-1 h-11 py-1 rounded-xl"}
-               onClick={onToggleFollow}
-               data-testid="follow-btn-in-list">
+              onClick={onToggleFollow}
+              data-testid="follow-btn-in-list">
               {followText}
             </Button>
             <Ellipsis className='flex-1'></Ellipsis>

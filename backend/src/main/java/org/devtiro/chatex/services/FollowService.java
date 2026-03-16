@@ -25,6 +25,7 @@ public interface FollowService {
     Set<User> searchFollowResultByUsername(String username, UUID userId);
 
     Set<User> searchFollowRecommendationByUsername(String username, UUID userId);
+
     /**
      * Returns all users that the user with the given username is following.
      * Loads the following list via a JOIN FETCH query to avoid lazy-loading issues.
@@ -54,22 +55,6 @@ public interface FollowService {
      *         otherwise
      */
     boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId);
-
-    /**
-     * Returns the subset of {@code idsInList} that the given user is following.
-     * Used for mass status checks to avoid the n+1 problem.
-     *
-     * @return a Set of UUIDs from {@code idsInList} that the user follows
-     */
-    Set<UUID> findFollowingIdsIn(UUID userId, Set<UUID> idsInList);
-
-    /**
-     * Returns the subset of {@code idsInList} that are following the given user.
-     * Used for mass status checks to avoid the n+1 problem.
-     *
-     * @return a Set of UUIDs from {@code idsInList} that follow the user
-     */
-    Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList);
 
     /**
      * Enriches a set of users with follow-status badges relative to the requesting

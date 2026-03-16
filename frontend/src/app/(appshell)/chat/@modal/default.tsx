@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import {
 import SearchInput from '@/components/shared/SearchInput';
 import RecentlyViewedUser from '@/components/chat/RecentlyViewedInstance';
 import { useGetRecentlyViewedUsersQuery } from '@redux/api/userApi';
+import { useChat } from '@/hooks/use-chat';
 
 const DefaultChatView = () => {
 
@@ -41,7 +42,7 @@ const DefaultChatView = () => {
             <DialogTitle>New Chat</DialogTitle>
           </DialogHeader>
           
-          <SearchInput />
+          <SearchInput variant='CHAT'/>
 
           <div className=''>
             <h3>Recently viewed Users by you</h3>

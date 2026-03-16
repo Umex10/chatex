@@ -8,13 +8,20 @@ import FollowInstance from '../follow/FollowInstance';
 import FollowInstanceSkeleton from '../follow/FollowInstanceSkeleton';
 import { Skeleton } from '../ui/skeleton';
 import { useRouter } from 'next/navigation';
+import { useChat } from '@/hooks/use-chat';
 
-const SearchInput = () => {
+interface SearchInputArgs {
+  variant: "ACCOUNT" | "CHAT";
+}
+
+const SearchInput = ({ variant }: SearchInputArgs) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+   const {handleCreateChat} = useChat();
 
   const router = useRouter();
 
@@ -132,7 +139,11 @@ const SearchInput = () => {
               ) : (
                 searchedUsers?.map(user => (
                   <li key={user.username} onClick={(e) => {
-                    router.push(`/chat/messages/${user.id}`);
+                    if (variant === "ACCOUNT") router.push(`/${user.username}`);
+                    if (variant === "CHAT") {
+                      if (user.user)
+                       handleCreateChat(user.username);
+                    };
                     setIsOpen(false);
                     e.stopPropagation();
                   }}>

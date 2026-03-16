@@ -133,30 +133,6 @@ public class FollowServiceIpl implements FollowService {
     }
 
     /**
-     * Returns the subset of {@code idsInList} that the given user is following.
-     * Used for mass status checks to avoid the n+1 problem when rendering follow
-     * badges.
-     *
-     * @return a Set of UUIDs from {@code idsInList} that the user follows
-     */
-    @Override
-    public Set<UUID> findFollowingIdsIn(UUID userId, Set<UUID> idsInList) {
-        return userRep.findFollowingIdsIn(userId, idsInList);
-    }
-
-    /**
-     * Returns the subset of {@code idsInList} that are following the given user.
-     * Used for mass status checks to avoid the n+1 problem when rendering follow
-     * badges.
-     *
-     * @return a Set of UUIDs from {@code idsInList} that follow the user
-     */
-    @Override
-    public Set<UUID> findFollowersIdsIn(UUID userId, Set<UUID> idsInList) {
-        return userRep.findFollowersIdsIn(userId, idsInList);
-    }
-
-    /**
      * Enriches a set of users with follow-status badges relative to the requesting
      * user.
      * Uses a single batch IN-query to avoid the n+1 problem: instead of querying
@@ -171,15 +147,19 @@ public class FollowServiceIpl implements FollowService {
     public List<FollowDto> handleFollowBadges(UUID userId, Set<User> users) {
         Set<UUID> idsInList = users.stream().map(User::getId).collect(Collectors.toSet());
 
-        Set<UUID> followedMe = findFollowersIdsIn(userId, idsInList);
-        Set<UUID> followedByMe = findFollowingIdsIn(userId, idsInList);
+        Set<UUID> followedMe = userRep.findFollowingIdsIn(userId, idsInList);
+        Set<UUID> following = userRep.findFollowingIdsIn(userId, idsInList);
+        Set<UUID> silencedByUsers = userRep.findSilencedByUsersIdsIn(userId, idsInList);
+        Set<UUID> silencedUsers = userRep.findSilencedUsersIdsIn(userId, idsInList);
 
-        List<FollowDto> followingDto = followMapper.toDtoList(users);
+        List<FollowDto> followDto = followMapper.toDtoList(users);
 
-        followingDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
-        followingDto.forEach(dto -> dto.setUserFollowingTarget(followedByMe.contains(dto.getId())));
+        followDto.forEach(dto -> dto.setTargetFollowingUser(followedMe.contains(dto.getId())));
+        followDto.forEach(dto -> dto.setUserFollowingTarget(following.contains(dto.getId())));
+        followDto.forEach(dto -> dto.setTargetSilencingUser(silencedByUsers.contains(dto.getId())));
+        followDto.forEach(dto -> dto.setUserSilencingTarget(silencedUsers.contains(dto.getId())));
 
-        return followingDto;
+        return followDto;
     }
 
 }

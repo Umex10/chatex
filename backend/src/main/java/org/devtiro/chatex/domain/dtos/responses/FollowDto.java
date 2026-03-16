@@ -8,7 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Data Transfer Object representing a user entry in a follower or following list.
+ * Data Transfer Object representing a user entry in a follower or following
+ * list.
  * In addition to basic profile fields it carries two follow-status flags that
  * indicate the relationship between the requesting user and the listed user.
  */
@@ -25,5 +26,7 @@ public class FollowDto {
   private String bio;
   private boolean userFollowingTarget;
   private boolean targetFollowingUser;
+  private boolean userSilencingTarget;
+  private boolean targetSilencingUser;
 
 }

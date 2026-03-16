@@ -105,7 +105,7 @@ export const Layout = ({
                   {/* search input with left icon */}
 
                   {!isSearchPage ? (
-                    <SearchInput></SearchInput>
+                    <SearchInput variant='ACCOUNT'></SearchInput>
                   ) : (
 
                     <div className='h-1 w-full bg-violet-500 '></div>

@@ -51,12 +51,7 @@ public class ChatServiceIpl implements ChatService {
         .me(me)
         .build();
 
-    chatRep.save(chat);
-
-    userRep.save(chatUser);
-    userRep.save(me);
-
-    return chat;
+    return chatRep.saveAndFlush(chat);
   }
 
 }

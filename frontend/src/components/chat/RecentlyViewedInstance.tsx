@@ -1,5 +1,6 @@
 "use client"
 
+import { useChat } from '@/hooks/use-chat'
 import { useCreateChatMutation } from '@redux/api/chatApi'
 import { CldImage } from 'next-cloudinary'
 import { useRouter } from 'next/navigation'
@@ -14,32 +15,19 @@ interface RecommendationArgs {
 const RecentlyViewedUser = ({ name, username, avatar }: RecommendationArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
-  const router = useRouter();
-
-  const [createChat] = useCreateChatMutation();
-
-  const handleCreateChat = async () => {
-    try {
-      const res = await createChat(username).unwrap();
-
-      router.push(`/chat/messages/${res.id}`);
-    } catch (error: any) {
-      const errorMessage = error?.message || "An error occurred while creating a new chat.";
-      console.error(errorMessage);
-    }
-  }
+  const {handleCreateChat} = useChat();
 
   return (
     <div className='w-full py-2 flex flex-row items-center gap-2 hover:bg-gray-800 
     transition ease-out duration-400'
-      onClick={() => handleCreateChat()}>
+      onClick={() => handleCreateChat(username)}>
 
       {/* Avatar */}
       <div className="relative w-15 h-15 rounded-full border-4 border-black 
       overflow-hidden bg-zinc-900">
         <CldImage
           width="56"
-          height="56"
+          height="56" 
           src={avatarSrc}
           alt="User Avatar"
           crop="thumb"

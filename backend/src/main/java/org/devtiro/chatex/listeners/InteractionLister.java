@@ -30,7 +30,7 @@ public class InteractionLister {
         targetUser,
         viewerId);
 
-    System.out.println("Listener: Interaktion for user " + event.getTargetUser().getUsername() + " conducted!");
+    System.out.println("Listener: Interaction for user " + event.getTargetUser().getUsername() + " conducted!");
   }
 
 }

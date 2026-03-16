@@ -91,6 +91,18 @@ public interface UserRep extends JpaRepository<User, UUID> {
             @Param("userId") UUID userId);
 
     /**
+     * Checks whether the user identified by {@code targetUsername} is following
+     * the user identified by {@code userId}.
+     *
+     * @return {@code true} if the target follows the authenticated user,
+     *         {@code false} otherwise
+     */
+    @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.followers f WHERE u.id = :userId AND f.username = :targetUsername")
+    boolean isTargetFollowingUser(
+            @Param("targetUsername") String targetUsername,
+            @Param("userId") UUID userId);
+
+    /**
      * Returns the subset of {@code targetIds} that the user identified by
      * {@code myId}
      * is following. Used for mass badge checks to avoid the n+1 problem.
@@ -113,6 +125,12 @@ public interface UserRep extends JpaRepository<User, UUID> {
      */
     @Query("SELECT f.id FROM User u JOIN u.followers f WHERE u.id = :myId AND f.id IN :targetIds")
     Set<UUID> findFollowersIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
+
+     @Query("SELECT f.id FROM User u JOIN u.silencedUsers f WHERE u.id = :myId AND f.id IN :targetIds")
+    Set<UUID> findSilencedUsersIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
+
+     @Query("SELECT f.id FROM User u JOIN u.silencedBy f WHERE u.id = :myId AND f.id IN :targetIds")
+    Set<UUID> findSilencedByUsersIdsIn(@Param("myId") UUID myId, @Param("targetIds") Set<UUID> targetIds);
 
     @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.silencedUsers s WHERE u.id = :userId AND s.username = :targetUsername")
     boolean isUserSilencingTarget(

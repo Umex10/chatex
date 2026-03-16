@@ -54,6 +54,8 @@ public class ChatController {
 
     Chat chat = chatService.createChat(username, userId);
 
+    System.out.println("Newly Chat created: " + chat.getId());
+
     ChatDto chatDto = chatMapper.toDto(chat);
 
     return new ResponseEntity<>(chatDto, HttpStatus.OK);

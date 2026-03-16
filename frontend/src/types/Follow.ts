@@ -7,5 +7,7 @@ export interface Follow {
   avatar: string,
   bio: string,
   userFollowingTarget: boolean,
-  targetFollowingUser: boolean
+  targetFollowingUser: boolean,
+  isUserSilencingTarget: boolean,
+  isTargetSilencingUser: boolean
 }
