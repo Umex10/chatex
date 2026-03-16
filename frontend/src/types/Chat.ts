@@ -12,5 +12,6 @@ export interface Chat {
   name: string,
   username: string,
   avatar: string,
+  createdUserAt: string,
   lastMessage: Message
 }

@@ -35,7 +35,11 @@ public class Chat {
   private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "me_user_id", nullable = false)
+  private User me;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "chat_user_id", nullable = false)
   private User chatUser;
 
   @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

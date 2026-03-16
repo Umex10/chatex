@@ -10,24 +10,12 @@ const Page = () => {
 
   return (
     <div>
-      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
-        lastMessageCreatedAt='2026-03-03'></ChatInstance>
-      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
-        lastMessageCreatedAt='2026-03-03'></ChatInstance>
-      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
-        lastMessageCreatedAt='2026-03-03'></ChatInstance>
-      <ChatInstance avatar='' name='Max' lastMessage='Lol!'
-        lastMessageCreatedAt='2026-03-03'></ChatInstance>
-
-      <ul>
+   
         {chats?.map(chat => (
-          <ChatInstance key={chat.username} avatar={chat.avatar} name={chat.name}
-            lastMessage={chat.lastMessage.text} lastMessageCreatedAt={chat.lastMessage.createdAt}></ChatInstance>
-        ))}
-      </ul>
-
-
-    </div>
+          <ChatInstance key={chat.username} chatId={chat.id} avatar={chat.avatar} name={chat.name}
+            lastMessage={"LoL!"} 
+            lastMessageCreatedAt="2026-03-03"></ChatInstance>
+        ))}    </div>
   )
 }
 

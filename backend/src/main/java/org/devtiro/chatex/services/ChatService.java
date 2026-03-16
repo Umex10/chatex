@@ -10,4 +10,8 @@ public interface ChatService {
 
   Set<Chat> getChats(UUID userId);
 
+  Chat getChat(UUID chatId);
+
+  Chat createChat(String username, UUID userId);
+
 }

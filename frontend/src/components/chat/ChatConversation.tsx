@@ -24,7 +24,13 @@ export interface ChatMessage {
 
 interface ChatConversationProps {
   messages: ChatMessage[];
-  chatUser: User | undefined
+  chatUser: {
+    id: string,
+    name: string,
+    username: string,
+    avatar: string,
+    createdUserAt: string
+  }
 }
 
 export default function ChatConversation({ messages, chatUser }: ChatConversationProps) {
@@ -96,7 +102,7 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
             <SquareAsterisk className="w-4 h-4 text-gray-400" />
           </div>
           <span className='text-gray-500 text-base'>@{chatUser?.username}</span>
-          <span className='text-gray-500 text-base'>{joinedAccountDate(chatUser?.createdAt ?? "")}</span>
+          <span className='text-gray-500 text-base'>{joinedAccountDate(chatUser?.createdUserAt ?? "")}</span>
 
           <Button variant="outline" className="mt-4 rounded-full bg-white text-black 
           font-bold px-6 py-2 border-none"

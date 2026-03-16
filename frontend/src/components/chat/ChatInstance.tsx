@@ -1,23 +1,28 @@
 "use client"
 
 import { joinedShoutDate } from '@/utils/joinedDate'
+import { useGetChatQuery } from '@redux/api/chatApi'
 import { CldImage } from 'next-cloudinary'
-import React from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface MessageArgs {
+  chatId: string,
   avatar: string,
   name: string,
   lastMessage: string,
   lastMessageCreatedAt: string
 }
 
-const ChatInstance = ({ avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
+const ChatInstance = ({chatId, avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
+  const router = useRouter();
+
   return (
     <div className='px-3 py-5 w-full flex flex-row items-center gap-2 hover:bg-gray-800 
-    transition ease-out duration-400'>
+    transition ease-out duration-400'
+      onClick={() => router.push(`/chat/messages/${chatId}`)}>
 
       <div className="relative w-15 h-15 rounded-full border-4 border-black 
       overflow-hidden bg-zinc-900">

@@ -11,6 +11,8 @@ import org.devtiro.chatex.services.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +36,27 @@ public class ChatController {
     List<ChatDto> chatsDto = chatMapper.toDtoList(chats); 
 
     return new ResponseEntity<>(chatsDto, HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/{chatId}")
+  public ResponseEntity<ChatDto> getChat(@PathVariable UUID chatId) {
+
+    Chat chat = chatService.getChat(chatId);
+
+    ChatDto chatDto = chatMapper.toDto(chat);
+
+    return new ResponseEntity<>(chatDto, HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/{username}")
+  public ResponseEntity<ChatDto> createChat(@PathVariable String username,
+    @RequestAttribute UUID userId) {
+
+    Chat chat = chatService.createChat(username, userId);
+
+    ChatDto chatDto = chatMapper.toDto(chat);
+
+    return new ResponseEntity<>(chatDto, HttpStatus.OK);
   }
 
 }
