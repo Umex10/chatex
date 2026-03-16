@@ -20,7 +20,7 @@ const LikedByPage = () => {
       <ReturnHeader returnText='Liked By'></ReturnHeader>
 
       {/* Renders the list of users who liked the shout */}
-      <RenderFollowList list={likedUsers ? likedUsers : []}
+      <RenderFollowList variant='ACCOUNT' list={likedUsers ? likedUsers : []}
         isLoading={isLoading}></RenderFollowList>
     </div>
   )

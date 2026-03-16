@@ -15,7 +15,7 @@ import {
 import SearchInput from '@/components/shared/SearchInput';
 import RecentlyViewedUser from '@/components/chat/RecentlyViewedInstance';
 import { useGetRecentlyViewedUsersQuery } from '@redux/api/userApi';
-import { useChat } from '@/hooks/use-chat';
+import RenderFollowList from '@/components/follow/RenderFollowList';
 
 const DefaultChatView = () => {
 
@@ -47,11 +47,9 @@ const DefaultChatView = () => {
           <div className=''>
             <h3>Recently viewed Users by you</h3>
 
-            <ul className='overflow-y-scroll max-h-[40vh]'>
-              {recentlyViewedUsers?.map(user => (
-                <RecentlyViewedUser key={user.username} {...user}></RecentlyViewedUser>
-              ))}
-            </ul>
+            <div className='flex flex-col overflow-y-scroll max-h-[40vh]'>
+               <RenderFollowList variant='CHAT' list={recentlyViewedUsers ? recentlyViewedUsers : []} isLoading={isLoading}></RenderFollowList>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

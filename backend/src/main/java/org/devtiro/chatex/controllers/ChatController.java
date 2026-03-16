@@ -10,6 +10,7 @@ import org.devtiro.chatex.domain.mappers.ChatMapper;
 import org.devtiro.chatex.services.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +28,12 @@ public class ChatController {
   private final ChatService chatService;
   private final ChatMapper chatMapper;
 
-
   @GetMapping
   public ResponseEntity<List<ChatDto>> getChats(@RequestAttribute UUID userId) {
 
     Set<Chat> chats = chatService.getChats(userId);
 
-    List<ChatDto> chatsDto = chatMapper.toDtoList(chats); 
+    List<ChatDto> chatsDto = chatMapper.toDtoList(chats);
 
     return new ResponseEntity<>(chatsDto, HttpStatus.OK);
   }
@@ -48,9 +48,17 @@ public class ChatController {
     return new ResponseEntity<>(chatDto, HttpStatus.OK);
   }
 
+  @DeleteMapping(path = "/{chatId}")
+  public ResponseEntity<Void> deleteChat(@PathVariable UUID chatId) {
+
+    chatService.deleteChat(chatId);
+
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
   @PostMapping(path = "/{username}")
   public ResponseEntity<ChatDto> createChat(@PathVariable String username,
-    @RequestAttribute UUID userId) {
+      @RequestAttribute UUID userId) {
 
     Chat chat = chatService.createChat(username, userId);
 

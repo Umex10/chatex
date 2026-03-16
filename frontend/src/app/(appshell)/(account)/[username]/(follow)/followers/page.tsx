@@ -22,7 +22,7 @@ const Followers = () => {
   return (
     <div className='flex flex-col'>
       {/* Renders the Follow list using the fetched followers */}
-      <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
+      <RenderFollowList variant='ACCOUNT' list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
     </div>
   )
 }

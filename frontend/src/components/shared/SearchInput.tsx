@@ -21,10 +21,6 @@ const SearchInput = ({ variant }: SearchInputArgs) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-   const {handleCreateChat} = useChat();
-
-  const router = useRouter();
-
   const { data: searchedUsers, isLoading: isLoadingSearchedUsers } = useSearchFollowQuery(debouncedQuery, {
     skip: debouncedQuery.length < 2
   });
@@ -138,16 +134,8 @@ const SearchInput = ({ variant }: SearchInputArgs) => {
                 </>
               ) : (
                 searchedUsers?.map(user => (
-                  <li key={user.username} onClick={(e) => {
-                    if (variant === "ACCOUNT") router.push(`/${user.username}`);
-                    if (variant === "CHAT") {
-                      if (user.user)
-                       handleCreateChat(user.username);
-                    };
-                    setIsOpen(false);
-                    e.stopPropagation();
-                  }}>
-                    <FollowInstance {...user}></FollowInstance>
+                  <li key={user.username} onClick={(e) => setIsOpen(false)}>
+                    <FollowInstance userData={user} variant={variant}></FollowInstance>
                   </li>
                 ))
               )}

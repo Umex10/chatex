@@ -1,6 +1,7 @@
 import { User } from '@/types/User';
 import { AccountSchemaValues } from '@/components/account/SettingsForm';
 import { apiSlice } from './apiSlice';
+import { Follow } from '@/types/Follow';
 
 /**
  * User-specific endpoints injected into the base API slice.
@@ -31,7 +32,7 @@ const userApi = apiSlice.injectEndpoints({
       invalidatesTags: ['User']
     }),
 
-    getRecentlyViewedUsers: builder.query<User[], void>({
+    getRecentlyViewedUsers: builder.query<Follow[], void>({
       query: () => "/user/recentlyViewedUsers",
     }),
 

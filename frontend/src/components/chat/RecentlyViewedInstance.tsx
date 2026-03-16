@@ -1,10 +1,7 @@
 "use client"
 
 import { useChat } from '@/hooks/use-chat'
-import { useCreateChatMutation } from '@redux/api/chatApi'
 import { CldImage } from 'next-cloudinary'
-import { useRouter } from 'next/navigation'
-import React from 'react'
 
 interface RecommendationArgs {
   name: string

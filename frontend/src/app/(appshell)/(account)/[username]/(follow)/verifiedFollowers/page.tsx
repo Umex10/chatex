@@ -22,7 +22,7 @@ const VerfiedFollowers = () => {
   return (
     <div className='flex flex-col'>
       {/* Renders the Follow list using the fetched verified followers */}
-      <RenderFollowList list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
+      <RenderFollowList variant='ACCOUNT' list={followers ? followers : []} isLoading={isLoading}></RenderFollowList>
     </div>
   )
 }

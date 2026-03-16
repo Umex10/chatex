@@ -5,10 +5,11 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 interface RenderFollowsArgs {
   list: Follow[],
-  isLoading: boolean
+  isLoading: boolean,
+  variant: "ACCOUNT" | "CHAT"
 }
 
-const RenderFollowList = ({ list, isLoading }: RenderFollowsArgs) => {
+const RenderFollowList = ({ list, isLoading, variant }: RenderFollowsArgs) => {
   return (
     <div className='w-full flex-1 border-y'>
       {/* Loading State with Skeleton */}
@@ -27,19 +28,21 @@ const RenderFollowList = ({ list, isLoading }: RenderFollowsArgs) => {
         </div>
       ) : (
 
-        <div className='flex flex-col gap-5'>
+        <ul className='flex flex-col gap-5'>
 
           {/* Following List */}
           {list && list.length > 0 ? (
             list.map(user => (
-              <FollowInstance {...user} key={user.username} />
+              <li key={user.username}>
+                <FollowInstance userData={user} variant={variant} />
+              </li>
             ))
           ) : (
             <div className="flex justify-center items-center py-10 text-muted-foreground border-b text-center">
               No follow accounts could be found.
             </div>
           )}
-        </div>
+        </ul>
       )}
     </div>
   )

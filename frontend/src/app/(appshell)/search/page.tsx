@@ -8,7 +8,7 @@ const SearchPage = () => {
     <div className='w-full'>
       <div className='w-full flex flex-col p-3'>
         <div className='w-full relative z-10'>
-          <SearchInput />
+          <SearchInput variant='ACCOUNT'/>
         </div>
 
         <div className='pt-3 mx-auto text-muted-foreground'>

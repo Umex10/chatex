@@ -20,6 +20,7 @@ import { Activity } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { ShoutView } from './ShoutView';
+import TrashButton from '../shared/TrashButton';
 
 
 /** Formats large numbers to short human-readable strings (e.g. 1500 → 1.5K). */
@@ -173,13 +174,7 @@ const ShoutInstance = (data: Shout) => {
                 />
               </div>
 
-              <Button size="icon" variant="secondary" className='bg-transparent'
-                onClick={(e) => {
-                  deleteShout(id)
-                  e.stopPropagation();
-                }}>
-                <Trash className="w-4 h-4" />
-              </Button>
+              <TrashButton deleteQuery={() => deleteShout(id)}></TrashButton>
             </div>
 
           </div>

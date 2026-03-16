@@ -6,6 +6,7 @@ import java.util.Set;
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.entities.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * MapStruct mapper interface for converting User entities to FollowDto
@@ -25,6 +26,10 @@ public interface FollowMapper {
    *
    * @return the mapped FollowDto
    */
+  @Mapping(target = "userFollowingTarget", ignore = true)
+  @Mapping(target = "targetFollowingUser", ignore = true)
+  @Mapping(target = "userSilencingTarget", ignore = true)
+  @Mapping(target = "targetSilencingUser", ignore = true)
   FollowDto toDto(User user);
 
   List<FollowDto> toDtoList(List<User> users);

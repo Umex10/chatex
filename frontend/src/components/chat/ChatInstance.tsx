@@ -1,9 +1,10 @@
 "use client"
 
 import { joinedShoutDate } from '@/utils/joinedDate'
-import { useGetChatQuery } from '@redux/api/chatApi'
+import { useDeleteChatMutation, useGetChatQuery } from '@redux/api/chatApi'
 import { CldImage } from 'next-cloudinary'
 import { usePathname, useRouter } from 'next/navigation'
+import TrashButton from '../shared/TrashButton'
 
 interface MessageArgs {
   chatId: string,
@@ -13,11 +14,13 @@ interface MessageArgs {
   lastMessageCreatedAt: string
 }
 
-const ChatInstance = ({chatId, avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
+const ChatInstance = ({ chatId, avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
   const router = useRouter();
+
+  const [deleteChat, { isLoading }] = useDeleteChatMutation();
 
   return (
     <div className='px-3 py-5 w-full flex flex-row items-center gap-2 hover:bg-gray-800 
@@ -46,11 +49,14 @@ const ChatInstance = ({chatId, avatar, name, lastMessage, lastMessageCreatedAt }
             {name}
           </p>
 
-          <p className='text-base opacity-70'>
-            {joinedShoutDate(lastMessageCreatedAt)}
-          </p>
-        </div>
+          <div className='flex flex-row gap-1 items-center'>
+            <p className='text-base opacity-70'>
+              {joinedShoutDate(lastMessageCreatedAt)}
+            </p>
+            <TrashButton deleteQuery={() => deleteChat(chatId)}></TrashButton>
+          </div>
 
+        </div>
 
         <div className='opacity-70 text-base'>
           You: {lastMessage}

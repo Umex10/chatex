@@ -19,7 +19,7 @@ const ReShoutsPage = () => {
 
   return (
     /* Re-shouters List Render */
-    < RenderFollowList list={reShoutedUsers ? reShoutedUsers : []}
+    < RenderFollowList variant='ACCOUNT' list={reShoutedUsers ? reShoutedUsers : []}
       isLoading={isLoading} ></RenderFollowList >
 
   )

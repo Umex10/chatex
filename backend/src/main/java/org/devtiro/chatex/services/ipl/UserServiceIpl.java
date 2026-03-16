@@ -16,7 +16,6 @@ import org.devtiro.chatex.domain.dtos.responses.ApiError;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.domain.exceptions.OwnException;
 import org.devtiro.chatex.reps.UserRep;
-import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,6 @@ public class UserServiceIpl implements UserService {
 
     private final UserRep userRep;
     private final PasswordEncoder encoder;
-    private final FollowService followService;
 
     /**
      * Creates a new user account with validation.
@@ -200,5 +198,4 @@ public class UserServiceIpl implements UserService {
     public boolean isTargetSilencingUser(String username, UUID userId) {
         return userRep.isTargetSilencingUser(username, userId);
     }
-
 }

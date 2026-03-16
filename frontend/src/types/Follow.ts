@@ -8,6 +8,6 @@ export interface Follow {
   bio: string,
   userFollowingTarget: boolean,
   targetFollowingUser: boolean,
-  isUserSilencingTarget: boolean,
-  isTargetSilencingUser: boolean
+  userSilencingTarget: boolean,
+  targetSilencingUser: boolean
 }

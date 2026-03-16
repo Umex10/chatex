@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
-import org.devtiro.chatex.domain.dtos.responses.RecentlyViewedUsersDto;
+import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.domain.mappers.RecentlyViewedUsersDtoMapper;
+import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.UserService;
@@ -29,7 +29,6 @@ public class UserController {
     private final UserService userService;
     private final FollowService followService;
     private final UserMapper userMapper;
-    private final RecentlyViewedUsersDtoMapper recentlyViewedUsersDtoMapper;
 
     // ==========================================
     // QUERIES (GET)
@@ -99,14 +98,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/recentlyViewedUsers")
-    public ResponseEntity<List<RecentlyViewedUsersDto>> getRecentlyViewedUsers(@RequestAttribute UUID userId) {
+    public ResponseEntity<List<FollowDto>> getRecentlyViewedUsers(@RequestAttribute UUID userId) {
 
         Set<User> recentlyViewedUsers = userService.getRecentlyViewedUsers(userId);
 
-        List<RecentlyViewedUsersDto> recentlyViewedusersDto = recentlyViewedUsersDtoMapper
-                .toDtoList(recentlyViewedUsers);
+        List<FollowDto> recentlyViewedUsersDto = followService.handleFollowBadges(userId, recentlyViewedUsers);
 
-        return new ResponseEntity<>(recentlyViewedusersDto, HttpStatus.OK);
+        return new ResponseEntity<>(recentlyViewedUsersDto, HttpStatus.OK);
     }
 
     @PostMapping(path = "/{username}/silence")

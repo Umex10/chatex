@@ -14,4 +14,5 @@ public interface ChatService {
 
   Chat createChat(String username, UUID userId);
 
+  void deleteChat(UUID chatId);
 }

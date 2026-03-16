@@ -54,4 +54,9 @@ public class ChatServiceIpl implements ChatService {
     return chatRep.saveAndFlush(chat);
   }
 
+  @Override
+  public void deleteChat(UUID chatId) {
+    chatRep.deleteById(chatId);
+  }
+
 }

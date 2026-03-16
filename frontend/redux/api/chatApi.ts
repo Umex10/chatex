@@ -23,6 +23,14 @@ const chatApi = apiSlice.injectEndpoints({
         method: 'POST'
       }),
       invalidatesTags: ['User']
+    }),
+
+    deleteChat: builder.mutation<void, string>({
+      query: (username) => ({
+        url: `/chat/${username}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['User']
     })
   }),
 });
@@ -30,5 +38,6 @@ const chatApi = apiSlice.injectEndpoints({
 export const {
   useGetChatsQuery,
   useGetChatQuery,
-  useCreateChatMutation
+  useCreateChatMutation,
+  useDeleteChatMutation
 } = chatApi;
