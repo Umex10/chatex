@@ -3,8 +3,6 @@ package org.devtiro.chatex.domain.entities;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.devtiro.chatex.domain.enums.UserSide;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
@@ -14,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -46,8 +45,13 @@ public class Message {
   @Column
   private boolean read;
 
-  @Column 
-  private UserSide userSide;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_sender_id", nullable = false)
+  private User sender;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_receiver_id")
+  private User receiver;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "chat_id", nullable = false)

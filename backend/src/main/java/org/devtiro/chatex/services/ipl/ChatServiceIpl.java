@@ -32,7 +32,7 @@ public class ChatServiceIpl implements ChatService {
 
   @Override
   public Chat getChat(UUID chatId) {
-    return chatRep.findById(chatId)
+    return chatRep.findChatWithMessages(chatId)
         .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
   }
 

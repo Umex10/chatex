@@ -1,6 +1,7 @@
 package org.devtiro.chatex.domain.dtos.responses;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.entities.Message;
@@ -22,5 +23,6 @@ public class ChatDto {
   private String avatar;
   private LocalDate createdUserAt;
   private Message lastMessage;
+  private List<Message> messages;
 
 }

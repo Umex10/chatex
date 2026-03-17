@@ -55,6 +55,8 @@ public interface FollowService {
      *         otherwise
      */
     boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId);
+    
+    boolean isTargetFollowingUser(String targetUsername, UUID requestingUserId);
 
     /**
      * Enriches a set of users with follow-status badges relative to the requesting

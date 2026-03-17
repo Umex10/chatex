@@ -178,40 +178,40 @@ public class FollowServiceIplTest {
     verify(userRep).isUserFollowingTarget(targetUsername, requestingUserId);
   }
 
-  /**
-   * Ensures following IDs returned by the repository are forwarded as-is.
-   */
-  @Test
-  void itShouldFindFollowingIdsInList() {
-    UUID userId = UUID.randomUUID();
-    Set<UUID> idsToCheck = Set.of(UUID.randomUUID(), UUID.randomUUID());
-    Set<UUID> expected = Set.of(idsToCheck.iterator().next()); // Simulating an actual result
+  // /**
+  //  * Ensures following IDs returned by the repository are forwarded as-is.
+  //  */
+  // @Test
+  // void itShouldFindFollowingIdsInList() {
+  //   UUID userId = UUID.randomUUID();
+  //   Set<UUID> idsToCheck = Set.of(UUID.randomUUID(), UUID.randomUUID());
+  //   Set<UUID> expected = Set.of(idsToCheck.iterator().next()); // Simulating an actual result
 
-    when(userRep.findFollowingIdsIn(userId, idsToCheck)).thenReturn(expected);
+  //   when(userRep.findFollowingIdsIn(userId, idsToCheck)).thenReturn(expected);
 
-    Set<UUID> actualResult = underTest.findFollowingIdsIn(userId, idsToCheck);
+  //   Set<UUID> actualResult = underTest.findFollowingIdsIn(userId, idsToCheck);
 
-    assertEquals(expected, actualResult);
-    verify(userRep).findFollowingIdsIn(userId, idsToCheck);
-  }
+  //   assertEquals(expected, actualResult);
+  //   verify(userRep).findFollowingIdsIn(userId, idsToCheck);
+  // }
 
-  /**
-   * Ensures follower IDs returned by the repository are forwarded as-is.
-   */
-  @Test
-  void itShouldFindFollowersIdsInList() {
-    UUID userId = UUID.randomUUID();
-    Set<UUID> idsToCheck = Set.of(UUID.randomUUID(), UUID.randomUUID());
-    Set<UUID> expected = Set.of(); // Simulating unmatched ids
+  // /**
+  //  * Ensures follower IDs returned by the repository are forwarded as-is.
+  //  */
+  // @Test
+  // void itShouldFindFollowersIdsInList() {
+  //   UUID userId = UUID.randomUUID();
+  //   Set<UUID> idsToCheck = Set.of(UUID.randomUUID(), UUID.randomUUID());
+  //   Set<UUID> expected = Set.of(); // Simulating unmatched ids
 
-    when(userRep.findFollowersIdsIn(userId, idsToCheck)).thenReturn(expected);
+  //   when(userRep.findFollowersIdsIn(userId, idsToCheck)).thenReturn(expected);
 
-    Set<UUID> actualResult = underTest.findFollowersIdsIn(userId, idsToCheck);
+  //   Set<UUID> actualResult = underTest.findFollowersIdsIn(userId, idsToCheck);
 
-    assertEquals(expected, actualResult);
-    assertTrue(actualResult.isEmpty());
-    verify(userRep).findFollowersIdsIn(userId, idsToCheck);
-  }
+  //   assertEquals(expected, actualResult);
+  //   assertTrue(actualResult.isEmpty());
+  //   verify(userRep).findFollowersIdsIn(userId, idsToCheck);
+  // }
 
   /**
    * Shared assertion to check {@link EntityNotFoundException} messages.

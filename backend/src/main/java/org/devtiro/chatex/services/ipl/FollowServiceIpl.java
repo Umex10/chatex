@@ -132,6 +132,11 @@ public class FollowServiceIpl implements FollowService {
         return userRep.isUserFollowingTarget(targetUsername, requestingUserId);
     }
 
+    @Override
+    public boolean isTargetFollowingUser(String targetUsername, UUID requestingUserId) {
+        return userRep.isTargetFollowingUser(targetUsername, requestingUserId);
+    }
+
     /**
      * Enriches a set of users with follow-status badges relative to the requesting
      * user.
