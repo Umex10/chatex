@@ -43,7 +43,8 @@ public class Message {
   private LocalDate createdAt;
 
   @Column
-  private boolean read;
+  @Builder.Default
+  private boolean read = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_sender_id", nullable = false)

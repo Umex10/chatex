@@ -9,7 +9,6 @@ import org.devtiro.chatex.domain.dtos.requests.UpdateUserDto;
 import org.devtiro.chatex.domain.dtos.responses.FollowDto;
 import org.devtiro.chatex.domain.dtos.responses.UserDto;
 import org.devtiro.chatex.domain.entities.User;
-import org.devtiro.chatex.domain.mappers.FollowMapper;
 import org.devtiro.chatex.domain.mappers.UserMapper;
 import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.UserService;
