@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
 import { setInitialMessages } from '@redux/api/slices/chatSlice'
 
+const EMPTY_MESSAGES: Message[] = [];
+
 interface ChatConversationProps {
   chatId: string,
   messages: Message[];
@@ -46,12 +48,12 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
 
   useEffect(() => {
     if (messages) {
-      dispatch(setInitialMessages({ chatId, messages: messages }));
+      dispatch(setInitialMessages({ chatId: chatId, messages: messages }));
     }
   }, [messages, chatId, dispatch]);
 
   const messagesView = useSelector((state: RootState) =>
-    state.chatState.messagesByChat[chatId] || []
+    state.chatState.messagesByChat[chatId] || EMPTY_MESSAGES
   );
 
   const router = useRouter();
@@ -82,12 +84,23 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
   }
 
   const send = () => {
-    if (inputText) return;
+    if (!inputText) return;
 
-    client?.publish({
-      destination: '/app/chat.send',
-      body: JSON.stringify({ text: inputText })
-    });
+    setInputText("");
+
+    if (client && client.connected) {
+
+      client?.publish({
+        destination: '/app/chat.send',
+        body: JSON.stringify({
+          text: inputText,
+          receiverUsername: chatUser?.username,
+          chatId: chatId
+        })
+      });
+    } else {
+      console.error("The connection was not ready yet.")
+    }
 
     console.log("Message was sent.")
   }
@@ -141,6 +154,8 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
         {messagesView.map((msg) => {
 
           const isMe = msg.senderUsername === meUser.username;
+
+          console.log(msg)
 
           return (
             <div

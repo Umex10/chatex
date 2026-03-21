@@ -1,7 +1,18 @@
 package org.devtiro.chatex.config;
 
+import org.devtiro.chatex.services.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -9,6 +20,43 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ChannelInterceptor() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                // with this, we are actually able to read the header more conveniently
+                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+
+                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    
+                    // 1. Receive the tk
+                    String authHeader = accessor.getFirstNativeHeader("Authorization");
+                    
+                    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                        String tk = authHeader.substring(7);
+                        
+                        // 2. Validate Tk
+                        UserDetails userDetails = jwtService.validateTk(tk);
+
+                        if (userDetails != null) {
+                           
+                            UsernamePasswordAuthenticationToken auth = 
+                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            
+                            // 3. Writing the auth instance into the session
+                            accessor.setUser(auth);
+                        }
+                    }
+                }
+                return message;
+            }
+        });
+    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -27,7 +75,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // The URL where the client connects to the WebSocket server
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("http://localhost:3000/**") // CORS for Next.js
-                .withSockJS(); // Fallback option if WebSockets are not available
+                .setAllowedOrigins("http://localhost:3000"); // CORS for Next.js
     }
 }

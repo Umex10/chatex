@@ -19,28 +19,36 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    
     const client = new Client({
       brokerURL: "ws://localhost:8080/ws",
-      connectHeaders: { Authorization: `Bearer ${accessTk}` },
+      connectHeaders: { Authorization: `Bearer ${accessTk.accessJwt}` },
       reconnectDelay: 5000,
+      debug: (str) => console.log("STOMP Debug:", str),
       onConnect: () => {
+
+        setStompClient(client);
+
         client.subscribe('/user/queue/messages', (payload) => {
           const msg = JSON.parse(payload.body);
 
           dispatch(receivedMessage(msg));
 
-          console.log("Neue Nachricht für egal welchen Chat:", msg);
+          console.log("Subscribed to the queue!", msg);
         });
-      }
+      },
+      onDisconnect: () => {
+      setStompClient(null); 
+    }
     });
 
     client.activate();
-    setStompClient(client);
 
     return () => {
       client.deactivate();
+      setStompClient(null);
     };
-  }, [accessTk]);
+  }, [accessTk, dispatch]);
 
   return (
     <WebSocketContext.Provider value={stompClient}>

@@ -1,6 +1,9 @@
 package org.devtiro.chatex.domain.mappers;
 
+import java.util.UUID;
+
 import org.devtiro.chatex.domain.dtos.responses.MessageDto;
+import org.devtiro.chatex.domain.entities.Chat;
 import org.devtiro.chatex.domain.entities.Message;
 import org.devtiro.chatex.domain.entities.User;
 import org.mapstruct.Mapper;
@@ -12,10 +15,16 @@ public interface MessageMapper {
 
   @Mapping(source = "sender", target = "senderUsername", qualifiedByName = "getUsername")
   @Mapping(source = "receiver", target = "receiverUsername", qualifiedByName = "getUsername")
+  @Mapping(source = "chat", target = "chatId", qualifiedByName = "getChatId")
   MessageDto toDto(Message message);
 
   @Named("getUsername")
   default String getUsername(User user) {
     return user.getUsername();
+  }
+
+  @Named("getChatId")
+  default UUID getChatId(Chat chat) {
+    return chat.getId();
   }
 }

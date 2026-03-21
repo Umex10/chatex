@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,13 +49,16 @@ public class Message {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_sender_id", nullable = false)
+  @JsonIgnore
   private User sender;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinTable(name = "user_receiver_id")
+  @JsonIgnore
   private User receiver;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "chat_id", nullable = false)
+  @JsonIgnore
   private Chat chat;
 }
