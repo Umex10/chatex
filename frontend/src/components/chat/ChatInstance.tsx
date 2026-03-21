@@ -1,20 +1,22 @@
 "use client"
 
 import { joinedShoutDate } from '@/utils/joinedDate'
-import { useDeleteChatMutation, useGetChatQuery } from '@redux/api/chatApi'
+import { useDeleteChatMutation, useGetChatQuery } from '@redux/api/apis/chatApi'
 import { CldImage } from 'next-cloudinary'
 import { usePathname, useRouter } from 'next/navigation'
 import TrashButton from '../shared/TrashButton'
+import { Message } from '@/types/Chat'
+import { User } from '@/types/User'
 
 interface MessageArgs {
+  meUser: User,
   chatId: string,
   avatar: string,
   name: string,
-  lastMessage: string,
-  lastMessageCreatedAt: string
+  lastMessage: Message
 }
 
-const ChatInstance = ({ chatId, avatar, name, lastMessage, lastMessageCreatedAt }: MessageArgs) => {
+const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage }: MessageArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
@@ -50,16 +52,27 @@ const ChatInstance = ({ chatId, avatar, name, lastMessage, lastMessageCreatedAt 
           </p>
 
           <div className='flex flex-row gap-1 items-center'>
-            <p className='text-base opacity-70'>
-              {joinedShoutDate(lastMessageCreatedAt)}
-            </p>
+            {lastMessage?.createdAt && (
+              <p className='text-base opacity-70'>
+                {joinedShoutDate(lastMessage?.createdAt)}
+              </p>
+            )}
             <TrashButton deleteQuery={() => deleteChat(chatId)}></TrashButton>
           </div>
 
         </div>
+        <div className='opacity-70 text-base flex flex-row gap-1 items-center'>
+          {lastMessage?.senderUsername && (
+            <>
+              <span className='font-bold'>
+                {meUser.username === lastMessage?.senderUsername ? "You" : lastMessage?.senderUsername}
+              </span>
 
-        <div className='opacity-70 text-base'>
-          You: {lastMessage}
+              <span className='opacity-70'>
+                {lastMessage?.text}
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>

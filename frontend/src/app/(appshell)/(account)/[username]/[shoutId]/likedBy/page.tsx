@@ -3,7 +3,7 @@
 import FollowInstance from '@/components/follow/FollowInstance';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 import ReturnHeader from '@/components/layout/ReturnHeader';
-import { useGetLikedByQuery } from '@redux/api/shoutApi';
+import { useGetLikedByQuery } from '@redux/api/apis/shoutApi';
 import React from 'react'
 import { useParams } from 'next/navigation';
 

@@ -1,3 +1,4 @@
+import { WebSocketProvider } from '@/components/chat/WebSocketProvider';
 import React from 'react'
 
 const layout = ({
@@ -8,16 +9,19 @@ const layout = ({
   modal: React.ReactNode;
 }) => {
   return (
-    <div className='w-full h-full flex flex-row'>
+    <WebSocketProvider>
+      <div className='w-full h-full flex flex-row'>
 
-      <div className='w-full md:w-[40%] md:border-x h-full'>
-        {children}
-      </div>
+        <div className='w-full md:w-[40%] md:border-x h-full'>
+          {children}
+        </div>
 
-      <div className='hidden md:flex w-[60%] border-x h-full'>
-        {modal}
+        <div className='hidden md:flex w-[60%] border-x h-full'>
+          {modal}
+        </div>
       </div>
-    </div>
+    </WebSocketProvider>
+
   )
 }
 

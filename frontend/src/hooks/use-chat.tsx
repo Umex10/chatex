@@ -1,6 +1,6 @@
 "use client"
 
-import { useCreateChatMutation } from "@redux/api/chatApi";
+import { useCreateChatMutation } from "@redux/api/apis/chatApi";
 import { useRouter } from "next/navigation";
 
 export const useChat = () => {

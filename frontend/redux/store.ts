@@ -2,7 +2,8 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 
-import { apiSlice } from "./api/apiSlice";
+import { apiSlice } from "./api/apis/apiSlice";
+import { chatSlice } from "./api/slices/chatSlice";
 
 /**
  * Configures and exports the Redux store for the application.
@@ -11,6 +12,7 @@ import { apiSlice } from "./api/apiSlice";
 export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
+        chatState: chatSlice.reducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(apiSlice.middleware)

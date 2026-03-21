@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import SettingsForm from "@/components/account/SettingsForm"
-import { useGetUserQuery } from "@redux/api/userApi"
+import { useGetUserQuery } from "@redux/api/apis/userApi"
 import AccountPage from "../[username]/page"
 
 /**

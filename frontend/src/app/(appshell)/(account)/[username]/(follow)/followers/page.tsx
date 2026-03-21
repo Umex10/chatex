@@ -2,7 +2,7 @@
 
 import FollowInstance from '@/components/follow/FollowInstance'
 import RenderFollowList from '@/components/follow/RenderFollowList'
-import { useGetFollowersQuery } from '@redux/api/followApi'
+import { useGetFollowersQuery } from '@redux/api/apis/followApi'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 

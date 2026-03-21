@@ -1,6 +1,6 @@
 "use client"
 
-import { useFollowUserMutation, useUnfollowUserMutation } from "@redux/api/followApi";
+import { useFollowUserMutation, useUnfollowUserMutation } from "@redux/api/apis/followApi";
 import { useEffect, useState } from "react";
 
 /** Arguments accepted by the useFollow hook. */

@@ -1,7 +1,7 @@
 "use client"
 
 import RenderShouts from '@/components/shout/RenderShouts';
-import { useGetQuotesQuery } from '@redux/api/shoutApi';
+import { useGetQuotesQuery } from '@redux/api/apis/shoutApi';
 import React from 'react'
 import { useParams } from 'next/navigation';
 

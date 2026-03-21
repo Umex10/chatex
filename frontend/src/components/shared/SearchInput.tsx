@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Input } from '../ui/input'
 import { Search } from "lucide-react";
-import { useSearchFollowQuery, useSearchRecommendFollowsQuery } from '@redux/api/followApi';
+import { useSearchFollowQuery, useSearchRecommendFollowsQuery } from '@redux/api/apis/followApi';
 import FollowInstance from '../follow/FollowInstance';
 import FollowInstanceSkeleton from '../follow/FollowInstanceSkeleton';
 import { Skeleton } from '../ui/skeleton';

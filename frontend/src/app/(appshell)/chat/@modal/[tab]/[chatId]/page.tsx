@@ -1,21 +1,9 @@
 "use client"
 import React from 'react'
-import ChatConversation, { ChatMessage } from '@/components/chat/ChatConversation'
-import { useGetUserQuery } from '@redux/api/userApi';
-import { useGetChatQuery } from '@redux/api/chatApi';
+import ChatConversation from '@/components/chat/ChatConversation'
+import { useGetChatQuery } from '@redux/api/apis/chatApi';
 import { usePathname } from 'next/navigation';
-import { Chat } from '@/types/Chat';
-
-const dummyMessages: ChatMessage[] = [
-  {
-    id: '1',
-    text: 'dazn',
-    createdAt: new Date().toISOString(),
-    username: 'Me',
-    avatar: 'user-avatar_yr4qhg',
-    isMe: true
-  }
-]
+import { useGetUserQuery } from '@redux/api/apis/userApi';
 
 const ChatInstancePage = () => {
 
@@ -24,22 +12,18 @@ const ChatInstancePage = () => {
   const segments = pathname.split('/').filter(Boolean);
   const chatId = segments[segments.length - 1];
 
-  const { data: chatUser } = useGetChatQuery(chatId);
+  const { data: chat } = useGetChatQuery(chatId);
+  const {data: meUser} = useGetUserQuery();
 
-  const { lastMessage, ...userData } = { ...chatUser };
+  if (!chat || !meUser) {
+    return <p>Data needed!</p>;
+  }
 
-  // Ensure all required fields are present and fallback to empty string if missing
-  const safeUserData = {
-    id: userData.id ?? '',
-    name: userData.name ?? '',
-    username: userData.username ?? '',
-    avatar: userData.avatar ?? '',
-    createdUserAt: userData.createdUserAt ?? '',
-  };
+  const { id, lastMessage, messages, ...userData } = { ...chat };
 
   return (
     <div className='flex-1 h-full w-full'>
-      <ChatConversation messages={dummyMessages} chatUser={safeUserData} />
+      <ChatConversation chatId={id} messages={messages} chatUser={userData} meUser={meUser} />
     </div>
   )
 }

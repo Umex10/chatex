@@ -7,7 +7,7 @@ import { Shout } from '@/types/Shout';
 import { CldImage } from 'next-cloudinary';
 import { joinedShoutDate } from '@/utils/joinedDate';
 import { Button } from '../ui/button';
-import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation, useUnShoutTheShoutMutation } from '@redux/api/shoutApi';
+import { useDeleteShoutMutation, useDislikeTheShoutMutation, useLikeTheShoutMutation, useReShoutTheShoutMutation, useUnShoutTheShoutMutation } from '@redux/api/apis/shoutApi';
 import Spinner from '../shared/Spinner';
 import { MouseEvent, useState } from 'react';
 import { Badge } from '../ui/badge';

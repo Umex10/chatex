@@ -27,7 +27,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // The URL where the client connects to the WebSocket server
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:3000") // CORS for Next.js
+                .setAllowedOriginPatterns("http://localhost:3000/**") // CORS for Next.js
                 .withSockJS(); // Fallback option if WebSockets are not available
     }
 }

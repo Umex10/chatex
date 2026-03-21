@@ -5,8 +5,8 @@ import { CalendarDays, Volume2, VolumeX } from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CldImage } from 'next-cloudinary';
-import { useGetAllImagesQuery, useGetLikedByQuery, useGetLikedShoutsQuery, useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/shoutApi';
-import { useGetUserByUsernameQuery, useGetUserQuery, useSilenceUserMutation, useUnSilenceUserMutation } from '@redux/api/userApi';
+import { useGetAllImagesQuery, useGetLikedByQuery, useGetLikedShoutsQuery, useGetShoutsQuery, useGetUserCommentsQuery } from '@redux/api/apis/shoutApi';
+import { useGetUserByUsernameQuery, useGetUserQuery, useSilenceUserMutation, useUnSilenceUserMutation } from '@redux/api/apis/userApi';
 import { joinedAccountDate } from '@/utils/joinedDate';
 import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation';

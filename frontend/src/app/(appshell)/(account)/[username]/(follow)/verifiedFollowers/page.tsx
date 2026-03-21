@@ -3,7 +3,7 @@
 import { twitterUsers } from '@/utils/dummy'
 import FollowInstance from '@/components/follow/FollowInstance'
 import { usePathname } from 'next/navigation';
-import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/followApi';
+import { useGetFollowersQuery, useGetFollowingQuery } from '@redux/api/apis/followApi';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 
 /**

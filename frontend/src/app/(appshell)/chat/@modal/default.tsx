@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import SearchInput from '@/components/shared/SearchInput';
 import RecentlyViewedUser from '@/components/chat/RecentlyViewedInstance';
-import { useGetRecentlyViewedUsersQuery } from '@redux/api/userApi';
+import { useGetRecentlyViewedUsersQuery } from '@redux/api/apis/userApi';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 
 const DefaultChatView = () => {

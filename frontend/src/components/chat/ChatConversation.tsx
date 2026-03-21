@@ -11,36 +11,48 @@ import Image from 'next/image'
 import { User } from '@/types/User'
 import { useRouter } from 'next/navigation'
 import { joinedAccountDate } from '@/utils/joinedDate'
-
-export interface ChatMessage {
-  id: string;
-  text: string;
-  createdAt: string;
-  username: string;
-  avatar: string;
-  isMe: boolean;
-  image?: string;
-}
+import { Message } from '@/types/Chat'
+import { Client } from '@stomp/stompjs';
+import { useWebSocket } from './WebSocketProvider'
+import { Input } from '../ui/input'
+import { SendHorizontal } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@redux/store'
+import { setInitialMessages } from '@redux/api/slices/chatSlice'
 
 interface ChatConversationProps {
-  messages: ChatMessage[];
+  chatId: string,
+  messages: Message[];
   chatUser: {
-    id: string,
     name: string,
     username: string,
     avatar: string,
     createdUserAt: string
-  }
+  },
+  meUser: User
 }
 
-export default function ChatConversation({ messages, chatUser }: ChatConversationProps) {
+export default function ChatConversation({ chatId, messages, chatUser, meUser }: ChatConversationProps) {
   const [inputText, setInputText] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+
+  const client = useWebSocket();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { resolvedTheme } = useTheme()
   const emojiRef = useRef<HTMLDivElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (messages) {
+      dispatch(setInitialMessages({ chatId, messages: messages }));
+    }
+  }, [messages, chatId, dispatch]);
+
+  const messagesView = useSelector((state: RootState) =>
+    state.chatState.messagesByChat[chatId] || []
+  );
 
   const router = useRouter();
 
@@ -67,6 +79,17 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
   const formatTime = (isoString: string) => {
     const date = new Date(isoString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  const send = () => {
+    if (inputText) return;
+
+    client?.publish({
+      destination: '/app/chat.send',
+      body: JSON.stringify({ text: inputText })
+    });
+
+    console.log("Message was sent.")
   }
 
   return (
@@ -115,36 +138,41 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
           <span className="text-gray-500 text-sm font-medium">Today</span>
         </div>
 
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex flex-col w-full ${msg.isMe ? 'items-end' : 'items-start'}`}
-          >
+        {messagesView.map((msg) => {
+
+          const isMe = msg.senderUsername === meUser.username;
+
+          return (
             <div
-              className={`px-4 py-2.5 max-w-[85%] sm:max-w-[60%] ${msg.isMe
+              key={msg.createdAt}
+              className={`flex flex-col w-full ${isMe ? 'items-end' : 'items-start'}`}
+            >
+              <div
+                className={`px-4 py-2.5 max-w-[85%] sm:max-w-[60%] ${isMe
                   ? 'bg-violet-600 text-white rounded-t-3xl rounded-bl-3xl rounded-br-sm'
                   : 'bg-emerald-600 text-white rounded-t-3xl rounded-br-3xl rounded-bl-sm'
-                }`}
-            >
-              {msg.image && (
-                <Image src={msg.image} alt="attached" className="max-w-full rounded-md mb-2 object-contain"
-                  width={200}
-                  height={200} />
-              )}
-              {msg.text && (
-                <div className="flex items-end gap-2 text-[15px]">
-                  <span className="break-words whitespace-pre-wrap leading-tight">{msg.text}</span>
-                  {/* Dazn style inline time on messages */}
-                  {msg.isMe && (
-                    <span className="text-[11px] opacity-80 mb-[-2px] whitespace-nowrap ml-1 font-medium">
-                      {formatTime(msg.createdAt)} <BadgeCheck className="w-3 h-3 inline ml-0.5 opacity-90 fill-current" />
-                    </span>
-                  )}
-                </div>
-              )}
+                  }`}
+              >
+                {/* {msg.image && (
+                  <Image src={msg.image} alt="attached" className="max-w-full rounded-md mb-2 object-contain"
+                    width={200}
+                    height={200} />
+                )} */}
+                {msg.text && (
+                  <div className="flex items-end gap-2 text-[15px]">
+                    <span className="break-words whitespace-pre-wrap leading-tight">{msg.text}</span>
+                    {/* Dazn style inline time on messages */}
+                    {isMe && (
+                      <span className="text-[11px] opacity-80 mb-[-2px] whitespace-nowrap ml-1 font-medium">
+                        {formatTime(msg.createdAt)} <BadgeCheck className="w-3 h-3 inline ml-0.5 opacity-90 fill-current" />
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         <div ref={messagesEndRef} />
       </div>
 
@@ -192,7 +220,7 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
           />
 
           <div className="flex-1 bg-zinc-800/80 rounded-full px-4 py-2.5 flex flex-row items-center border border-transparent focus-within:border-[#1d9bf0]">
-            <input
+            <Input
               type="text"
               className='w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-white placeholder:text-gray-500'
               placeholder='Message'
@@ -201,6 +229,15 @@ export default function ChatConversation({ messages, chatUser }: ChatConversatio
             />
           </div>
 
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full w-10 h-10 bg-zinc-800/80 hover:bg-zinc-700 
+            text-gray-200 flex-shrink-0"
+            onClick={() => send()}
+          >
+            <SendHorizontal className="w-5 h-5" />
+          </Button>
         </div>
       </div>
     </div>

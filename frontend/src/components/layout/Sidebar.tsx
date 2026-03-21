@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils"
 import { CreateShout } from "../shout/CreateShout"
 import { usePathname, useRouter } from "next/navigation"
 import { CldImage } from 'next-cloudinary';
-import { useGetUserQuery } from "@redux/api/userApi"
+import { useGetUserQuery } from "@redux/api/apis/userApi"
 import { signOutRequest } from "@/actions/auth-account-actions"
 import { toast } from "sonner"
 import { Button } from "../ui/button"

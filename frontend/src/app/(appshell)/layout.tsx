@@ -56,6 +56,7 @@ export const Layout = ({
   return (
     /* provides auth context for all app shell pages */
     <AuthProvider>
+      
       {/* controls desktop/tablet sidebar open/collapsed state */}
       <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <div className='w-full max-w-[1400px] flex mx-auto relative'>

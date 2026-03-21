@@ -3,7 +3,7 @@
 import RenderShouts from '@/components/shout/RenderShouts';
 import RenderFollowList from '@/components/follow/RenderFollowList';
 import ReturnHeader from '@/components/layout/ReturnHeader';
-import { useGetQuotesQuery, useGetReShoutedByQuery } from '@redux/api/shoutApi';
+import { useGetQuotesQuery, useGetReShoutedByQuery } from '@redux/api/apis/shoutApi';
 import React from 'react'
 import { useParams } from 'next/navigation';
 

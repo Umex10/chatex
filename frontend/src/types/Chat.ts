@@ -1,11 +1,3 @@
-interface Message {
-
-  text: string,
-  createdAt: string,
-  read: boolean,
-  userSide: "ME" | "CHAT_USER"
-
-}
 
 export interface Chat {
   id: string,
@@ -13,5 +5,16 @@ export interface Chat {
   username: string,
   avatar: string,
   createdUserAt: string,
-  lastMessage: Message
+  lastMessage: Message,
+  messages: Message[]
+}
+
+export interface Message {
+  chatId: string,
+  text: string,
+  createdAt: string,
+  read: boolean,
+  senderUsername: string,
+  receiverUsername: string
+
 }

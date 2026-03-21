@@ -8,7 +8,7 @@ import { apiSlice } from './apiSlice';
  */
 const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    /** Fetches a new access and refresh token from the backend using the refresh_jwt cookie. */
+    /** Fetches a new access token from the backend using the refresh_jwt cookie. */
     refreshAccessTk: builder.query({
       async queryFn() {
         const res = await refreshAuthSessionRequest();
