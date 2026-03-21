@@ -17,7 +17,7 @@ public class MessageDto {
   private UUID chatId;
   private String text;
   private LocalDate createdAt;
-  private boolean read;
+  private boolean seen;
   private String senderUsername;
   private String receiverUsername;
 

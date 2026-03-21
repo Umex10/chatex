@@ -1,4 +1,4 @@
-import { Message } from '@/types/Chat';
+import { Message } from '@/types/Message';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 

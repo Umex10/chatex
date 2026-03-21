@@ -11,7 +11,7 @@ import Image from 'next/image'
 import { User } from '@/types/User'
 import { useRouter } from 'next/navigation'
 import { joinedAccountDate } from '@/utils/joinedDate'
-import { Message } from '@/types/Chat'
+import { Message } from '@/types/Message'
 import { Client } from '@stomp/stompjs';
 import { useWebSocket } from './WebSocketProvider'
 import { Input } from '../ui/input'
@@ -151,7 +151,7 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
           <span className="text-gray-500 text-sm font-medium">Today</span>
         </div>
 
-        {messagesView.map((msg) => {
+        {messagesView.map((msg, index) => {
 
           const isMe = msg.senderUsername === meUser.username;
 
@@ -159,7 +159,7 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
 
           return (
             <div
-              key={msg.createdAt}
+              key={index}
               className={`flex flex-col w-full ${isMe ? 'items-end' : 'items-start'}`}
             >
               <div
@@ -179,7 +179,8 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
                     {/* Dazn style inline time on messages */}
                     {isMe && (
                       <span className="text-[11px] opacity-80 mb-[-2px] whitespace-nowrap ml-1 font-medium">
-                        {formatTime(msg.createdAt)} <BadgeCheck className="w-3 h-3 inline ml-0.5 opacity-90 fill-current" />
+                        {formatTime(msg.createdAt)} 
+                        <BadgeCheck className="w-3 h-3 inline ml-0.5 opacity-90 fill-current" />
                       </span>
                     )}
                   </div>

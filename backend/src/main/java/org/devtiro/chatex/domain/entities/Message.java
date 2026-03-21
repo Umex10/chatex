@@ -45,7 +45,7 @@ public class Message {
 
   @Column
   @Builder.Default
-  private boolean read = false;
+  private boolean seen = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_sender_id", nullable = false)

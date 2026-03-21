@@ -1,3 +1,4 @@
+import { Message } from "./Message";
 
 export interface Chat {
   id: string,
@@ -9,12 +10,3 @@ export interface Chat {
   messages: Message[]
 }
 
-export interface Message {
-  chatId: string,
-  text: string,
-  createdAt: string,
-  read: boolean,
-  senderUsername: string,
-  receiverUsername: string
-
-}
