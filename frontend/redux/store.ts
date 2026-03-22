@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { apiSlice } from "./api/apis/apiSlice";
 import { chatSlice } from "./api/slices/chatSlice";
+import { searchChatSlice } from "./api/slices/searchChatSlice";
 
 /**
  * Configures and exports the Redux store for the application.
@@ -12,7 +13,8 @@ import { chatSlice } from "./api/slices/chatSlice";
 export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
-        chatState: chatSlice.reducer
+        chatState: chatSlice.reducer,
+        searchChatState: searchChatSlice.reducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(apiSlice.middleware)

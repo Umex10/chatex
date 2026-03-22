@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import NavMenu from '@/components/layout/NavMenu'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import SearchInput from '@/components/shared/SearchInput'
+import SearchUsersInput from '@/components/shared/SearchInput'
 const XL_BREAKPOINT = 1280
 
 /**
@@ -106,7 +106,7 @@ export const Layout = ({
                   {/* search input with left icon */}
 
                   {!isSearchPage ? (
-                    <SearchInput variant='ACCOUNT'></SearchInput>
+                    <SearchUsersInput variant='ACCOUNT'></SearchUsersInput>
                   ) : (
 
                     <div className='h-1 w-full bg-violet-500 '></div>

@@ -1,5 +1,6 @@
 package org.devtiro.chatex.services.ipl;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,6 +32,14 @@ public class ChatServiceIpl implements ChatService {
   }
 
   @Override
+  public Set<Chat> getSilencedChats(UUID userId) {
+    userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+
+    return chatRep.findAllChatsByUserIdWithSilencedUser(userId);
+  }
+
+  @Override
   public Chat getChat(UUID chatId) {
     return chatRep.findChatWithMessages(chatId)
         .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
@@ -45,6 +54,11 @@ public class ChatServiceIpl implements ChatService {
 
     User me = userRep.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+
+    Optional<Chat> alreadyHasChat = chatRep.findChatBetweenUsers(chatUser.getId(), me.getId());
+
+    if (!alreadyHasChat.isEmpty())
+      return alreadyHasChat.get();
 
     Chat chat = Chat.builder()
         .chatUser(chatUser)

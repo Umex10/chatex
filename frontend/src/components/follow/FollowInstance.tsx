@@ -54,17 +54,17 @@ const FollowInstance = ({ userData, variant }: FollowInstanceArgs) => {
             router.push(`/${username}`);
           } else if (variant === "CHAT") {
 
-            if (targetSilencingUser) {
-              toast.error(`You cannot message @${username} right now. They have silenced you.`, {
-                className: "toast-error"
-              });
-              return;
-            }
+            // if (targetSilencingUser) {
+            //   toast.error(`You cannot message @${username} right now. They have silenced you.`, {
+            //     className: "toast-error"
+            //   });
+            //   return;
+            // }
 
-            if (userSilencingTarget) {
-              setShowSilenceAlert(true);
-              return;
-            }
+            // if (userSilencingTarget) {
+            //   setShowSilenceAlert(true);
+            //   return;
+            // }
 
             handleCreateChat(username);
 

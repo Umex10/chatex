@@ -14,7 +14,7 @@ interface SearchInputArgs {
   variant: "ACCOUNT" | "CHAT";
 }
 
-const SearchInput = ({ variant }: SearchInputArgs) => {
+const SearchUsersInput = ({ variant }: SearchInputArgs) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -94,7 +94,7 @@ const SearchInput = ({ variant }: SearchInputArgs) => {
           <div className='flex flex-col p-3'>
             <span className='text-xs font-semibold text-muted-foreground mb-2'>Recommendations</span>
 
-            {/* You can map your max 3 suggestions here */}
+            {/* Max. 3 suggestions*/}
             <ul className='flex flex-col gap-2'>
               {isLoadingRecommendedUsers ? (
                 <>
@@ -124,7 +124,6 @@ const SearchInput = ({ variant }: SearchInputArgs) => {
           <div className='flex flex-col p-3'>
             <span className='text-xs font-semibold text-muted-foreground mb-2'>Results</span>
 
-            {/* You can map your detailed search results here (e.g. User list) */}
             <ul className='flex flex-col gap-2'>
               {isLoadingSearchedUsers ? (
                 <>
@@ -148,4 +147,4 @@ const SearchInput = ({ variant }: SearchInputArgs) => {
   )
 }
 
-export default SearchInput
+export default SearchUsersInput

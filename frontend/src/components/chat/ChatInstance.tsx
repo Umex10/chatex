@@ -5,7 +5,7 @@ import { useDeleteChatMutation, useGetChatQuery } from '@redux/api/apis/chatApi'
 import { CldImage } from 'next-cloudinary'
 import { usePathname, useRouter } from 'next/navigation'
 import TrashButton from '../shared/TrashButton'
-import { Message } from '@/types/Chat'
+import { Message } from '@/types/Message'
 import { User } from '@/types/User'
 
 interface MessageArgs {
@@ -21,13 +21,20 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage }: MessageArgs
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
   const router = useRouter();
+  const path = usePathname().split("/")
+  const chatIdInURL = path[3]; // this will ensure that we don't fetch the chat unnecessarily
+  const isSameChat = chatId === chatIdInURL;
 
   const [deleteChat, { isLoading }] = useDeleteChatMutation();
 
   return (
-    <div className='px-3 py-5 w-full flex flex-row items-center gap-2 hover:bg-gray-800 
-    transition ease-out duration-400'
-      onClick={() => router.push(`/chat/messages/${chatId}`)}>
+    <div className={`px-3 py-5 w-full flex flex-row items-center gap-2 hover:bg-gray-800 
+    ${isSameChat ? "bg-gray-800/50" : ""} transition ease-out duration-400`}
+      onClick={() => {
+        if (!isSameChat) {
+          router.push(`/chat/messages/${chatId}`)
+        }
+      }}>
 
       <div className="relative w-15 h-15 rounded-full border-4 border-black 
       overflow-hidden bg-zinc-900">
@@ -57,7 +64,10 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage }: MessageArgs
                 {joinedShoutDate(lastMessage?.createdAt)}
               </p>
             )}
-            <TrashButton deleteQuery={() => deleteChat(chatId)}></TrashButton>
+            <TrashButton deleteQuery={() => {
+              deleteChat(chatId);
+              router.back();
+            }}></TrashButton>
           </div>
 
         </div>

@@ -1,33 +1,43 @@
 "use client"
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Search, Settings } from 'lucide-react'
+import { Search, Settings, MessageCirclePlus } from 'lucide-react'
 import React, { useState } from 'react'
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import ReusableTabsList from '@/components/layout/ReusableTabsList'
-import SearchInput from '@/components/shared/SearchInput'
+import SearchUsersInput from '@/components/shared/SearchInput'
+import SearchChatsInput from '@/components/chat/SearchChatsInput'
+import CreateChatDialog from '@/components/chat/CreateChatDialog'
 
-const ChatPage = ({children} : {children: React.ReactNode}) => {
+const ChatPage = ({ children }: { children: React.ReactNode }) => {
 
-   const [activeTab, setActiveTab] = useState("messages");
+  const [activeTab, setActiveTab] = useState("messages");
 
   return (
     <div className='flex-1 h-full w-full flex flex-col'>
 
       {/* Header Form */}
       <div className='flex flex-row items-center justify-between px-4 py-3 gap-6'>
-        
+
         <div className='flex flex-row items-center gap-3 flex-1 justify-end'>
           {/* Search Input */}
           <div className='w-full max-w-sm'>
-             <SearchInput variant='CHAT' />
+            <SearchChatsInput />
           </div>
 
           {/* Settings */}
-          <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary">
-            <Settings className="w-5 h-5 text-muted-foreground" />
-          </Button>
+          <div className='flex flex-row items-center gap-1'>
+            <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary">
+              <Settings className="w-5 h-5 text-muted-foreground" />
+            </Button>
+            <CreateChatDialog>
+              <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary"
+                onClick={() => { }}>
+                <MessageCirclePlus className="w-5 h-5 text-muted-foreground" />
+              </Button>
+            </CreateChatDialog>
+          </div>
+
         </div>
 
       </div>

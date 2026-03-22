@@ -28,10 +28,20 @@ public class ChatController {
   private final ChatService chatService;
   private final ChatMapper chatMapper;
 
-  @GetMapping
+  @GetMapping(path = "/chats")
   public ResponseEntity<List<ChatDto>> getChats(@RequestAttribute UUID userId) {
 
     Set<Chat> chats = chatService.getChats(userId);
+
+    List<ChatDto> chatsDto = chatMapper.toDtoList(chats);
+
+    return new ResponseEntity<>(chatsDto, HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/silencedChats")
+  public ResponseEntity<List<ChatDto>> getSilencedChats(@RequestAttribute UUID userId) {
+
+    Set<Chat> chats = chatService.getSilencedChats(userId);
 
     List<ChatDto> chatsDto = chatMapper.toDtoList(chats);
 
@@ -61,8 +71,6 @@ public class ChatController {
       @RequestAttribute UUID userId) {
 
     Chat chat = chatService.createChat(username, userId);
-
-    System.out.println("Newly Chat created: " + chat.getId());
 
     ChatDto chatDto = chatMapper.toDto(chat);
 

@@ -7,8 +7,9 @@ import org.devtiro.chatex.domain.entities.Chat;
 
 public interface ChatService {
 
-
   Set<Chat> getChats(UUID userId);
+
+  Set<Chat> getSilencedChats(UUID userId);
 
   Chat getChat(UUID chatId);
 

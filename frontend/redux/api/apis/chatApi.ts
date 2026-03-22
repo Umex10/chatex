@@ -9,7 +9,12 @@ export const chatApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
    
     getChats: builder.query<Chat[], void>({
-      query: () => `/chat`,
+      query: () => `/chat/chats`,
+      providesTags: ['User']
+    }),
+
+     getSilencedChats: builder.query<Chat[], void>({
+      query: () => `/chat/silencedChats`,
       providesTags: ['User']
     }),
 
@@ -37,6 +42,7 @@ export const chatApi = apiSlice.injectEndpoints({
 
 export const {
   useGetChatsQuery,
+  useGetSilencedChatsQuery,
   useGetChatQuery,
   useCreateChatMutation,
   useDeleteChatMutation

@@ -1,25 +1,11 @@
 "use client"
 
-import React, { useEffect } from 'react'
-
 import { Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import SearchInput from '@/components/shared/SearchInput';
-import RecentlyViewedUser from '@/components/chat/RecentlyViewedInstance';
-import { useGetRecentlyViewedUsersQuery } from '@redux/api/apis/userApi';
-import RenderFollowList from '@/components/follow/RenderFollowList';
+import CreateChatDialog from '@/components/chat/CreateChatDialog';
 
 const DefaultChatView = () => {
-
-  const {data: recentlyViewedUsers, isLoading} = useGetRecentlyViewedUsersQuery();
 
   return (
     <div className='w-full h-full flex flex-col items-center justify-center gap-4'>
@@ -31,28 +17,11 @@ const DefaultChatView = () => {
         <p className='text-xl text-muted-foreground'>Select a chat or start a new chat in order to chatex!</p>
       </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline" className='bg-transparent text-xl'>
-            New Chat
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>New Chat</DialogTitle>
-          </DialogHeader>
-          
-          <SearchInput variant='CHAT'/>
-
-          <div className=''>
-            <h3>Recently viewed Users by you</h3>
-
-            <div className='flex flex-col overflow-y-scroll max-h-[40vh]'>
-               <RenderFollowList variant='CHAT' list={recentlyViewedUsers ? recentlyViewedUsers : []} isLoading={isLoading}></RenderFollowList>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CreateChatDialog>
+        <Button variant="outline" className='bg-transparent text-xl'>
+          New Chat
+        </Button>
+      </CreateChatDialog>
 
     </div>
   )
