@@ -24,6 +24,10 @@ public interface ShoutService {
    */
   List<Shout> getShouts(String username, ShoutVariant variant);
 
+  List<Shout> getRecentShouts(UUID userId, ShoutVariant variant);
+
+   List<Shout> getRecentFollowingShouts(UUID userId, ShoutVariant variant);
+
   /**
    * Retrieves a single shout by its unique identifier.
    *

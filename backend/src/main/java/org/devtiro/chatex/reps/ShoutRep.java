@@ -1,5 +1,6 @@
 package org.devtiro.chatex.reps;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +19,28 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ShoutRep extends JpaRepository<Shout, UUID> {
+
+        @Query("SELECT DISTINCT s from Shout s JOIN FETCH s.user LEFT JOIN s.reShoutedBy reShouter" +
+                        " WHERE (s.user.id != :userId OR reShouter.id != :userId)" +
+                        " AND s.variant = :variant" +
+                        " ORDER BY s.createdAt DESC")
+        List<Shout> findRecentShouts(@Param("userId") UUID userId,
+                        @Param("variant") ShoutVariant variant);
+
+        @Query("SELECT s FROM Shout s " +
+                        "WHERE s.user IN (SELECT f FROM User u JOIN u.following f WHERE u.id = :userId) " +
+                        "AND s.createdAt >= :threeDaysAgo " +
+                        "AND s.variant = :variant " +
+                        "AND s.id IN (" +
+                        "  SELECT MAX(s2.id) FROM Shout s2 " + // Wir nehmen den neuesten Shout pro User
+                        "  WHERE s2.createdAt >= :threeDaysAgo " +
+                        "  GROUP BY s2.user.id" +
+                        ") " +
+                        "ORDER BY s.createdAt DESC")
+        List<Shout> findRecentShoutsFromFollowing(
+                        @Param("userId") UUID userId,
+                        @Param("variant") ShoutVariant variant,
+                        @Param("threeDaysAgo") LocalDate threeDaysAgo);
 
         /**
          * Finds all authored and re-shouted shouts by a given username, eagerly

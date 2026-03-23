@@ -1,13 +1,12 @@
 "use client"
 
-import ShoutInstance from '@/components/shout/ShoutInstance'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
 import { CreateShout, ShoutComposer } from '@/components/shout/CreateShout';
 import { PencilLine } from 'lucide-react';
-import { useGetShoutsQuery } from '@redux/api/apis/shoutApi';
+import { useGetRecentFollowingShoutsQuery, useGetRecentShoutsQuery } from '@redux/api/apis/shoutApi';
 import { useGetUserQuery } from '@redux/api/apis/userApi';
 import RenderShouts from '@/components/shout/RenderShouts';
 
@@ -20,20 +19,23 @@ export type CreateShoutPlayoad = { shoutId?: string, text: string; images: strin
  */
 const Home = () => {
 
-  const [activeTab, setActiveTab] = useState("for-you");
+  const [activeTab, setActiveTab] = useState("recent");
 
-  const { data: user } = useGetUserQuery(undefined);
-  const username = user?.username ?? "";
-  const { data: shouts, isLoading } = useGetShoutsQuery(username);
+  const { data: recentShouts, isLoading: isLoadingRecentShouts, } = useGetRecentShoutsQuery(undefined, {
+    skip: activeTab !== "recent"
+  });
+  const { data: recentFollowingShouts, isLoading: isLoadingRecentFollowingShouts } = useGetRecentFollowingShoutsQuery(undefined, {
+    skip: activeTab !== "following"
+  });
 
   return (
     <div className='w-full text-3xl'>
 
       {/* Tab Navigation */}
-      <Tabs defaultValue="for-you" className="w-full" onValueChange={setActiveTab}>
+      <Tabs defaultValue="recent" className="w-full" onValueChange={setActiveTab}>
         <TabsList className='bg-background w-full grid grid-cols-2 h-14 p-0'>
-          <TabsTrigger value="for-you" className={`flex-1 text-lg
-            ${activeTab === "for-you" ? "underline decoration-2 underline-offset-20" : ""}`}>For you</TabsTrigger>
+          <TabsTrigger value="recent" className={`flex-1 text-lg
+            ${activeTab === "recent" ? "underline decoration-2 underline-offset-20" : ""}`}>Recent</TabsTrigger>
           <TabsTrigger value="following" className={`flex-1 text-lg
             ${activeTab === "following" ? "underline decoration-2 underline-offset-20" : ""}`}>Following</TabsTrigger>
         </TabsList>
@@ -45,11 +47,13 @@ const Home = () => {
         </div>
 
         {/* "For You" Feed */}
-        <TabsContent value="for-you" className='m-0'>
-          <RenderShouts isLoading={isLoading} shouts={shouts ? shouts : []}></RenderShouts>
+        <TabsContent value="recent" className='m-0'>
+          <RenderShouts isLoading={isLoadingRecentShouts} shouts={recentShouts ? recentShouts : []}></RenderShouts>
         </TabsContent>
         {/* "Following" Feed */}
-        <TabsContent value="following" className='m-0'>Change your following here.</TabsContent>
+        <TabsContent value="following" className='m-0'>
+          <RenderShouts isLoading={isLoadingRecentFollowingShouts} shouts={recentFollowingShouts ? recentFollowingShouts : []}></RenderShouts>
+        </TabsContent>
       </Tabs>
 
       {/* Floating compose button — mobile only */}

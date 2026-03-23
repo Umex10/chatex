@@ -4,6 +4,7 @@ import ChatConversation from '@/components/chat/ChatConversation'
 import { useGetChatQuery } from '@redux/api/apis/chatApi';
 import { usePathname } from 'next/navigation';
 import { useGetUserQuery } from '@redux/api/apis/userApi';
+import DefaultChatView from '../../default';
 
 const ChatInstancePage = () => {
 
@@ -16,7 +17,7 @@ const ChatInstancePage = () => {
   const {data: meUser} = useGetUserQuery();
 
   if (!chat || !meUser) {
-    return <p>Data needed!</p>;
+    return <DefaultChatView></DefaultChatView>;
   }
 
   const { id, lastMessage, messages, ...userData } = { ...chat };

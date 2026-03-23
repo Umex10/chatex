@@ -27,6 +27,18 @@ const shoutApi = apiSlice.injectEndpoints({
       providesTags: ['User']
     }),
 
+      /** Fetches all shouts for a given username. */
+    getRecentShouts: builder.query<Shout[], void>({
+      query: () => `/shout/recentShouts`,
+      providesTags: ['User']
+    }),
+
+       /** Fetches all shouts for a given username. */
+    getRecentFollowingShouts: builder.query<Shout[], void>({
+      query: () => `/shout/recentFollowingShouts`,
+      providesTags: ['User']
+    }),
+
      getLikedShouts: builder.query<Shout[], string>({
       query: (username) => `/shout/${username}/likedShouts`,
       providesTags: ['User']
@@ -162,6 +174,8 @@ export const {
   useGetReShoutedByQuery,
   useGetShoutQuery,
   useGetShoutsQuery,
+  useGetRecentShoutsQuery,
+  useGetRecentFollowingShoutsQuery,
   useGetLikedShoutsQuery,
   useGetUserCommentsQuery,
 

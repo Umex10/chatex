@@ -58,6 +58,48 @@ public class ShoutController {
         return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
     }
 
+     /**
+     * Retrieves all shouts for the given username with engagement flags for the
+     * requesting user.
+     *
+     * @param username the target username whose shouts are being requested
+     * @param userId   the ID of the requesting user
+     * @return ResponseEntity containing a list of ShoutDto entries
+     */
+    @GetMapping(path = "/recentShouts")
+    public ResponseEntity<List<ShoutDto>> getRecentShouts(@RequestAttribute UUID userId) {
+        List<Shout> shouts = shoutService.getRecentShouts(userId, ShoutVariant.DEFAULT);
+        List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
+
+        shoutsDto.forEach(dto -> {
+            dto.setUserLikingTheShout(shoutService.isUserLikingTheShout(dto.getId(), userId));
+            dto.setUserReShoutingTheShout(shoutService.isUserReShoutingTheShout(dto.getId(), userId));
+        });
+
+        return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
+    }
+
+         /**
+     * Retrieves all shouts for the given username with engagement flags for the
+     * requesting user.
+     *
+     * @param username the target username whose shouts are being requested
+     * @param userId   the ID of the requesting user
+     * @return ResponseEntity containing a list of ShoutDto entries
+     */
+    @GetMapping(path = "/recentFollowingShouts")
+    public ResponseEntity<List<ShoutDto>> getRecentFollowingShouts(@RequestAttribute UUID userId) {
+        List<Shout> shouts = shoutService.getRecentFollowingShouts(userId, ShoutVariant.DEFAULT);
+        List<ShoutDto> shoutsDto = shoutMapper.toDtoList(shouts);
+
+        shoutsDto.forEach(dto -> {
+            dto.setUserLikingTheShout(shoutService.isUserLikingTheShout(dto.getId(), userId));
+            dto.setUserReShoutingTheShout(shoutService.isUserReShoutingTheShout(dto.getId(), userId));
+        });
+
+        return new ResponseEntity<>(shoutsDto, HttpStatus.OK);
+    }
+
     /**
      * Retrieves a single shout by its ID with engagement flags for the requesting
      * user.
