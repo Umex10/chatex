@@ -1,12 +1,15 @@
 package org.devtiro.chatex.services.ipl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.entities.Chat;
+import org.devtiro.chatex.domain.entities.Message;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.ChatRep;
+import org.devtiro.chatex.reps.MessageRep;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.ChatService;
 import org.springframework.stereotype.Service;
@@ -21,78 +24,82 @@ public class ChatServiceIpl implements ChatService {
 
   private final UserRep userRep;
   private final ChatRep chatRep;
+  private final MessageRep messageRep;
 
-    /**
-     * {@inheritDoc}
-     *
-     * Throws EntityNotFoundException if user is not found.
-     */
-    @Override
-    public Set<Chat> getChats(UUID userId) {
-        userRep.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+  /**
+   * {@inheritDoc}
+   *
+   * Throws EntityNotFoundException if user is not found.
+   */
+  @Override
+  public Set<Chat> getChats(UUID userId) {
+    userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
 
-        return chatRep.findAllChatsByUserId(userId);
-    }
+    return chatRep.findAllChatsByUserId(userId);
+  }
 
-    /**
-     * {@inheritDoc}
-     *
-     * Throws EntityNotFoundException if user is not found.
-     */
-    @Override
-    public Set<Chat> getSilencedChats(UUID userId) {
-        userRep.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+  /**
+   * {@inheritDoc}
+   *
+   * Throws EntityNotFoundException if user is not found.
+   */
+  @Override
+  public Set<Chat> getSilencedChats(UUID userId) {
+    userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
 
-        return chatRep.findAllChatsByUserIdWithSilencedUser(userId);
-    }
+    return chatRep.findAllChatsByUserIdWithSilencedUser(userId);
+  }
 
-    /**
-     * {@inheritDoc}
-     *
-     * Throws EntityNotFoundException if chat is not found.
-     */
-    @Override
-    public Chat getChat(UUID chatId) {
-        return chatRep.findChatWithMessages(chatId)
-                .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
-    }
+  /**
+   * {@inheritDoc}
+   *
+   * Throws EntityNotFoundException if chat is not found.
+   */
+  @Override
+  public Chat getChat(UUID chatId) {
+    Chat chat = chatRep.findChatWithMessages(chatId)
+        .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
 
-    /**
-     * {@inheritDoc}
-     *
-     * Throws EntityNotFoundException if user or chat partner is not found.
-     */
-    @Override
-    @Transactional
-    public Chat createChat(String username, UUID userId) {
+    messageRep.markAllMessagesAsSeen(chatId, chat.getChatUser().getId());
+    return chat;
+  }
 
-        User chatUser = userRep.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User with username " + username + " not found"));
+  /**
+   * {@inheritDoc}
+   *
+   * Throws EntityNotFoundException if user or chat partner is not found.
+   */
+  @Override
+  @Transactional
+  public Chat createChat(String username, UUID userId) {
 
-        User me = userRep.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+    User chatUser = userRep.findByUsername(username)
+        .orElseThrow(() -> new EntityNotFoundException("User with username " + username + " not found"));
 
-        Optional<Chat> alreadyHasChat = chatRep.findChatBetweenUsers(chatUser.getId(), me.getId());
+    User me = userRep.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
 
-        if (!alreadyHasChat.isEmpty())
-            return alreadyHasChat.get();
+    Optional<Chat> alreadyHasChat = chatRep.findChatBetweenUsers(chatUser.getId(), me.getId());
 
-        Chat chat = Chat.builder()
-                .chatUser(chatUser)
-                .me(me)
-                .build();
+    if (!alreadyHasChat.isEmpty())
+      return alreadyHasChat.get();
 
-        return chatRep.saveAndFlush(chat);
-    }
+    Chat chat = Chat.builder()
+        .chatUser(chatUser)
+        .me(me)
+        .build();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void deleteChat(UUID chatId) {
-        chatRep.deleteById(chatId);
-    }
+    return chatRep.saveAndFlush(chat);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void deleteChat(UUID chatId) {
+    chatRep.deleteById(chatId);
+  }
 
 }

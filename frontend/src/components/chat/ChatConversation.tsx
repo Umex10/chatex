@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect, KeyboardEvent } from 'react'
-import { Plus, Image as ImageIcon, Smile, MoreHorizontal, BadgeCheck, SquareAsterisk } from 'lucide-react'
+import { Plus, Image as ImageIcon, Smile, MoreHorizontal, BadgeCheck, SquareAsterisk, Check } from 'lucide-react'
 import { useTheme } from "next-themes"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
@@ -19,6 +19,8 @@ import { SendHorizontal } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
 import { setInitialMessages } from '@redux/api/slices/chatSlice'
+import { Badge } from '../ui/badge'
+import { CheckCheck } from 'lucide-react';
 
 const EMPTY_MESSAGES: Message[] = [];
 
@@ -202,9 +204,19 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
                     <span className="break-words whitespace-pre-wrap leading-tight">{msg.text}</span>
                     {/* Dazn style inline time on messages */}
                     {isMe && (
-                      <span className="text-[11px] opacity-80 mb-[-2px] whitespace-nowrap ml-1 font-medium">
-                        {formatTime(msg.createdAt)} 
-                        <BadgeCheck className="w-3 h-3 inline ml-0.5 opacity-90 fill-current" />
+                      <span className="text-[11px] opacity-80 mb-[-2px] whitespace-nowrap ml-1 font-medium
+                      flex items-center">
+                        {formatTime(msg.createdAt)}
+                        <span className="inline-flex items-center">
+                          {!msg.seen ? (
+
+                            <Check className="w-4 h-4" />
+                          ) : (
+
+                            <CheckCheck className="w-4 h-4 text-zinc-400 shadow-sm" />
+                          )}
+                        </span>
+
                       </span>
                     )}
                   </div>

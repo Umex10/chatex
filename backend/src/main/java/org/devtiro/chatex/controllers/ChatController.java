@@ -33,7 +33,7 @@ public class ChatController {
 
     Set<Chat> chats = chatService.getChats(userId);
 
-    List<ChatDto> chatsDto = chatMapper.toDtoList(chats);
+    List<ChatDto> chatsDto = chatMapper.toDtoList(chats, userId);
 
     return new ResponseEntity<>(chatsDto, HttpStatus.OK);
   }
@@ -43,17 +43,17 @@ public class ChatController {
 
     Set<Chat> chats = chatService.getSilencedChats(userId);
 
-    List<ChatDto> chatsDto = chatMapper.toDtoList(chats);
+    List<ChatDto> chatsDto = chatMapper.toDtoList(chats, userId);
 
     return new ResponseEntity<>(chatsDto, HttpStatus.OK);
   }
 
   @GetMapping(path = "/{chatId}")
-  public ResponseEntity<ChatDto> getChat(@PathVariable UUID chatId) {
+  public ResponseEntity<ChatDto> getChat(@PathVariable UUID chatId, @RequestAttribute UUID userId) {
 
     Chat chat = chatService.getChat(chatId);
 
-    ChatDto chatDto = chatMapper.toDto(chat);
+    ChatDto chatDto = chatMapper.toDto(chat, userId);
 
     return new ResponseEntity<>(chatDto, HttpStatus.OK);
   }
@@ -72,7 +72,7 @@ public class ChatController {
 
     Chat chat = chatService.createChat(username, userId);
 
-    ChatDto chatDto = chatMapper.toDto(chat);
+    ChatDto chatDto = chatMapper.toDto(chat, userId);
 
     return new ResponseEntity<>(chatDto, HttpStatus.OK);
   }

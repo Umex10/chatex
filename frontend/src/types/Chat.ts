@@ -18,6 +18,8 @@ export interface Chat {
   /** The most recent message in the chat */
   lastMessage: Message,
   /** All messages in the chat */
-  messages: Message[]
+  messages: Message[],
+
+  unseenMessages: number
 }
 

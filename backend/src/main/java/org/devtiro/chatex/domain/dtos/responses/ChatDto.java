@@ -22,5 +22,5 @@ public class ChatDto {
   private LocalDate createdUserAt;
   private MessageDto lastMessage;
   private List<MessageDto> messages;
-
+  private long unseenMessages;
 }

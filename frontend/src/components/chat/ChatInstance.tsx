@@ -7,16 +7,18 @@ import { usePathname, useRouter } from 'next/navigation'
 import TrashButton from '../shared/TrashButton'
 import { Message } from '@/types/Message'
 import { User } from '@/types/User'
+import { Badge } from '../ui/badge'
 
 interface MessageArgs {
   meUser: User,
   chatId: string,
   avatar: string,
   name: string,
-  lastMessage: Message
+  lastMessage: Message,
+  unseenMessages: number
 }
 
-const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage }: MessageArgs) => {
+const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessages }: MessageArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
@@ -68,6 +70,10 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage }: MessageArgs
               deleteChat(chatId);
               router.back();
             }}></TrashButton>
+
+            {unseenMessages >= 1 && (
+              <Badge>{unseenMessages}</Badge>
+            )}
           </div>
 
         </div>

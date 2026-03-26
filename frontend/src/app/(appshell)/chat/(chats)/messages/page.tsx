@@ -34,8 +34,9 @@ const Page = () => {
         </div>
       ) : (
         filteredChats.map(chat => (
-          <ChatInstance key={chat.username} meUser={me ? me : {} as User} chatId={chat.id} avatar={chat.avatar} name={chat.name}
-            lastMessage={chat.lastMessage}></ChatInstance>
+          <ChatInstance key={chat.username} meUser={me ? me : {} as User} 
+          chatId={chat.id} avatar={chat.avatar} name={chat.username}
+            lastMessage={chat.lastMessage} unseenMessages={chat.unseenMessages}></ChatInstance>
         ))
       )}
 
