@@ -26,7 +26,7 @@ export default function Home() {
         <div className="container flex justify-between items-center py-3 px-4 mx-auto sm:py-4 sm:px-6">
           <div className="flex gap-2 items-center sm:gap-3">
             <Image
-              src="/chatex2.png"
+              src="/chatex4.png"
               width="32"
               height="32"
               alt="Chatex Logo"
@@ -60,7 +60,7 @@ export default function Home() {
           {/* Hero Section */}
           <div className="flex flex-col gap-4 items-center text-center sm:gap-6">
             <Image
-              src="/chatex2.png"
+              src="/chatex4.png"
               width="80"
               height="80"
               alt="Chatex Logo"

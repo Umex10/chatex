@@ -22,8 +22,23 @@ public interface FollowService {
      */
     Set<User> getFollowers(String username);
 
+
+    /**
+     * Searches for users by username for follow results.
+     *
+     * @param username the username to search for
+     * @param userId the ID of the requesting user
+     * @return a set of User entities matching the search
+     */
     Set<User> searchFollowResultByUsername(String username, UUID userId);
 
+    /**
+     * Searches for follow recommendations by username.
+     *
+     * @param username the username to search for
+     * @param userId the ID of the requesting user
+     * @return a set of recommended User entities
+     */
     Set<User> searchFollowRecommendationByUsername(String username, UUID userId);
 
     /**
@@ -56,6 +71,13 @@ public interface FollowService {
      */
     boolean isUserFollowingTarget(String targetUsername, UUID requestingUserId);
     
+    /**
+     * Checks if the target user is following the requesting user.
+     *
+     * @param targetUsername the username of the target
+     * @param requestingUserId the ID of the requesting user
+     * @return true if the target is following the user, false otherwise
+     */
     boolean isTargetFollowingUser(String targetUsername, UUID requestingUserId);
 
     /**

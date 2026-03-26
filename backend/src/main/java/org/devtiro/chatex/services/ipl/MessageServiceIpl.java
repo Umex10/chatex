@@ -25,32 +25,38 @@ public class MessageServiceIpl implements MessageService {
   private final ChatRep chatRep;
   private final MessageRep messageRep;
 
-  @Override
-  @Transactional
-  public Message saveMessage(UUID senderId, ChatMessageRequest request) {
+    /**
+     * {@inheritDoc}
+     *
+     * Finds sender and receiver, validates chat, and persists the message.
+     * Throws EntityNotFoundException if sender, receiver, or chat is not found.
+     */
+    @Override
+    @Transactional
+    public Message saveMessage(UUID senderId, ChatMessageRequest request) {
 
-    User sender = userRep.findById(senderId)
-        .orElseThrow(() -> new EntityNotFoundException("Sender with id " + senderId + " not found"));
+      User sender = userRep.findById(senderId)
+          .orElseThrow(() -> new EntityNotFoundException("Sender with id " + senderId + " not found"));
 
-    String receiverUsername = request.getReceiverUsername();
-    UUID chatId = request.getChatId();
-    String text = request.getText();
+      String receiverUsername = request.getReceiverUsername();
+      UUID chatId = request.getChatId();
+      String text = request.getText();
 
-    User receiver = userRep.findByUsername(receiverUsername)
-        .orElseThrow(() -> new EntityNotFoundException("Receiver with username " + receiverUsername + " not found"));
+      User receiver = userRep.findByUsername(receiverUsername)
+          .orElseThrow(() -> new EntityNotFoundException("Receiver with username " + receiverUsername + " not found"));
 
-    Chat chat = chatRep.findById(chatId)
-        .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
+      Chat chat = chatRep.findById(chatId)
+          .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
 
-    Message message = Message.builder()
-        .text(text)
-        .sender(sender)
-        .receiver(receiver)
-        .createdAt(LocalDate.now())
-        .chat(chat)
-        .build();
+      Message message = Message.builder()
+          .text(text)
+          .sender(sender)
+          .receiver(receiver)
+          .createdAt(LocalDate.now())
+          .chat(chat)
+          .build();
 
-    return messageRep.save(message);
-  }
+      return messageRep.save(message);
+    }
 
 }

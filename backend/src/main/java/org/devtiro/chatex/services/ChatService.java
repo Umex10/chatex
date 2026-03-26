@@ -5,15 +5,49 @@ import java.util.UUID;
 
 import org.devtiro.chatex.domain.entities.Chat;
 
+/**
+ * Service interface for chat management operations.
+ * Provides methods for creating, retrieving, and deleting chats.
+ */
 public interface ChatService {
 
-  Set<Chat> getChats(UUID userId);
+    /**
+     * Retrieves all chats for a given user.
+     *
+     * @param userId the ID of the user
+     * @return a set of Chat entities
+     */
+    Set<Chat> getChats(UUID userId);
 
-  Set<Chat> getSilencedChats(UUID userId);
+    /**
+     * Retrieves all silenced chats for a given user.
+     *
+     * @param userId the ID of the user
+     * @return a set of silenced Chat entities
+     */
+    Set<Chat> getSilencedChats(UUID userId);
 
-  Chat getChat(UUID chatId);
+    /**
+     * Retrieves a chat by its unique identifier.
+     *
+     * @param chatId the ID of the chat
+     * @return the Chat entity
+     */
+    Chat getChat(UUID chatId);
 
-  Chat createChat(String username, UUID userId);
+    /**
+     * Creates a new chat for a user with the specified username.
+     *
+     * @param username the username to chat with
+     * @param userId the ID of the user creating the chat
+     * @return the created Chat entity
+     */
+    Chat createChat(String username, UUID userId);
 
-  void deleteChat(UUID chatId);
+    /**
+     * Deletes a chat by its unique identifier.
+     *
+     * @param chatId the ID of the chat to delete
+     */
+    void deleteChat(UUID chatId);
 }

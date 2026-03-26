@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, KeyboardEvent } from 'react'
 import { Plus, Image as ImageIcon, Smile, MoreHorizontal, BadgeCheck, SquareAsterisk } from 'lucide-react'
 import { useTheme } from "next-themes"
 import data from "@emoji-mart/data"
@@ -22,18 +22,34 @@ import { setInitialMessages } from '@redux/api/slices/chatSlice'
 
 const EMPTY_MESSAGES: Message[] = [];
 
+
+/**
+ * Props for the ChatConversation component.
+ */
 interface ChatConversationProps {
+  /** The chat ID for this conversation */
   chatId: string,
+  /** Initial messages for the chat */
   messages: Message[];
+  /** The user you are chatting with */
   chatUser: {
+    /** Display name of the chat user */
     name: string,
+    /** Username of the chat user */
     username: string,
+    /** Avatar image URL */
     avatar: string,
+    /** ISO date string when the user was created */
     createdUserAt: string
   },
+  /** The current logged-in user */
   meUser: User
 }
 
+/**
+ * ChatConversation component displays a chat interface between two users.
+ * Handles message sending, emoji picker, and message rendering.
+ */
 export default function ChatConversation({ chatId, messages, chatUser, meUser }: ChatConversationProps) {
   const [inputText, setInputText] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -45,6 +61,14 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
   const emojiRef = useRef<HTMLDivElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && buttonRef.current) {
+      buttonRef.current.click();
+    }
+  };
 
   useEffect(() => {
     if (messages) {
@@ -241,6 +265,7 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
               className='w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-white placeholder:text-gray-500'
               placeholder='Message'
               value={inputText}
+              onKeyDown={handleKeyDown}
               onChange={(e) => setInputText(e.target.value)}
             />
           </div>
@@ -250,6 +275,7 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
             size="icon"
             className="rounded-full w-10 h-10 bg-zinc-800/80 hover:bg-zinc-700 
             text-gray-200 flex-shrink-0"
+            ref={buttonRef}
             onClick={() => send()}
           >
             <SendHorizontal className="w-5 h-5" />
