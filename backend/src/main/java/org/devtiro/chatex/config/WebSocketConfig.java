@@ -1,7 +1,11 @@
 package org.devtiro.chatex.config;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.devtiro.chatex.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -23,6 +27,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Autowired
     private JwtService jwtService;
+
+    @Value("${FRONTEND_URL:http://localhost:3000}")
+    private String frontendUrl;
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
@@ -73,8 +80,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+
+          List<String> allowedOrigins = Stream.of(frontendUrl.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
         // The URL where the client connects to the WebSocket server
-        registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:3000"); // CORS for Next.js
+      registry.addEndpoint("/ws")
+            .setAllowedOriginPatterns(allowedOrigins.toArray(new String[0])); // CORS for Next.js
     }
 }
