@@ -22,6 +22,9 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const segments = pathname.split('/').filter(Boolean);
 
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+  const socketUrl = backendUrl.replace(/^http/, "ws") + "/ws";
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
     if (!accessTk?.accessJwt) return;
 
     const client = new Client({
-      brokerURL: "ws://localhost:8080/ws",
+      brokerURL: socketUrl,
       connectHeaders: { Authorization: `Bearer ${accessTk.accessJwt}` },
       reconnectDelay: 5000,
       debug: (str) => console.log("STOMP Debug:", str),
