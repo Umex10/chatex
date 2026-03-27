@@ -29,7 +29,7 @@ const CreateChatDialog = ({children}: {children: React.ReactNode}) => {
         <SearchUsersInput variant='CHAT' />
 
         <div className=''>
-          <h3>Recently viewed Users by you</h3>
+          <h3>Users you recently interacted with</h3>
 
           <div className='flex flex-col overflow-y-scroll max-h-[40vh]'>
             <RenderFollowList variant='CHAT' list={recentlyViewedUsers ? recentlyViewedUsers : []} isLoading={isLoading}></RenderFollowList>

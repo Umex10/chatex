@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChatMessageRequest {
   private String text;
-  private String receiverUsername; 
-  private UUID chatId; 
+  private String receiverUsername;
+  private UUID chatId;
 }

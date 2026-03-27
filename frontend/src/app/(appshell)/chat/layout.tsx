@@ -4,31 +4,42 @@ import { WebSocketProvider } from '@/components/chat/WebSocketProvider';
 import { usePathname } from 'next/navigation';
 import React from 'react'
 
-const Layout = ({
+import { useSelectedLayoutSegment } from 'next/navigation';
+
+export default function ChatLayout({
   children,
   modal,
 }: {
   children: React.ReactNode;
   modal: React.ReactNode;
-}) => {
+}) {
 
-  const path = usePathname();
-  const segment = path.split('/')[2];
+  // This will tell us if the modal is currently showing sth. or just the defualt
+  // In order to show the chat on the mobile, and on md: on the right side
+  const modalSegment = useSelectedLayoutSegment('modal');
+  const isChatOpen = modalSegment !== null;
+
   return (
     <WebSocketProvider>
-      <div className='w-full h-full flex flex-row'>
+      <div className='w-full h-full flex flex-row overflow-hidden'>
 
-        <div className='w-full md:w-[40%] md:border-x h-full'>
+        {/* ChatList */}
+        <div className={`
+          ${isChatOpen ? 'hidden md:block' : 'block'} 
+          w-full md:w-[40%] md:border-r h-full
+        `}>
           {children}
         </div>
 
-        <div className='hidden md:flex w-[60%] border-x h-full' key={path}>
+        {/* Chat */}
+        <div className={`
+          ${isChatOpen ? 'block' : 'hidden'} 
+          md:flex w-full md:w-[60%] h-full
+        `}>
           {modal}
         </div>
+
       </div>
     </WebSocketProvider>
-
-  )
+  );
 }
-
-export default Layout

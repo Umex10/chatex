@@ -28,7 +28,7 @@ const ReturnHeader = ({children, returnText}: ReturnHeaderArgs) => {
           <Button
             className="bg-transparent [&_svg]:!size-6 px-0"
             onClick={() => router.back()}
-            aria-label="Zurück"
+            aria-label="Back"
             data-testid="return-btn"
           >
             <ArrowLeft/>

@@ -27,9 +27,6 @@ const ChatPage = ({ children }: { children: React.ReactNode }) => {
 
           {/* Settings */}
           <div className='flex flex-row items-center gap-1'>
-            <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary">
-              <Settings className="w-5 h-5 text-muted-foreground" />
-            </Button>
             <CreateChatDialog>
               <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary"
                 onClick={() => {}}>
