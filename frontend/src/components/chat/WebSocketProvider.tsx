@@ -9,6 +9,7 @@ import { Client } from "@stomp/stompjs";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Chat } from "@/types/Chat";
+import { usePathname } from "next/navigation";
 
 const WebSocketContext = createContext<Client | null>(null);
 
@@ -17,6 +18,9 @@ export const useWebSocket = () => useContext(WebSocketContext);
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const { data: accessTk } = useRefreshAccessTkQuery(undefined);
+
+  const pathname = usePathname();
+  const segments = pathname.split('/').filter(Boolean);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -33,14 +37,14 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
         setStompClient(client);
 
         client.subscribe('/user/queue/messages', (payload) => {
-          const msg = JSON.parse(payload.body); 
+          const msg = JSON.parse(payload.body);
 
           dispatch(receivedMessage(msg));
 
           // Needed to be able to still see the data after leaving the chat layout
           dispatch(
             chatApi.util.updateQueryData('getChat', msg.chatId, (draft: Chat) => {
-              draft.messages.push(msg); 
+              draft.messages.push(msg);
             })
           );
 
@@ -48,11 +52,21 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
             chatApi.util.updateQueryData('getChats', undefined, (draft: Chat[]) => {
               const chat = draft.find(c => c.id === msg.chatId);
               if (chat) {
-                chat.lastMessage = msg; 
+                chat.lastMessage = msg;
                 chat.unseenMessages++;
               }
             })
-          ); 
+          );
+
+          dispatch(
+            chatApi.util.updateQueryData('getSilencedChats', undefined, (draft: Chat[]) => {
+              const chat = draft.find(c => c.id === msg.chatId);
+              if (chat) {
+                chat.lastMessage = msg;
+                chat.unseenMessages++;
+              }
+            })
+          );
 
           console.log("Subscribed to the queue!", msg);
         });

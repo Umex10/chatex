@@ -108,55 +108,61 @@ export const Layout = ({
                   {!isSearchPage ? (
                     <SearchUsersInput variant='ACCOUNT'></SearchUsersInput>
                   ) : (
-
                     <div className='h-1 w-full bg-violet-500 '></div>
-
                   )}
 
                   {/* trends section with list items and show-more action */}
-                  <section className="overflow-hidden rounded-2xl bg-secondary/50">
-                    <h2 className="py-3 px-4 text-xl font-extrabold">Trends für dich</h2>
-
-                    <div className="flex flex-col">
-                      {[
-                        { category: "Technologie · Trending", title: "#NextJS", posts: "12.5K Posts" },
-                        { category: "Laufen · Trending", title: "Bundesliga", posts: "45K Posts" },
-                        { category: "Wirtschaft · Trending", title: "Wahlen", posts: "120K Posts" },
-                      ].map((trend, i) => (
-                        <Button variant="outline" key={i} className="py-3 px-4 text-left transition hover:bg-secondary">
-                          <p className="text-xs text-muted-foreground">{trend.category}</p>
-                          <p className="font-bold">{trend.title}</p>
-                          <p className="text-xs text-muted-foreground">{trend.posts}</p>
-                        </Button>
-                      ))}
+                  <div className="relative">
+                    <section className="overflow-hidden rounded-2xl bg-secondary/50">
+                      <h2 className="py-3 px-4 text-xl font-extrabold">Trends für dich</h2>
+                      <div className="flex flex-col">
+                        {[
+                          { category: "Technologie · Trending", title: "#NextJS", posts: "12.5K Posts" },
+                          { category: "Laufen · Trending", title: "Bundesliga", posts: "45K Posts" },
+                          { category: "Wirtschaft · Trending", title: "Wahlen", posts: "120K Posts" },
+                        ].map((trend, i) => (
+                          <Button variant="outline" key={i} className="py-3 px-4 text-left transition hover:bg-secondary">
+                            <p className="text-xs text-muted-foreground">{trend.category}</p>
+                            <p className="font-bold">{trend.title}</p>
+                            <p className="text-xs text-muted-foreground">{trend.posts}</p>
+                          </Button>
+                        ))}
+                      </div>
+                      <Button variant="secondary" className="py-4 px-4 w-full text-sm text-left text-primary hover:bg-secondary">
+                        Mehr anzeigen
+                      </Button>
+                    </section>
+                    {/* Coming Soon Badge Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="bg-black/70 text-white text-lg font-bold px-6 py-2 rounded-2xl shadow-lg" style={{backdropFilter: 'blur(2px)'}}>Coming Soon</span>
                     </div>
+                  </div>
 
-                    <Button variant="secondary" className="py-4 px-4 w-full text-sm text-left text-primary hover:bg-secondary">
-                      Mehr anzeigen
-                    </Button>
-                  </section>
-
-                  <section className="overflow-hidden rounded-2xl bg-secondary/50">
-                    <h2 className="py-3 px-4 text-xl font-extrabold">Trends for you</h2>
-
-                    <div className="flex flex-col">
-                      {[
-                        { category: "Technologie · Trending", title: "#NextJS", posts: "12.5K Posts" },
-                        { category: "Laufen · Trending", title: "Bundesliga", posts: "45K Posts" },
-                        { category: "Wirtschaft · Trending", title: "Wahlen", posts: "120K Posts" },
-                      ].map((trend, i) => (
-                        <Button variant="outline" key={i} className="py-3 px-4 text-left transition hover:bg-secondary">
-                          <p className="text-xs text-muted-foreground">{trend.category}</p>
-                          <p className="font-bold">{trend.title}</p>
-                          <p className="text-xs text-muted-foreground">{trend.posts}</p>
-                        </Button>
-                      ))}
+                  <div className="relative">
+                    <section className="overflow-hidden rounded-2xl bg-secondary/50 mt-4">
+                      <h2 className="py-3 px-4 text-xl font-extrabold">Trends for you</h2>
+                      <div className="flex flex-col">
+                        {[
+                          { category: "Technologie · Trending", title: "#NextJS", posts: "12.5K Posts" },
+                          { category: "Laufen · Trending", title: "Bundesliga", posts: "45K Posts" },
+                          { category: "Wirtschaft · Trending", title: "Wahlen", posts: "120K Posts" },
+                        ].map((trend, i) => (
+                          <Button variant="outline" key={i} className="py-3 px-4 text-left transition hover:bg-secondary">
+                            <p className="text-xs text-muted-foreground">{trend.category}</p>
+                            <p className="font-bold">{trend.title}</p>
+                            <p className="text-xs text-muted-foreground">{trend.posts}</p>
+                          </Button>
+                        ))}
+                      </div>
+                      <Button variant="secondary" className="py-4 px-4 w-full text-sm text-left text-primary hover:bg-secondary">
+                        Mehr anzeigen
+                      </Button>
+                    </section>
+                    {/* Coming Soon Badge Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="bg-black/70 text-white text-lg font-bold px-6 py-2 rounded-2xl shadow-lg" style={{backdropFilter: 'blur(2px)'}}>Coming Soon</span>
                     </div>
-
-                    <Button variant="secondary" className="py-4 px-4 w-full text-sm text-left text-primary hover:bg-secondary">
-                      Mehr anzeigen
-                    </Button>
-                  </section>
+                  </div>
                 </aside>
               )}
               {/* mobile bottom navigation that stays fixed on small screens */}

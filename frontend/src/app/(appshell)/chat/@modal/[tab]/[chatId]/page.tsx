@@ -23,8 +23,18 @@ const ChatInstancePage = () => {
 
   // This will make sure that, when the user clicks on the chat, that the 
   // "unseen" messages resets to 0 
+
   dispatch(
     chatApi.util.updateQueryData('getChats', undefined, (draft: Chat[]) => {
+      const chat = draft.find(c => c.id === chatId);
+      if (chat) {
+        chat.unseenMessages = 0;
+      }
+    })
+  );
+
+  dispatch(
+    chatApi.util.updateQueryData('getSilencedChats', undefined, (draft: Chat[]) => {
       const chat = draft.find(c => c.id === chatId);
       if (chat) {
         chat.unseenMessages = 0;

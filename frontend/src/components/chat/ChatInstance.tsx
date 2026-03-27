@@ -20,12 +20,14 @@ interface MessageArgs {
 
 const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessages }: MessageArgs) => {
 
+
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";
 
   const router = useRouter();
   const path = usePathname().split("/")
   const chatIdInURL = path[3]; // this will ensure that we don't fetch the chat unnecessarily
   const isSameChat = chatId === chatIdInURL;
+  const tab = path[2]
 
   const [deleteChat, { isLoading }] = useDeleteChatMutation();
 
@@ -36,7 +38,7 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessage
     ${isSameChat ? "bg-gray-800/50" : ""} transition ease-out duration-400`}
       onClick={() => {
         if (!isSameChat) {
-          router.push(`/chat/messages/${chatId}`)
+          router.push(`/chat/${tab}/${chatId}`)
         }
       }}>
 
