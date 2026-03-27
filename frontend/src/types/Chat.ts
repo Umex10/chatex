@@ -19,7 +19,7 @@ export interface Chat {
   lastMessage: Message,
   /** All messages in the chat */
   messages: Message[],
-
+  /** All unseen messages in the chat */
   unseenMessages: number
 }
 

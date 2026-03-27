@@ -51,7 +51,7 @@ public class ChatController {
   @GetMapping(path = "/{chatId}")
   public ResponseEntity<ChatDto> getChat(@PathVariable UUID chatId, @RequestAttribute UUID userId) {
 
-    Chat chat = chatService.getChat(chatId);
+    Chat chat = chatService.getChat(chatId, userId);
 
     ChatDto chatDto = chatMapper.toDto(chat, userId);
 

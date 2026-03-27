@@ -7,7 +7,7 @@ import { User } from '@/types/User'
 import { useGetChatsQuery } from '@redux/api/apis/chatApi'
 import { useGetUserQuery } from '@redux/api/apis/userApi'
 import { RootState } from '@redux/store'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 const Page = () => {
@@ -29,18 +29,18 @@ const Page = () => {
     <div className='relative'>
 
       {isLoading || isLoadingUser ? (
-        <div className="absolute z-50 top-20 inset-0 flex w-full items-center justify-center bg-transparent">
+        <div className="absolute z-50 top-20 inset-0 flex w-full
+         items-center justify-center bg-transparent">
           <Spinner></Spinner>
         </div>
       ) : (
         filteredChats.map(chat => (
-          <ChatInstance key={chat.username} meUser={me ? me : {} as User} 
-          chatId={chat.id} avatar={chat.avatar} name={chat.username}
-            lastMessage={chat.lastMessage} unseenMessages={chat.unseenMessages}></ChatInstance>
+          <ChatInstance key={chat.username} meUser={me ? me : {} as User}
+            chatId={chat.id} avatar={chat.avatar} name={chat.username}
+            lastMessage={chat.lastMessage} unseenMessages={chat.unseenMessages}>
+          </ChatInstance>
         ))
       )}
-
-
     </div>
   )
 }

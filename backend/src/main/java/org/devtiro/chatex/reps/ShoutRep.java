@@ -1,6 +1,7 @@
 package org.devtiro.chatex.reps;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,19 +21,27 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShoutRep extends JpaRepository<Shout, UUID> {
 
-        @Query("SELECT DISTINCT s from Shout s JOIN FETCH s.user LEFT JOIN s.reShoutedBy reShouter" +
-                        " WHERE (s.user.id != :userId OR reShouter.id != :userId)" +
-                        " AND s.variant = :variant" +
-                        " ORDER BY s.createdAt DESC")
-        List<Shout> findRecentShouts(@Param("userId") UUID userId,
-                        @Param("variant") ShoutVariant variant);
+        @Query("SELECT s FROM Shout s " +
+                        "JOIN FETCH s.user " +
+                        "WHERE s.variant = :variant " +
+                        "AND s.createdAt >= :threeDaysAgo " +
+                        "AND s.createdAt = (" +
+                        "  SELECT MAX(s2.createdAt) FROM Shout s2 " +
+                        "  WHERE s2.user.id = s.user.id " +
+                        "  AND s2.createdAt >= :threeDaysAgo " +
+                        "  AND s2.variant = :variant" +
+                        ") " +
+                        "ORDER BY s.createdAt DESC")
+        List<Shout> findRecentShouts(
+                        @Param("variant") ShoutVariant variant,
+                        @Param("threeDaysAgo") LocalDate threeDaysAgo);
 
         @Query("SELECT s FROM Shout s " +
                         "WHERE s.user IN (SELECT f FROM User u JOIN u.following f WHERE u.id = :userId) " +
                         "AND s.createdAt >= :threeDaysAgo " +
                         "AND s.variant = :variant " +
                         "AND s.id IN (" +
-                        "  SELECT MAX(s2.id) FROM Shout s2 " + // Wir nehmen den neuesten Shout pro User
+                        "  SELECT MAX(s2.id) FROM Shout s2 " +
                         "  WHERE s2.createdAt >= :threeDaysAgo " +
                         "  GROUP BY s2.user.id" +
                         ") " +

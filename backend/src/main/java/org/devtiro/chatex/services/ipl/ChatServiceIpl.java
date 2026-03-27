@@ -1,12 +1,10 @@
 package org.devtiro.chatex.services.ipl;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.entities.Chat;
-import org.devtiro.chatex.domain.entities.Message;
 import org.devtiro.chatex.domain.entities.User;
 import org.devtiro.chatex.reps.ChatRep;
 import org.devtiro.chatex.reps.MessageRep;
@@ -58,11 +56,11 @@ public class ChatServiceIpl implements ChatService {
    * Throws EntityNotFoundException if chat is not found.
    */
   @Override
-  public Chat getChat(UUID chatId) {
+  public Chat getChat(UUID chatId, UUID userId) {
     Chat chat = chatRep.findChatWithMessages(chatId)
         .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + " not found"));
 
-    messageRep.markAllMessagesAsSeen(chatId, chat.getChatUser().getId());
+    messageRep.markAllMessagesAsSeen(chatId, userId);
     return chat;
   }
 
@@ -100,6 +98,11 @@ public class ChatServiceIpl implements ChatService {
   @Override
   public void deleteChat(UUID chatId) {
     chatRep.deleteById(chatId);
+  }
+
+@Override
+  public void markAllMessagesAsSeen(UUID chatId, UUID userId) {
+     messageRep.markAllMessagesAsSeen(chatId, userId);
   }
 
 }

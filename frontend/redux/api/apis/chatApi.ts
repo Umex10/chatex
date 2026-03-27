@@ -19,7 +19,8 @@ export const chatApi = apiSlice.injectEndpoints({
     }),
 
     getChat: builder.query<Chat, string>({
-      query: (chatId) => `/chat/${chatId}`
+      query: (chatId) => `/chat/${chatId}`,
+      providesTags: ['User']
     }),
 
     createChat: builder.mutation<Chat, string>({

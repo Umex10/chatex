@@ -33,13 +33,13 @@ public interface ChatService {
      * @param chatId the ID of the chat
      * @return the Chat entity
      */
-    Chat getChat(UUID chatId);
+    Chat getChat(UUID chatId, UUID userId);
 
     /**
      * Creates a new chat for a user with the specified username.
      *
      * @param username the username to chat with
-     * @param userId the ID of the user creating the chat
+     * @param userId   the ID of the user creating the chat
      * @return the created Chat entity
      */
     Chat createChat(String username, UUID userId);
@@ -50,4 +50,6 @@ public interface ChatService {
      * @param chatId the ID of the chat to delete
      */
     void deleteChat(UUID chatId);
+
+    void markAllMessagesAsSeen(UUID chatId, UUID userId);
 }

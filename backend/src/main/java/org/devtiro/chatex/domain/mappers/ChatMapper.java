@@ -61,6 +61,7 @@ public abstract class ChatMapper {
       return 0;
     }
 
-    return messages.stream().filter(m -> m.isSeen() == false).count();
+    return messages.stream()
+        .filter(m -> m.isSeen() == false).count();
   }
 }

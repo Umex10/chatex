@@ -32,7 +32,7 @@ const ChatPage = ({ children }: { children: React.ReactNode }) => {
             </Button>
             <CreateChatDialog>
               <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-secondary"
-                onClick={() => { }}>
+                onClick={() => {}}>
                 <MessageCirclePlus className="w-5 h-5 text-muted-foreground" />
               </Button>
             </CreateChatDialog>

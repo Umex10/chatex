@@ -37,7 +37,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
 
           dispatch(receivedMessage(msg));
 
-          // Needed to able to still see the data after leaving the chat layout
+          // Needed to be able to still see the data after leaving the chat layout
           dispatch(
             chatApi.util.updateQueryData('getChat', msg.chatId, (draft: Chat) => {
               draft.messages.push(msg); 
@@ -49,6 +49,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
               const chat = draft.find(c => c.id === msg.chatId);
               if (chat) {
                 chat.lastMessage = msg; 
+                chat.unseenMessages++;
               }
             })
           ); 

@@ -14,7 +14,7 @@ const DefaultChatView = () => {
 
       <div className='w-full flex flex-col items-center'>
         <h3 className='text-5xl font-bold'>Chat</h3>
-        <p className='text-xl text-muted-foreground'>Select a chat or start a new chat in order to chatex!</p>
+        <p className='text-xl text-center text-muted-foreground'>Select a chat or start a new chat in order to chatex!</p>
       </div>
 
       <CreateChatDialog>

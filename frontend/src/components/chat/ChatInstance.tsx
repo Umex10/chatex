@@ -29,6 +29,8 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessage
 
   const [deleteChat, { isLoading }] = useDeleteChatMutation();
 
+  const isLastMessageFromMe = meUser.username === lastMessage?.senderUsername;
+
   return (
     <div className={`px-3 py-5 w-full flex flex-row items-center gap-2 hover:bg-gray-800 
     ${isSameChat ? "bg-gray-800/50" : ""} transition ease-out duration-400`}
@@ -71,7 +73,7 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessage
               router.back();
             }}></TrashButton>
 
-            {unseenMessages >= 1 && (
+            {unseenMessages >= 1 && !isLastMessageFromMe && (
               <Badge>{unseenMessages}</Badge>
             )}
           </div>
@@ -81,7 +83,7 @@ const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessage
           {lastMessage?.senderUsername && (
             <>
               <span className='font-bold'>
-                {meUser.username === lastMessage?.senderUsername ? "You" : lastMessage?.senderUsername}
+                {isLastMessageFromMe ? "You" : lastMessage?.senderUsername}
               </span>
 
               <span className='opacity-70'>

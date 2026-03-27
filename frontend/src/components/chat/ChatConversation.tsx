@@ -7,23 +7,19 @@ import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import { Button } from '@/components/ui/button'
 import Avatar from '@/components/account/Avatar'
-import Image from 'next/image'
 import { User } from '@/types/User'
 import { useRouter } from 'next/navigation'
 import { joinedAccountDate } from '@/utils/joinedDate'
 import { Message } from '@/types/Message'
-import { Client } from '@stomp/stompjs';
 import { useWebSocket } from './WebSocketProvider'
 import { Input } from '../ui/input'
 import { SendHorizontal } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
 import { setInitialMessages } from '@redux/api/slices/chatSlice'
-import { Badge } from '../ui/badge'
 import { CheckCheck } from 'lucide-react';
 
 const EMPTY_MESSAGES: Message[] = [];
-
 
 /**
  * Props for the ChatConversation component.
@@ -180,8 +176,6 @@ export default function ChatConversation({ chatId, messages, chatUser, meUser }:
         {messagesView.map((msg, index) => {
 
           const isMe = msg.senderUsername === meUser.username;
-
-          console.log(msg)
 
           return (
             <div

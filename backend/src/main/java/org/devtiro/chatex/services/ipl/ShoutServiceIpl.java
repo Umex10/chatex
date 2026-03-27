@@ -47,7 +47,8 @@ public class ShoutServiceIpl implements ShoutService {
 
   @Override
   public List<Shout> getRecentShouts(UUID userId, ShoutVariant variant) {
-    return shoutRep.findRecentShouts(userId, variant);
+    LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
+    return shoutRep.findRecentShouts(variant, threeDaysAgo);
   }
 
   @Override

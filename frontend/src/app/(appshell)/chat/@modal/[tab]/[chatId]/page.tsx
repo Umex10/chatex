@@ -5,6 +5,10 @@ import { useGetChatQuery } from '@redux/api/apis/chatApi';
 import { usePathname } from 'next/navigation';
 import { useGetUserQuery } from '@redux/api/apis/userApi';
 import DefaultChatView from '../../default';
+import { AppDispatch } from "@redux/store";
+import { chatApi } from "@redux/api/apis/chatApi";
+import { useDispatch } from 'react-redux';
+import { Chat } from '@/types/Chat';
 
 const ChatInstancePage = () => {
 
@@ -13,8 +17,22 @@ const ChatInstancePage = () => {
   const segments = pathname.split('/').filter(Boolean);
   const chatId = segments[segments.length - 1];
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const { data: chat } = useGetChatQuery(chatId);
-  const {data: meUser} = useGetUserQuery();
+
+  // This will make sure that, when the user clicks on the chat, that the 
+  // "unseen" messages resets to 0 
+  dispatch(
+    chatApi.util.updateQueryData('getChats', undefined, (draft: Chat[]) => {
+      const chat = draft.find(c => c.id === chatId);
+      if (chat) {
+        chat.unseenMessages = 0;
+      }
+    })
+  );
+
+  const { data: meUser } = useGetUserQuery();
 
   if (!chat || !meUser) {
     return <DefaultChatView></DefaultChatView>;

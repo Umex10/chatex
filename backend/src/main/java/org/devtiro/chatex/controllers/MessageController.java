@@ -8,6 +8,7 @@ import org.devtiro.chatex.domain.dtos.responses.MessageDto;
 import org.devtiro.chatex.domain.entities.Message;
 import org.devtiro.chatex.domain.mappers.MessageMapper;
 import org.devtiro.chatex.security.CustomUserDetails;
+import org.devtiro.chatex.services.ChatService;
 import org.devtiro.chatex.services.MessageService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,6 +25,7 @@ public class MessageController {
   private final MessageService messageService;
   private final MessageMapper messageMapper;
   private final SimpMessagingTemplate messagingTemplate;
+  private final ChatService chatService;
   
   @MessageMapping("/chat.send")
   public void handleChatMessage(@Payload ChatMessageRequest request, Principal userAuth) {
@@ -34,6 +36,8 @@ public class MessageController {
     UUID senderId = userDetails.getId();
 
     Message message = messageService.saveMessage(senderId, request);
+
+    chatService.markAllMessagesAsSeen(message.getChat().getId(), senderId);
 
     MessageDto messageDto = messageMapper.toDto(message);
 
