@@ -138,6 +138,11 @@ public class UserServiceIpl implements UserService {
         return userRep.save(userToUpdate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Looks up the user and returns their recently viewed users.
+     */
     @Override
     public Set<User> getRecentlyViewedUsers(UUID userId) {
         User me = userRep.findById(userId)
@@ -147,6 +152,11 @@ public class UserServiceIpl implements UserService {
         return me.getRecentlyViewed();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Adds the target user to the recently viewed list of the given user.
+     */
     @Override
     public void addUserToRecentlyViewedUsersList(User targetUser, UUID userId) {
         User me = userRep.findById(userId)
@@ -157,6 +167,11 @@ public class UserServiceIpl implements UserService {
         userRep.save(me);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Silences the target user for the given user, and updates follow relationships if necessary.
+     */
     @Override
     @Transactional
     public void silenceUser(String username, UUID userId) {
@@ -188,6 +203,11 @@ public class UserServiceIpl implements UserService {
         userRep.save(userToSilence);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Removes the silence status for the target user.
+     */
     @Override
     @Transactional
     public void unSilenceUser(String username, UUID userId) {
@@ -206,11 +226,21 @@ public class UserServiceIpl implements UserService {
         userRep.save(userToSilence);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Checks if the user is silencing the target user.
+     */
     @Override
     public boolean isUserSilencingTarget(String username, UUID userId) {
         return userRep.isUserSilencingTarget(username, userId);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Checks if the target user is silencing the user.
+     */
     @Override
     public boolean isTargetSilencingUser(String username, UUID userId) {
         return userRep.isTargetSilencingUser(username, userId);

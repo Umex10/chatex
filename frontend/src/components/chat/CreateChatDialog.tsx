@@ -11,6 +11,11 @@ import SearchUsersInput from '../shared/SearchInput'
 import RenderFollowList from '../follow/RenderFollowList'
 import { useGetRecentlyViewedUsersQuery } from '@redux/api/apis/userApi'
 
+
+/**
+ * CreateChatDialog component displays a dialog for starting a new chat.
+ * Shows a user search and recently interacted users.
+ */
 const CreateChatDialog = ({children}: {children: React.ReactNode}) => {
 
   const { data: recentlyViewedUsers, isLoading } = useGetRecentlyViewedUsersQuery();

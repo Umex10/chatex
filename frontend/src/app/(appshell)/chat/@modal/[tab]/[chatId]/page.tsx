@@ -10,6 +10,11 @@ import { chatApi } from "@redux/api/apis/chatApi";
 import { useDispatch } from 'react-redux';
 import { Chat } from '@/types/Chat';
 
+
+/**
+ * ChatInstancePage component displays a single chat conversation.
+ * Loads chat and user data, resets unseen messages, and renders ChatConversation.
+ */
 const ChatInstancePage = () => {
 
   const pathname = usePathname();

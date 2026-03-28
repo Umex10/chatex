@@ -24,9 +24,24 @@ public interface ShoutService {
    */
   List<Shout> getShouts(String username, ShoutVariant variant);
 
+
+  /**
+   * Retrieves recent shouts for a user within the last three days.
+   *
+   * @param userId the ID of the user
+   * @param variant the shout variant
+   * @return a list of recent Shout entities
+   */
   List<Shout> getRecentShouts(UUID userId, ShoutVariant variant);
 
-   List<Shout> getRecentFollowingShouts(UUID userId, ShoutVariant variant);
+  /**
+   * Retrieves recent shouts from users the given user is following, within the last three days.
+   *
+   * @param userId the ID of the user
+   * @param variant the shout variant
+   * @return a list of recent Shout entities from followed users
+   */
+  List<Shout> getRecentFollowingShouts(UUID userId, ShoutVariant variant);
 
   /**
    * Retrieves a single shout by its unique identifier.
@@ -35,6 +50,13 @@ public interface ShoutService {
    */
   Shout getShout(UUID shoutId);
 
+
+  /**
+   * Returns all images posted by the given user.
+   *
+   * @param username the username
+   * @return a list of image URLs
+   */
   List<String> getAllImages(String username);
 
   /**
@@ -79,6 +101,13 @@ public interface ShoutService {
    */
   void deleteShout(UUID shoutId);
 
+
+  /**
+   * Returns all shouts liked by the given user.
+   *
+   * @param username the username
+   * @return a set of liked Shout entities
+   */
   Set<Shout> likedShouts(String username);
 
   /**
@@ -101,8 +130,22 @@ public interface ShoutService {
    */
   void unShoutTheShout(UUID shoutId, UUID userId);
 
+
+  /**
+   * Adds a quote to the given shout by the user.
+   *
+   * @param shoutId the ID of the shout to quote
+   * @param userId the ID of the quoting user
+   * @param createShoutRequest the quote request data
+   */
   void quoteTheShout(UUID shoutId, UUID userId, CreateShoutRequest createShoutRequest);
 
+  /**
+   * Removes a quote from the given shout by the user.
+   *
+   * @param shoutId the ID of the quote shout
+   * @param userId the ID of the user
+   */
   void unQuoteTheShout(UUID shoutId, UUID userId);
 
   List<Shout> getQuotedBy(UUID shoutId);

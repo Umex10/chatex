@@ -7,6 +7,11 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@redux/store';
 import { setSearchText } from '@redux/api/slices/searchChatSlice';
 
+
+/**
+ * SearchChatsInput component provides a search input for filtering chats.
+ * Dispatches search text to the Redux store on change.
+ */
 const SearchChatsInput = () => {
 
   const [searchQuery, setSearchQuery] = useState('');

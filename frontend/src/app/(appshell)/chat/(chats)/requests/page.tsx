@@ -10,6 +10,11 @@ import { RootState } from '@redux/store'
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
+
+/**
+ * Page component displays the list of silenced chats (requests).
+ * Filters chats by search text and shows loading spinner if needed.
+ */
 const Page = () => {
 
   const { data: chats, isLoading } = useGetSilencedChatsQuery();

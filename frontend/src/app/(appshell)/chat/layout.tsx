@@ -12,6 +12,13 @@ import CreateChatDialog from '@/components/chat/CreateChatDialog'
 
 import { useSelectedLayoutSegment } from 'next/navigation';
 
+/**
+ * ChatLayout component provides the main layout for the chat route.
+ * Handles chat list, search, and modal display for chat conversations.
+ *
+ * @param children - The main chat content
+ * @param modal - The modal content (e.g., chat details)
+ */
 export default function ChatLayout({
   children,
   modal,

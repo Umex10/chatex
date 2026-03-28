@@ -11,10 +11,24 @@ import { useDispatch } from "react-redux";
 import { Chat } from "@/types/Chat";
 import { usePathname } from "next/navigation";
 
+
+/**
+ * React context for the STOMP WebSocket client.
+ */
 const WebSocketContext = createContext<Client | null>(null);
 
+
+/**
+ * Custom hook to access the WebSocket context.
+ * @returns The STOMP client instance or null.
+ */
 export const useWebSocket = () => useContext(WebSocketContext);
 
+
+/**
+ * WebSocketProvider component establishes a STOMP WebSocket connection for chat messaging.
+ * Provides the client via React context to child components.
+ */
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const { data: accessTk } = useRefreshAccessTkQuery(undefined);

@@ -3,12 +3,24 @@
 import { useChat } from '@/hooks/use-chat'
 import { CldImage } from 'next-cloudinary'
 
+
+/**
+ * Props for the RecentlyViewedUser component.
+ */
 interface RecommendationArgs {
+  /** Display name of the user */
   name: string
+  /** Username of the user */
   username: string,
+  /** Avatar image URL */
   avatar: string,
 }
 
+
+/**
+ * RecentlyViewedUser component displays a user from the recently viewed list.
+ * Allows starting a chat by clicking on the user.
+ */
 const RecentlyViewedUser = ({ name, username, avatar }: RecommendationArgs) => {
 
   const avatarSrc = avatar ? avatar : "user-avatar_yr4qhg";

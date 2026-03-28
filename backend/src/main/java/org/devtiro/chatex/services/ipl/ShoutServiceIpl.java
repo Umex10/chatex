@@ -266,11 +266,25 @@ public class ShoutServiceIpl implements ShoutService {
     return shoutRep.isUserReShoutingTheShout(shoutId, userId);
   }
 
+  /**
+   * Finds a user by ID or throws an EntityNotFoundException.
+   *
+   * @param userId the user ID
+   * @return the User entity
+   * @throws EntityNotFoundException if not found
+   */
   private User findUserOrThrow(UUID userId) {
     return userRep.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
   }
 
+  /**
+   * Finds a shout by ID or throws an EntityNotFoundException.
+   *
+   * @param shoutId the shout ID
+   * @return the Shout entity
+   * @throws EntityNotFoundException if not found
+   */
   private Shout findShoutOrThrow(UUID shoutId) {
     return shoutRep.findById(shoutId)
         .orElseThrow(() -> new EntityNotFoundException("Shout with id " + shoutId + " not found"));

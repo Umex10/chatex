@@ -9,15 +9,30 @@ import { Message } from '@/types/Message'
 import { User } from '@/types/User'
 import { Badge } from '../ui/badge'
 
+
+/**
+ * Props for the ChatInstance component.
+ */
 interface MessageArgs {
+  /** The current logged-in user */
   meUser: User,
+  /** The chat ID */
   chatId: string,
+  /** Avatar image URL */
   avatar: string,
+  /** Display name of the chat or user */
   name: string,
+  /** The last message in the chat */
   lastMessage: Message,
+  /** Number of unseen messages in the chat */
   unseenMessages: number
 }
 
+
+/**
+ * ChatInstance component displays a chat preview in the chat list.
+ * Shows avatar, name, last message, and unseen message count.
+ */
 const ChatInstance = ({ meUser, chatId, avatar, name, lastMessage, unseenMessages }: MessageArgs) => {
 
 

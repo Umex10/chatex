@@ -41,16 +41,55 @@ public interface UserService {
      */
     User updateUser(User userToUpdate, UpdateUserDto updateUserDto);
 
+
+    /**
+     * Returns the set of users recently viewed by the given user.
+     *
+     * @param userId the ID of the user
+     * @return a set of recently viewed User entities
+     */
     Set<User> getRecentlyViewedUsers(UUID userId);
 
+    /**
+     * Adds a user to the recently viewed list of another user.
+     *
+     * @param targetUser the user to add
+     * @param userId the ID of the viewing user
+     */
     void addUserToRecentlyViewedUsersList(User targetUser, UUID userId);
 
+    /**
+     * Silences a user for the given user.
+     *
+     * @param username the username to silence
+     * @param userId the ID of the user performing the action
+     */
     void silenceUser(String username, UUID userId);
-    
+
+    /**
+     * Removes the silence status for a user.
+     *
+     * @param username the username to unsilence
+     * @param userId the ID of the user performing the action
+     */
     void unSilenceUser(String username, UUID userId);
 
+    /**
+     * Checks if the user is silencing the target user.
+     *
+     * @param username the target username
+     * @param userId the ID of the user
+     * @return true if silencing, false otherwise
+     */
     boolean isUserSilencingTarget(String username, UUID userId);
 
+    /**
+     * Checks if the target user is silencing the user.
+     *
+     * @param username the target username
+     * @param userId the ID of the user
+     * @return true if silenced by target, false otherwise
+     */
     boolean isTargetSilencingUser(String username, UUID userId);
 
 }
