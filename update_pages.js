@@ -1,4 +1,16 @@
-"use client";
+const fs = require('fs');
+const path = require('path');
+
+const ensureDir = (dir) => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+};
+
+ensureDir('/home/umejr/IdeaProjects/chatex/frontend/src/app/terms');
+ensureDir('/home/umejr/IdeaProjects/chatex/frontend/src/app/contact');
+ensureDir('/home/umejr/IdeaProjects/chatex/frontend/src/app/roadmap');
+
+// 1. Rewrite page.tsx
+const pageContent = `"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -88,7 +100,7 @@ export default function Home() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-sm font-semibold border border-violet-200 dark:border-violet-800/50 mt-10">
               <Rocket size={16} />
-              <span>Your new Social Media Website! (X Clone)</span>
+              <span>The Next Generation Social Network</span>
             </div>
             <h2 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-tight tracking-tighter">
               A place for your <br className="hidden sm:block" />
@@ -97,8 +109,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Connect with people globally. Share your thoughts through Shouts, 
-              interact seamlessly, and build your own unique community on an nice website.
+              Connect with people globally. Share your thoughts through Shouts, interact seamlessly, and build your own unique community on an open, modern platform.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
@@ -110,7 +121,7 @@ export default function Home() {
                 </div>
               </SignUpAcc>
               <Button onClick={(e) => handleScroll(e as any, 'features')} size="lg" variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 border-2 border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:scale-105 transition-all">
-                Browse Features
+                Explore Features
               </Button>
             </div>
           </motion.div>
@@ -137,7 +148,7 @@ export default function Home() {
                 Everything you need to connect
               </h3>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Chatex isn{"'"}t just a messaging app. It{"'"}s a full-fledged social platform designed to amplify your voice and spark meaningful interactions.
+                Chatex isn't just a messaging app. It's a full-fledged social platform designed to amplify your voice and spark meaningful interactions.
               </p>
             </div>
 
@@ -197,7 +208,7 @@ export default function Home() {
                 </div>
                 <h4 className="text-xl font-bold mb-2 dark:text-white">Quote System</h4>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-1">
-                  Add your own unique spin to someone else{"'"}s Shout by quoting them directly on your feed.
+                  Add your own unique spin to someone else's Shout by quoting them directly on your feed.
                 </p>
                 <div className="w-full h-24 rounded-xl bg-gray-200 dark:bg-[#1a1a1a] flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-300 dark:border-gray-700 font-medium">
                   [ Quoted Shout Image ]
@@ -223,100 +234,46 @@ export default function Home() {
 
         {/* Tech Stack Section */}
         <section id="tech-stack" className="min-h-screen w-full flex flex-col justify-center py-20 px-6 relative overflow-hidden bg-gradient-to-tr from-purple-50 to-violet-100 dark:from-[#141414] dark:to-[#1f1a26]">
-          <div className="container mx-auto max-w-6xl relative z-10">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center justify-center p-3 bg-violet-600 text-white rounded-2xl mb-6 shadow-lg shadow-violet-500/30">
-                <Code2 size={32} />
-              </div>
-              <h3 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight mb-4">Architecture & Technology</h3>
-              <p className="text-xl text-violet-600 dark:text-violet-400 font-medium">The comprehensive stack powering Chatex</p>
-            </div>
-              
+          <div className="container mx-auto max-w-5xl relative z-10">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white/70 dark:bg-[#262626]/80 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border border-white/50 dark:border-gray-700/50 shadow-[0_20px_50px_rgba(139,92,246,0.1)]"
+              className="bg-white/60 dark:bg-[#262626]/80 backdrop-blur-xl rounded-3xl p-8 md:p-14 border border-white/50 dark:border-gray-700/50 shadow-2xl"
             >
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed text-center max-w-4xl mx-auto mb-12">
-                Chatex is a full-stack social media application engineered entirely from scratch over <strong>two dedicated months</strong>. 
-                My main objective was to create a modern, scalable platform that accurately mimics real-world enterprise architectures, proving my readiness for professional software engineering securely and confidently.
-              </p>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-4 bg-violet-600 text-white rounded-2xl shadow-lg shadow-violet-500/30">
+                  <Code2 size={32} />
+                </div>
+                <div>
+                  <h3 className="text-3xl md:text-5xl font-bold dark:text-white tracking-tight">Handcrafted with passion</h3>
+                  <p className="text-violet-600 dark:text-violet-400 font-medium mt-1">The architecture behind Chatex</p>
+                </div>
+              </div>
               
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* Frontend Card */}
-                <div className="bg-gradient-to-b from-white to-blue-50/30 dark:from-[#1f1f1f] dark:to-[#1f1f1f]/80 p-8 rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-xl shadow-blue-900/5 group hover:border-blue-400 dark:hover:border-blue-600 transition-all hover:-translate-y-1">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-6 ring-4 ring-white dark:ring-[#1f1f1f] shadow-inner">
-                    <span className="w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]"></span>
+              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                <p>
+                  Chatex is a full-stack social media application I developed entirely from scratch over the course of <strong>two dedicated months</strong>. My goal was to create a modern, performant, and scalable platform that mirrors the complexity of real-world enterprise applications.
+                </p>
+                
+                <div className="py-2 grid md:grid-cols-2 gap-6">
+                  <div className="bg-white/50 dark:bg-[#1a1a1a]/50 p-6 rounded-2xl border border-violet-100 dark:border-gray-700">
+                    <h4 className="font-bold text-xl mb-3 text-gray-900 dark:text-white flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></span> Frontend
+                    </h4>
+                    <p className="text-base text-gray-600 dark:text-gray-400">
+                      Powered by <strong>Next.js 14</strong> and React. Designed with Tailwind CSS for high responsiveness and polished with Framer Motion for buttery-smooth animations.
+                    </p>
                   </div>
-                  <h4 className="font-extrabold text-2xl mb-6 text-gray-900 dark:text-white">Frontend Ecosystem</h4>
-                  <ul className="space-y-4 text-slate-700 dark:text-slate-300">
-                    <li className="flex items-start gap-3">
-                      <span className="text-blue-500 mt-1">▹</span>
-                      <span><strong>Next.js 14 & React:</strong> Fully responsive UI built with Tailwind CSS, Server Components, and polished with Framer Motion.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-blue-500 mt-1">▹</span>
-                      <span><strong>State & Data:</strong> Managed globally utilizing Redux Toolkit (RTK) and heavily optimized using RTK Queries for catching/mutations.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-blue-500 mt-1">▹</span>
-                      <span><strong>Testing:</strong> Extensive Unit & Integration testing through Vitest alongside automated End-to-End (E2E) testing via Playwright.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-blue-500 mt-1">▹</span>
-                      <span><strong>Hosting:</strong> Seamlessly deployed and delivered on Vercel's global edge network.</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Backend Card */}
-                <div className="bg-gradient-to-b from-white to-green-50/30 dark:from-[#1f1f1f] dark:to-[#1f1f1f]/80 p-8 rounded-2xl border border-green-100 dark:border-green-900/30 shadow-xl shadow-green-900/5 group hover:border-green-400 dark:hover:border-green-600 transition-all hover:-translate-y-1">
-                  <div className="w-14 h-14 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-6 ring-4 ring-white dark:ring-[#1f1f1f] shadow-inner">
-                    <span className="w-4 h-4 rounded-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]"></span>
+                  <div className="bg-white/50 dark:bg-[#1a1a1a]/50 p-6 rounded-2xl border border-violet-100 dark:border-gray-700">
+                    <h4 className="font-bold text-xl mb-3 text-gray-900 dark:text-white flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></span> Backend
+                    </h4>
+                    <p className="text-base text-gray-600 dark:text-gray-400">
+                      A robust REST API built strictly with <strong>Java Spring Boot</strong>. Incorporates JWT authentication, complex relational mapping for the social graph, and optimized SQL queries.
+                    </p>
                   </div>
-                  <h4 className="font-extrabold text-2xl mb-6 text-gray-900 dark:text-white">Backend Architecture</h4>
-                  <ul className="space-y-4 text-slate-700 dark:text-slate-300">
-                    <li className="flex items-start gap-3">
-                      <span className="text-green-500 mt-1">▹</span>
-                      <span><strong>Java Spring Boot:</strong> The robust engine powering the RESTful APIs with optimized querying via Spring Data JPA.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-green-500 mt-1">▹</span>
-                      <span><strong>Security:</strong> Protected via a strictly defined Custom Security Filter Chain and stateless JWT-based authentication.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-green-500 mt-1">▹</span>
-                      <span><strong>Testing:</strong> Bulletproof stability ensured through heavy JUnit testing and comprehensive Spring Boot Integration Tests.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-green-500 mt-1">▹</span>
-                      <span><strong>Hosting:</strong> Running continuously in production via Railway deployment.</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* DevOps & Flow Card */}
-                <div className="bg-gradient-to-b from-white to-purple-50/30 dark:from-[#1f1f1f] dark:to-[#1f1f1f]/80 p-8 rounded-2xl border border-purple-100 dark:border-purple-900/30 shadow-xl shadow-purple-900/5 group hover:border-purple-400 dark:hover:border-purple-600 transition-all hover:-translate-y-1">
-                  <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-6 ring-4 ring-white dark:ring-[#1f1f1f] shadow-inner">
-                    <span className="w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]"></span>
-                  </div>
-                  <h4 className="font-extrabold text-2xl mb-6 text-gray-900 dark:text-white">DevOps & Database</h4>
-                  <ul className="space-y-4 text-slate-700 dark:text-slate-300">
-                    <li className="flex items-start gap-3">
-                      <span className="text-purple-500 mt-1">▹</span>
-                      <span><strong>Docker Containerization:</strong> Standardized and isolated environments using Docker & Docker Compose for testing/staging.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-purple-500 mt-1">▹</span>
-                      <span><strong>Database Complexity:</strong> Leveraging PostgreSQL to accurately map the complex relational social graph (Follows, Reshouts, Comments).</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-purple-500 mt-1">▹</span>
-                      <span><strong>Engineering Mindset:</strong> Clean code architecture bridging independent frontend and backend infrastructures realistically.</span>
-                    </li>
-                  </ul>
                 </div>
               </div>
             </motion.div>
@@ -330,7 +287,7 @@ export default function Home() {
               Start connecting with <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">nice people</span>
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-12 text-xl lead-relaxed">
-              Create your account today and experience the next era of social networking. It{"'"}s fast, free, and built for you.
+              Create your account today and experience the next era of social networking. It's fast, free, and built for you.
             </p>
             <SignUpAcc>
               <div className="shrink-0 w-full flex justify-center">
@@ -367,3 +324,159 @@ export default function Home() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync('/home/umejr/IdeaProjects/chatex/frontend/src/app/page.tsx', pageContent);
+
+// 2. Create Terms page
+const termsContent = `"use client";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
+export default function Terms() {
+  return (
+    <div className="min-h-screen bg-white dark:bg-[#121212] pt-32 px-6 pb-20">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-8">Terms of Code & Usage</h1>
+        <div className="prose dark:prose-invert prose-violet prose-lg">
+          <p>
+            Chatex is an ambitious full-stack project built over two months. 
+            Because it is designed as a portfolio piece showing my engineering skills in React, Next.js, and Java Spring Boot, 
+            <strong> you are completely free to fork, expand, or build upon this code.</strong>
+          </p>
+          <h3>Open Source Spirit</h3>
+          <p>
+            I strongly believe in the open-source community. If you find a component you like, or want to use the architecture 
+            for your own ideas, feel free to use it. Just don't forget to star the repository and maybe leave a shoutout!
+          </p>
+          <div className="mt-12">
+            <Link href="/">
+              <Button className="bg-violet-600 hover:bg-violet-700 text-white">Back to Home</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+`;
+
+fs.writeFileSync('/home/umejr/IdeaProjects/chatex/frontend/src/app/terms/page.tsx', termsContent);
+
+// 3. Create Contact page
+const contactContent = `"use client";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Mail, Github, Linkedin } from "lucide-react";
+
+export default function Contact() {
+  return (
+    <div className="min-h-screen bg-white dark:bg-[#121212] pt-32 px-6 pb-20 flex flex-col items-center">
+      <div className="max-w-xl w-full text-center">
+        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-6">Let's Talk</h1>
+        <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
+          Whether you have a question, feedback on the project, or want to discuss professional opportunities—I'm always open to connect.
+        </p>
+        
+        <div className="bg-violet-50 dark:bg-[#1a1a1a] rounded-3xl p-10 border border-violet-100 dark:border-gray-800 shadow-xl mb-12 flex flex-col items-center gap-6">
+          <a href="mailto:umi.dzinovic10@gmail.com" className="flex items-center gap-4 text-2xl font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+            <Mail size={32} />
+            umi.dzinovic10@gmail.com
+          </a>
+        </div>
+
+        <div className="flex justify-center mt-12 gap-4">
+          <Link href="/">
+            <Button variant="outline" className="border-violet-200 dark:border-gray-800 text-violet-700 dark:text-gray-300">
+              Return Home
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+`;
+fs.writeFileSync('/home/umejr/IdeaProjects/chatex/frontend/src/app/contact/page.tsx', contactContent);
+
+// 4. Create Roadmap page (creative page)
+const roadmapContent = `"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Sparkles, Zap, Shield, Globe } from "lucide-react";
+
+export default function Roadmap() {
+  return (
+    <div className="min-h-screen bg-violet-50 dark:bg-[#121212] pt-32 px-6 pb-24 overflow-hidden">
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center p-3 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-2xl mb-6">
+            <Sparkles size={32} />
+          </div>
+          <h1 className="text-5xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">The Vision & Roadmap</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400">
+            Chatex is already a robust application, but the journey doesn't stop here. Here is a sneak peek into the future features planned.
+          </p>
+        </div>
+
+        <div className="space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="flex gap-6 bg-white dark:bg-[#1a1a1a] p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-lg"
+          >
+            <div className="mt-1 text-violet-500"><Zap size={28} /></div>
+            <div>
+              <h3 className="text-2xl font-bold dark:text-white mb-2">Real-Time WebSocket Chat</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Direct Messaging (DM) features using Spring Boot WebSockets and STOMP to enable instantaneous private conversations between mutual followers.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex gap-6 bg-white dark:bg-[#1a1a1a] p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-lg"
+          >
+            <div className="mt-1 text-blue-500"><Shield size={28} /></div>
+            <div>
+              <h3 className="text-2xl font-bold dark:text-white mb-2">Advanced Moderation UI</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Empowering administrators with a dedicated dashboard to handle reports, block spammers, and ensure the community remains a safe space.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex gap-6 bg-white dark:bg-[#1a1a1a] p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-lg"
+          >
+            <div className="mt-1 text-green-500"><Globe size={28} /></div>
+            <div>
+              <h3 className="text-2xl font-bold dark:text-white mb-2">Algorithmic Feed Discovery</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                An intelligent feed switch that alternates between "Following Only" and "Discover," pushing relevant, trending Reshouts and Quotes to your timeline.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="mt-16 text-center">
+          <Link href="/">
+            <Button size="lg" className="bg-violet-600 text-white rounded-full px-8 hover:scale-105 transition-transform shadow-lg shadow-violet-500/30">
+              Return to Landing Page
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+`;
+fs.writeFileSync('/home/umejr/IdeaProjects/chatex/frontend/src/app/roadmap/page.tsx', roadmapContent);
