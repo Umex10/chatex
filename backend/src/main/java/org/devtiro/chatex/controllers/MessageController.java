@@ -18,6 +18,11 @@ import org.springframework.stereotype.Controller;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * WebSocket controller for handling real-time chat messages.
+ * Manages the reception, persistence, and broadcasting of messages
+ * using Spring WebSockets and STOMP messaging.
+ */
 @Controller
 @RequiredArgsConstructor
 public class MessageController {
@@ -27,6 +32,14 @@ public class MessageController {
   private final SimpMessagingTemplate messagingTemplate;
   private final ChatService chatService;
   
+  /**
+   * Processes incoming real-time chat messages from users.
+   * Persists the message and broadcasts it back to both the sender
+   * and the receiving user via private message queues.
+   *
+   * @param request  the payload containing message content and target receiver
+   * @param userAuth the authentication principal injected by the WebSocket session
+   */
   @MessageMapping("/chat.send")
   public void handleChatMessage(@Payload ChatMessageRequest request, Principal userAuth) {
 
@@ -41,7 +54,7 @@ public class MessageController {
 
     MessageDto messageDto = messageMapper.toDto(message);
 
-    // Send the message to the receiver
+    // Send the message to the receiver's private queue
     messagingTemplate.convertAndSendToUser(
         request.getReceiverUsername(), 
         "/queue/messages", 

@@ -10,12 +10,21 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Event listener for UserInteractionEvent actions.
+ * Automatically records the interaction to update recently viewed profiles.
+ */
 @Component
 @RequiredArgsConstructor
 public class InteractionLister {
 
   private final UserService userService;
 
+  /**
+   * Triggers side effects when a user visits another user's profile.
+   *
+   * @param event The interaction event payload carrying visitor and target details
+   */
   @EventListener
   public void handleUserInteraction(UserInteractionEvent event) {
 

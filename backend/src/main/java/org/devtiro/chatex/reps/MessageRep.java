@@ -9,6 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Data Access Object (Repository) for Message entities.
+ * Manages persistence and retrieval operations for individual chat messages.
+ */
 public interface MessageRep extends JpaRepository<Message, UUID> {
 
 @Modifying

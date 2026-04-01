@@ -46,6 +46,14 @@ public class FollowController {
         return ResponseEntity.ok(followersDto);
     }
 
+    /**
+     * Searches for active users by their username pattern to explore new follow connections.
+     * Enriches the response with the follow status between the requester and found users.
+     *
+     * @param query  the partial or full username to search for
+     * @param userId the ID of the requesting user
+     * @return ResponseEntity containing matching users wrapped in FollowDto
+     */
     @GetMapping(path = "/searchFollows")
     public ResponseEntity<List<FollowDto>> searchUsers(@RequestParam String query,
             @RequestAttribute UUID userId) {
@@ -55,6 +63,14 @@ public class FollowController {
         return new ResponseEntity<>(followInstancesDto, HttpStatus.OK);
     }
 
+    /**
+     * Fetches suggested users (recommendations) for the authenticated user.
+     * Typically prioritizes users that might be interesting to follow.
+     *
+     * @param query  the search payload or empty string for default recommendations
+     * @param userId the ID of the requesting user
+     * @return ResponseEntity with recommended users as FollowDto list
+     */
     @GetMapping(path = "/searchRecommendations")
     public ResponseEntity<List<FollowDto>> searchRecommendations(@RequestParam String query,
             @RequestAttribute UUID userId) {

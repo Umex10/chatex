@@ -10,6 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Data Access Object (Repository) for Chat entities.
+ * Provides custom queries to fetch chats based on user relationships and silenced status.
+ */
 @Repository
 public interface ChatRep extends JpaRepository<Chat, UUID> {
 

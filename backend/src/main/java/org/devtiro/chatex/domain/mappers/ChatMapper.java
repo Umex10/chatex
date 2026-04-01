@@ -18,6 +18,10 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring", uses = { MessageMapper.class })
+/**
+ * Mapping component responsible for translating Chat entities into ChatDto models.
+ * Extracts relevant user context and formats last messages properly.
+ */
 public abstract class ChatMapper {
 
   @Autowired

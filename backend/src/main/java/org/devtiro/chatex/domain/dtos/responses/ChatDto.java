@@ -9,6 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object summarizing a chat connection.
+ * Includes participant details, unread counts, and the most recent message snippet.
+ */
 @Data
 @Builder
 @NoArgsConstructor

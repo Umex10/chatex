@@ -11,6 +11,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
+/**
+ * Mapping component responsible for translating Message entities deeply into MessageDto records.
+ */
 public interface MessageMapper {
 
   @Mapping(source = "sender", target = "senderUsername", qualifiedByName = "getUsername")

@@ -76,6 +76,20 @@ interface SignUpAccountProps {
  * Dialog component for user registration.
  * Displays a form modal for creating new user accounts.
  */
+/**
+ * Dialog component handling new user registration.
+ * Captures email, username, phone, and password, performing validation before submission.
+ *
+ * @param {Object} props - React props containing children trigger elements
+ * @returns {JSX.Element} The rendered dialog with sign-up form
+ */
+/**
+ * Dialog component handling new user registration.
+ * Captures email, username, phone, and password, performing validation before submission.
+ *
+ * @param {Object} props - React props containing children trigger elements
+ * @returns {JSX.Element} The rendered dialog with sign-up form
+ */
 export function SignUpAcc({ children }: SignUpAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();

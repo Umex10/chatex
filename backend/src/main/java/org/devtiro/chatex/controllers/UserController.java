@@ -96,6 +96,13 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves the list of users recently viewed by the authenticated user.
+     * Evaluates follow status for each recently viewed user.
+     *
+     * @param userId the ID of the authenticated user
+     * @return ResponseEntity containing a list of recently viewed users
+     */
     @GetMapping(path = "/recentlyViewedUsers")
     public ResponseEntity<List<FollowDto>> getRecentlyViewedUsers(@RequestAttribute UUID userId) {
 
@@ -106,6 +113,14 @@ public class UserController {
         return new ResponseEntity<>(recentlyViewedUsersDto, HttpStatus.OK);
     }
 
+    /**
+     * Silences or mutes requests/messages from a specific targeted user.
+     * Prevents notifications or restricts interactions from the specified user.
+     *
+     * @param username the username to be silenced
+     * @param userId   the ID of the authenticated user performing the action
+     * @return ResponseEntity with HTTP status OK upon success
+     */
     @PostMapping(path = "/{username}/silence")
     public ResponseEntity<Void> silenceUser(@PathVariable String username,
          @RequestAttribute UUID userId) {
@@ -116,6 +131,14 @@ public class UserController {
 
     }
 
+    /**
+     * Unsilences or unmutes a previously targeted user.
+     * Restores notifications and interactions from the specified user.
+     *
+     * @param username the username to be unsilenced
+     * @param userId   the ID of the authenticated user performing the action
+     * @return ResponseEntity with HTTP status OK upon success
+     */
     @PostMapping(path = "/{username}/unSilence")
     public ResponseEntity<Void> unSilenceUser(@PathVariable String username,
          @RequestAttribute UUID userId) {

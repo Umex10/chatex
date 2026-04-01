@@ -20,6 +20,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity class representing a Chat room or direct conversation.
+ * Links two users and contains a collection of related messages.
+ */
 @Entity
 @Table(name = "chats")
 @AllArgsConstructor

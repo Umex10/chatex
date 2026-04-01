@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object representing an incoming chat message request.
+ * Contains the payload used to send a direct message via WebSockets.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

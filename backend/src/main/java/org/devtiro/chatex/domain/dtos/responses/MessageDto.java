@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Data Transfer Object representing a sent message.
+ * Used for returning message data to the client, including sender info and timestamps.
+ */
 @Data
 public class MessageDto {
   

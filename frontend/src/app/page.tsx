@@ -9,6 +9,12 @@ import { SignInAcc } from "@/components/auth/signin-account";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Users, Heart, Share2, Quote, Rocket, Code2 } from "lucide-react";
 
+/**
+ * Primary Landing Page (Home) component for Chatex.
+ * Showcases the app's features, architecture, and provides auth entry points.
+ * 
+ * @returns {JSX.Element} Rendered landing page 
+ */
 export default function Home() {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -26,6 +32,12 @@ export default function Home() {
     },
   };
 
+  /**
+   * Smoothly scrolls to the specified section anchor.
+   *
+   * @param {React.MouseEvent<HTMLAnchorElement>} e - The click event
+   * @param {string} targetId - The DOM ID of the target section
+   */
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
@@ -266,7 +278,7 @@ export default function Home() {
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-blue-500 mt-1">▹</span>
-                      <span><strong>Hosting:</strong> Seamlessly deployed and delivered on Vercel's global edge network.</span>
+                      <span><strong>Hosting:</strong> Seamlessly deployed and delivered on Vercel{"'"}s global edge network.</span>
                     </li>
                   </ul>
                 </div>
@@ -353,10 +365,8 @@ export default function Home() {
               <span className="font-bold text-gray-600 dark:text-gray-400">Chatex</span>
             </div>
             
-            <div className="flex gap-8 text-sm font-medium">
-              <Link href="/terms" className="text-gray-500 hover:text-violet-600 dark:text-gray-400 dark:hover:text-violet-400 transition-colors">Terms of Code</Link>
-              <Link href="/contact" className="text-gray-500 hover:text-violet-600 dark:text-gray-400 dark:hover:text-violet-400 transition-colors">Contact</Link>
-              <Link href="/roadmap" className="text-gray-500 hover:text-violet-600 dark:text-gray-400 dark:hover:text-violet-400 transition-colors">Roadmap & Vision</Link>
+            <div className="text-sm font-medium italic text-gray-500 dark:text-gray-400">
+              Code is code. Communication is art.
             </div>
           </div>
           <div className="mt-8 text-center text-sm text-gray-400 dark:text-gray-600">

@@ -23,12 +23,22 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping(path = "/api/v1/chat")
 @RequiredArgsConstructor
+/**
+ * REST controller for managing direct messages and chat rooms.
+ * Provides endpoints for retrieving, creating, and deleting chats.
+ */
 public class ChatController {
 
   private final ChatService chatService;
   private final ChatMapper chatMapper;
 
   @GetMapping(path = "/chats")
+  /**
+   * Retrieves all active, non-silenced chats for the authenticated user.
+   *
+   * @param userId the ID of the authenticated user
+   * @return ResponseEntity containing a list of ChatDto objects
+   */
   public ResponseEntity<List<ChatDto>> getChats(@RequestAttribute UUID userId) {
 
     Set<Chat> chats = chatService.getChats(userId);
@@ -39,6 +49,12 @@ public class ChatController {
   }
 
   @GetMapping(path = "/silencedChats")
+  /**
+   * Retrieves all silenced or muted chats for the authenticated user.
+   *
+   * @param userId the ID of the authenticated user
+   * @return ResponseEntity containing a list of silenced ChatDto objects
+   */
   public ResponseEntity<List<ChatDto>> getSilencedChats(@RequestAttribute UUID userId) {
 
     Set<Chat> chats = chatService.getSilencedChats(userId);
@@ -49,6 +65,13 @@ public class ChatController {
   }
 
   @GetMapping(path = "/{chatId}")
+  /**
+   * Retrieves details for a specific chat by its ID.
+   *
+   * @param chatId the unique identifier of the chat
+   * @param userId the ID of the authenticated user requesting the chat
+   * @return ResponseEntity containing the requested ChatDto
+   */
   public ResponseEntity<ChatDto> getChat(@PathVariable UUID chatId, @RequestAttribute UUID userId) {
 
     Chat chat = chatService.getChat(chatId, userId);
@@ -59,6 +82,12 @@ public class ChatController {
   }
 
   @DeleteMapping(path = "/{chatId}")
+  /**
+   * Deletes a chat room or direct message thread permanently.
+   *
+   * @param chatId the unique identifier of the chat to delete
+   * @return ResponseEntity without content, HTTP status 200 OK
+   */
   public ResponseEntity<Void> deleteChat(@PathVariable UUID chatId) {
 
     chatService.deleteChat(chatId);
@@ -67,6 +96,13 @@ public class ChatController {
   }
 
   @PostMapping(path = "/{username}")
+  /**
+   * Initiates a new chat with a specified user by their username.
+   *
+   * @param username the username of the target user
+   * @param userId   the ID of the authenticated user creating the chat
+   * @return ResponseEntity containing the newly created ChatDto
+   */
   public ResponseEntity<ChatDto> createChat(@PathVariable String username,
       @RequestAttribute UUID userId) {
 

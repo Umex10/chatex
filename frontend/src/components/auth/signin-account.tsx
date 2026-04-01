@@ -58,6 +58,20 @@ interface SignInAccountProps {
  * Dialog component for user sign-in.
  * Displays a form modal for authenticating existing users.
  */
+/**
+ * Dialog component providing the sign-in form for existing users.
+ * Validates credentials and uses RTK Query to authenticate with the backend.
+ *
+ * @param {Object} props - React props containing children trigger elements
+ * @returns {JSX.Element} The rendered dialog with sign-in form
+ */
+/**
+ * Dialog component providing the sign-in form for existing users.
+ * Validates credentials and uses RTK Query to authenticate with the backend.
+ *
+ * @param {Object} props - React props containing children trigger elements
+ * @returns {JSX.Element} The rendered dialog with sign-in form
+ */
 export function SignInAcc({ children }: SignInAccountProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();

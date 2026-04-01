@@ -11,6 +11,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object representing a quoted shout (re-post with comment).
+ * Encapsulates the original shout details within the quoting context.
+ */
 @Data
 @Builder
 @NoArgsConstructor

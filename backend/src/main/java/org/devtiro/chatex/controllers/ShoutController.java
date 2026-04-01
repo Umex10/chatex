@@ -291,6 +291,13 @@ public class ShoutController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Retrieves all shouts liked by a specific user.
+     *
+     * @param username the username of the user whose liked shouts are to be retrieved
+     * @param userId   the ID of the authenticated user making the request
+     * @return ResponseEntity containing a list of liked shouts wrapped in ShoutDto
+     */
     @GetMapping("/{username}/likedShouts")
     public ResponseEntity<List<ShoutDto>> likedShouts(@PathVariable String username,
             @RequestAttribute UUID userId) {

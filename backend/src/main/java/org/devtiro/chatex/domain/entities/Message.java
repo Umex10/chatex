@@ -22,6 +22,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity class representing an individual chat message.
+ * Contains the sender, text content, and relates to a specific Chat room.
+ */
 @Entity
 @Table(name = "messages")
 @Data
