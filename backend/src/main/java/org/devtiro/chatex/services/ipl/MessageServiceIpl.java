@@ -1,6 +1,6 @@
 package org.devtiro.chatex.services.ipl;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import org.devtiro.chatex.domain.dtos.requests.ChatMessageRequest;
@@ -52,7 +52,7 @@ public class MessageServiceIpl implements MessageService {
           .text(text)
           .sender(sender)
           .receiver(receiver)
-          .createdAt(LocalDate.now())
+          .createdAt(ZonedDateTime.now())
           .chat(chat)
           .build();
 

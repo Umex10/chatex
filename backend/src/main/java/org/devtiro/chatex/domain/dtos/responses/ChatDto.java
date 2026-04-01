@@ -1,6 +1,6 @@
 package org.devtiro.chatex.domain.dtos.responses;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ public class ChatDto {
   private String name;
   private String username;
   private String avatar;
-  private LocalDate createdUserAt;
+  private ZonedDateTime createdUserAt;
   private MessageDto lastMessage;
   private List<MessageDto> messages;
   private long unseenMessages;

@@ -1,6 +1,6 @@
 package org.devtiro.chatex.domain.dtos.responses;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class MessageDto {
   
   private UUID chatId;
   private String text;
-  private LocalDate createdAt;
+  private ZonedDateTime createdAt;
   private boolean seen;
   private String senderUsername;
   private String receiverUsername;

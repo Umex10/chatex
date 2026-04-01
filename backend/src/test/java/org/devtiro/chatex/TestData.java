@@ -1,6 +1,6 @@
 package org.devtiro.chatex;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 import org.devtiro.chatex.domain.dtos.requests.SignInAccountRequestDto;
 import org.devtiro.chatex.domain.dtos.requests.SignUpAccountRequestDto;
@@ -17,7 +17,7 @@ public class TestData {
     static String email = "max@mail.com";
     static String phone = "+43 333 22222";
     static String key = "max+1234";
-    static LocalDate createdAt = LocalDate.now();
+    static ZonedDateTime createdAt = ZonedDateTime.now();
     static String avatar = "avatar";
     static String banner = "banner";
     static String bio = "bio";
@@ -36,7 +36,7 @@ public class TestData {
                 .email(email)
                 .phone(phone)
                 .key(key)
-                .createdAt(LocalDate.now())
+                .createdAt(ZonedDateTime.now())
                 .avatar(avatar)
                 .banner(banner)
                 .bio(bio)
@@ -59,7 +59,7 @@ public class TestData {
                 .email(email + unique)
                 .phone(phone + unique)
                 .key(key + unique)
-                .createdAt(LocalDate.now())
+                .createdAt(ZonedDateTime.now())
                 .avatar(avatar + unique)
                 .banner(banner + unique)
                 .bio(bio + unique)

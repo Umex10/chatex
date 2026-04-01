@@ -91,7 +91,7 @@ export function ShoutView({quotedShoutId, name, username, avatar, text, images, 
                 {/* Three Images Grid */}
                 {images.length === 3 && (
                   <div className="grid grid-cols-2 grid-rows-2 gap-0.5 h-72 rounded-2xl overflow-hidden">
-                    <div className="relative row-span-2">
+                    <div className="relative row-span-2 cursor-pointer hover:opacity-90 transition-opacity">
                       <CldImage
                         fill src={images[0]} alt="Quoted image 1" crop="fill" format="auto"
                         quality="auto" sizes="300px" className="object-cover" placeholder="blur"
@@ -99,7 +99,7 @@ export function ShoutView({quotedShoutId, name, username, avatar, text, images, 
                       />
                     </div>
                     {images.slice(1).map((img, i) => (
-                      <div key={img} className="relative">
+                      <div key={img} className="relative cursor-pointer hover:opacity-90 transition-opacity">
                         <CldImage
                           fill src={img} alt={`Quoted image ${i + 2}`} crop="fill" format="auto"
                           quality="auto" sizes="300px" className="object-cover" placeholder="blur"

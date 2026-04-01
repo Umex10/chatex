@@ -158,14 +158,14 @@ const AccountPage = () => {
           </Link>
           {/* Follower Stats */}
           <div className='flex flex-row gap-4'>
-            <h4 className='flex gap-1'
+            <h4 className='flex gap-1 cursor-pointer hover:underline'
               onClick={() => router.push(`${username}/following`)}
               data-testid="following-list">
               <span className='font-bold' data-testid="following-count">{followingCount}</span>
               <span className='opacity-50'>Following</span>
             </h4>
 
-            <h4 className='flex gap-1'
+            <h4 className='flex gap-1 cursor-pointer hover:underline'
               onClick={() => router.push(`${username}/followers`)}
               data-testid="followers-list">
               <span className='font-bold' data-testid="followers-count">{followersCount}</span>

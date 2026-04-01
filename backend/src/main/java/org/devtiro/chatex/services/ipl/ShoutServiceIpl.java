@@ -1,6 +1,6 @@
 package org.devtiro.chatex.services.ipl;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -47,13 +47,13 @@ public class ShoutServiceIpl implements ShoutService {
 
   @Override
   public List<Shout> getRecentShouts(UUID userId, ShoutVariant variant) {
-    LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
+    ZonedDateTime threeDaysAgo = ZonedDateTime.now().minusDays(3);
     return shoutRep.findRecentShouts(variant, threeDaysAgo);
   }
 
   @Override
   public List<Shout> getRecentFollowingShouts(UUID userId, ShoutVariant variant) {
-    LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
+    ZonedDateTime threeDaysAgo = ZonedDateTime.now().minusDays(3);
     return shoutRep.findRecentShoutsFromFollowing(userId, variant, threeDaysAgo);
   }
 
@@ -71,7 +71,7 @@ public class ShoutServiceIpl implements ShoutService {
         .user(user)
         .text(createShoutRequest.getText())
         .images(createShoutRequest.getImages())
-        .createdAt(LocalDate.now())
+        .createdAt(ZonedDateTime.now())
         .build();
 
     shout.setVariant(ShoutVariant.DEFAULT);
@@ -88,7 +88,7 @@ public class ShoutServiceIpl implements ShoutService {
         .user(user)
         .text(createShoutRequest.getText())
         .images(createShoutRequest.getImages())
-        .createdAt(LocalDate.now())
+        .createdAt(ZonedDateTime.now())
         .build();
 
     Shout commentedShout = getShout(mainShoutId);
@@ -219,7 +219,7 @@ public class ShoutServiceIpl implements ShoutService {
         .images(createShoutRequest.getImages())
         .quotedShout(shout)
         .variant(ShoutVariant.DEFAULT)
-        .createdAt(LocalDate.now())
+        .createdAt(ZonedDateTime.now())
         .build();
 
     shoutRep.save(quote);

@@ -130,12 +130,12 @@ export function AppSidebar() {
                 </div>
 
                 <div className='flex flex-row gap-4'>
-                  <h4 className='flex gap-1'>
+                  <h4 className='flex gap-1 cursor-pointer hover:underline' onClick={() => router.push(`/${username}/following`)}>
                     <span className='font-bold'>{followingCount}</span>
                     <span className='opacity-50'>Following</span>
                   </h4>
 
-                  <h5 className='flex gap-1'>
+                  <h5 className='flex gap-1 cursor-pointer hover:underline' onClick={() => router.push(`/${username}/followers`)}>
                     <span className='font-bold'>{followersCount}</span>
                     <span className='opacity-50'>Follower</span>
                   </h5>

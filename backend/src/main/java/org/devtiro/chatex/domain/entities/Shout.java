@@ -1,6 +1,6 @@
 package org.devtiro.chatex.domain.entities;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +36,7 @@ public class Shout {
   private User user;
 
   @Column
-  private LocalDate createdAt;
+  private ZonedDateTime createdAt;
 
   @Column
   private String text;

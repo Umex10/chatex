@@ -1,6 +1,6 @@
 package org.devtiro.chatex.domain.entities;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,8 +44,7 @@ public class Message {
   private String text;
 
   @Column
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  private LocalDate createdAt;
+  private ZonedDateTime createdAt;
 
   @Column
   @Builder.Default

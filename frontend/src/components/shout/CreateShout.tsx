@@ -156,7 +156,7 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
       <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
 
         {/* Loading Overlay */}
-        {isLoadingShout || isLoadingComment || form.formState.isSubmitting && (
+        {(isLoadingShout || isLoadingComment || form.formState.isSubmitting) && (
           <div className="absolute z-50 inset-0 flex w-full items-center justify-center bg-transparent">
             <Spinner></Spinner>
           </div>
@@ -190,7 +190,7 @@ export function ShoutComposer({ onSubmitted, placeholder, submitText = "Shout", 
               <div className="flex flex-row gap-2 flex-wrap mt-1">
                 {imageViews.map((preview, i) => (
                   <div key={i} className="relative w-20 h-20">
-                    <Image src={preview} alt={`Preview ${i + 1}`} width={80} height={80} className="w-20 h-20 object-cover rounded-md" />
+                    <Image src={preview} alt={`Preview ${i + 1}`} width={80} height={80} unoptimized className="w-20 h-20 object-cover rounded-md border" />
                     <Button
                       type="button"
                       variant="ghost"

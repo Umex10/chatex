@@ -4,7 +4,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +82,7 @@ public class UserServiceIpl implements UserService {
                 .email(email)
                 .phone(phone)
                 .key(encodedKey)
-                .createdAt(LocalDate.now())
+                .createdAt(ZonedDateTime.now())
                 .avatar("")
                 .banner("")
                 .bio("")

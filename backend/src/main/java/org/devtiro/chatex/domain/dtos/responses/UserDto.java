@@ -1,6 +1,6 @@
 package org.devtiro.chatex.domain.dtos.responses;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -21,8 +21,7 @@ public class UserDto {
 
   private String name;
   private String username;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  private LocalDate createdAt;
+  private ZonedDateTime createdAt;
   private int followersCount; 
   private int followingCount;
   private boolean userFollowingTarget;

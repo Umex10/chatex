@@ -100,7 +100,7 @@ export default function Home() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-sm font-semibold border border-violet-200 dark:border-violet-800/50 mt-10">
               <Rocket size={16} />
-              <span>Your new Social Media Website! (X Clone)</span>
+              <span>Your new Social Media Website!</span>
             </div>
             <h2 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-tight tracking-tighter">
               A place for your <br className="hidden sm:block" />
@@ -109,7 +109,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Connect with people globally. Share your thoughts through Shouts, 
+              Connect with the world. Share your ideas with Shouts, 
               interact seamlessly, and build your own unique community on an nice website.
             </p>
 
@@ -134,10 +134,7 @@ export default function Home() {
             className="mt-16 w-full max-w-4xl aspect-video rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-2xl bg-gray-100 dark:bg-[#1a1a1a] relative flex items-center justify-center group"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-purple-500/10 z-0"></div>
-            <span className="z-10 text-gray-400 dark:text-gray-600 text-lg font-medium flex flex-col items-center gap-3">
-              <Image src="/chatex4.png" width={60} height={60} alt="App Preview" className="opacity-50 grayscale" />
-              [ App Dashboard Screenshot Placeholder ]
-            </span>
+            <Image src="/home.jpg" fill alt="App Dashboard Preview" className="object-cover object-top z-10 transition-transform duration-700 group-hover:scale-105" />
           </motion.div>
         </section>
 
@@ -149,7 +146,7 @@ export default function Home() {
                 Everything you need to connect
               </h3>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Chatex isn{"'"}t just a messaging app. It{"'"}s a full-fledged social platform designed to amplify your voice and spark meaningful interactions.
+                Chatex isn{"'"}t just a messaging app. It{"'"}s a full-fledged social website designed to show your voice and leave meaningful interactions.
               </p>
             </div>
 
@@ -158,75 +155,47 @@ export default function Home() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch"
+              className="grid gap-8 md:grid-cols-3 items-stretch max-w-6xl mx-auto w-full"
             >
-              {/* Feature 1 */}
-              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-violet-50/50 dark:bg-[#1f1f1f] border border-violet-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl hover:shadow-violet-500/5">
-                <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4 group-hover:scale-110 transition-transform">
-                  <MessageSquare size={24} />
-                </div>
-                <h4 className="text-xl font-bold mb-2 dark:text-white">Make a Shout</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-1">
-                  Share your thoughts, daily updates, or creative ideas instantly with the world through Shouts. 
-                </p>
-                <div className="w-full h-24 rounded-xl bg-gray-200 dark:bg-[#1a1a1a] flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-300 dark:border-gray-700 font-medium">
-                  [ Shout Form Image ]
-                </div>
-              </motion.div>
-
-              {/* Feature 2 */}
-              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-violet-50/50 dark:bg-[#1f1f1f] border border-violet-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl hover:shadow-violet-500/5">
-                <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4 group-hover:scale-110 transition-transform">
-                  <Heart size={24} />
+              {/* Feature 1: Like & Comment */}
+              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-gray-50 dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl shadow-sm hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                  <Heart size={28} />
                 </div>
                 <h4 className="text-xl font-bold mb-2 dark:text-white">Like & Comment</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-1">
-                  Engage deeply with the content you love. Drop a like or start a rich discussion in the comments section.
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-6 flex-1">
+                  Engage deeply with the content you love. Leave a like or start a rich discussion in the comments section seamlessly.
                 </p>
-                <div className="w-full h-24 rounded-xl bg-gray-200 dark:bg-[#1a1a1a] flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-300 dark:border-gray-700 font-medium">
-                  [ Comments Thread Image ]
+                <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 transition-transform duration-700 group-hover:scale-[1.02] bg-white dark:bg-black">
+                  <Image src="/comment.jpg" alt="Like and Comment Feature" width={800} height={600} priority className="w-full h-auto object-contain" />
                 </div>
               </motion.div>
 
-              {/* Feature 3 */}
-              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-violet-50/50 dark:bg-[#1f1f1f] border border-violet-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl hover:shadow-violet-500/5">
-                <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4 group-hover:scale-110 transition-transform">
-                  <Share2 size={24} />
+              {/* Feature 2: Reshouts & Quotes */}
+              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-gray-50 dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl shadow-sm hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                  <Share2 size={28} />
                 </div>
-                <h4 className="text-xl font-bold mb-2 dark:text-white">Reshouts</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-1">
-                  Found something awesome? Amplify it to your own audience with a single click using the Reshout button.
+                <h4 className="text-xl font-bold mb-2 dark:text-white">Reshouts & Quotes</h4>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-6 flex-1">
+                  Found something nice? Show it to your own audience or add your unique spin by re-shoutin' them on your feed.
                 </p>
-                <div className="w-full h-24 rounded-xl bg-gray-200 dark:bg-[#1a1a1a] flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-300 dark:border-gray-700 font-medium">
-                  [ Reshout Action Image ]
+                <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 transition-transform duration-700 group-hover:scale-[1.02] bg-white dark:bg-black">
+                  <Image src="/reshout.jpg" alt="Reshouts and Quotes Feature" width={800} height={600} priority className="w-full h-auto object-contain" />
                 </div>
               </motion.div>
 
-              {/* Feature 4 */}
-              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-violet-50/50 dark:bg-[#1f1f1f] border border-violet-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl hover:shadow-violet-500/5">
-                <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4 group-hover:scale-110 transition-transform">
-                  <Quote size={24} />
-                </div>
-                <h4 className="text-xl font-bold mb-2 dark:text-white">Quote System</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-1">
-                  Add your own unique spin to someone else{"'"}s Shout by quoting them directly on your feed.
-                </p>
-                <div className="w-full h-24 rounded-xl bg-gray-200 dark:bg-[#1a1a1a] flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-300 dark:border-gray-700 font-medium">
-                  [ Quoted Shout Image ]
-                </div>
-              </motion.div>
-
-              {/* Feature 5 */}
-              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-violet-50/50 dark:bg-[#1f1f1f] border border-violet-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl hover:shadow-violet-500/5 md:col-span-2 lg:col-span-2">
-                <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4 group-hover:scale-110 transition-transform">
-                  <Users size={24} />
+              {/* Feature 3: Follow System */}
+              <motion.div variants={itemVariants} className="group flex flex-col p-6 lg:p-8 rounded-3xl bg-gray-50 dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:shadow-xl shadow-sm hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-2xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                  <Users size={28} />
                 </div>
                 <h4 className="text-xl font-bold mb-2 dark:text-white">Follow System</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-1">
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-6 flex-1">
                   Build your network. Follow your favorite creators, friends, and trending topics to curate your personal feed.
                 </p>
-                <div className="w-full h-32 rounded-xl bg-gray-200 dark:bg-[#1a1a1a] flex items-center justify-center text-xs text-gray-400 border border-dashed border-gray-300 dark:border-gray-700 font-medium">
-                  [ User Profile / Follow Following Image ]
+                <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 transition-transform duration-700 group-hover:scale-[1.02] bg-white dark:bg-black">
+                  <Image src="/followList.jpg" alt="Follow System Image" width={800} height={600} priority className="w-full h-auto object-contain" />
                 </div>
               </motion.div>
             </motion.div>
@@ -292,7 +261,7 @@ export default function Home() {
                   <ul className="space-y-4 text-slate-700 dark:text-slate-300">
                     <li className="flex items-start gap-3">
                       <span className="text-green-500 mt-1">▹</span>
-                      <span><strong>Java Spring Boot:</strong> The robust engine powering the RESTful APIs with optimized querying via Spring Data JPA.</span>
+                      <span><strong>Java S-Boot:</strong> The robust engine powering the RESTful APIs with optimized querying via Spring Data JPA.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-green-500 mt-1">▹</span>
@@ -314,7 +283,7 @@ export default function Home() {
                   <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-6 ring-4 ring-white dark:ring-[#1f1f1f] shadow-inner">
                     <span className="w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]"></span>
                   </div>
-                  <h4 className="font-extrabold text-2xl mb-6 text-gray-900 dark:text-white">DevOps & Database</h4>
+                  <h4 className="font-extrabold text-2xl mb-6 text-gray-900 dark:text-white">Database</h4>
                   <ul className="space-y-4 text-slate-700 dark:text-slate-300">
                     <li className="flex items-start gap-3">
                       <span className="text-purple-500 mt-1">▹</span>
@@ -342,7 +311,7 @@ export default function Home() {
               Start connecting with <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">nice people</span>
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-12 text-xl lead-relaxed">
-              Create your account today and experience the next era of social networking. It{"'"}s fast, free, and built for you.
+              Create your account today and live the next era of social media. It{"'"}s fast, free, and built for you.
             </p>
             <SignUpAcc>
               <div className="shrink-0 w-full flex justify-center">

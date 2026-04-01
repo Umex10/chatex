@@ -1,6 +1,6 @@
 package org.devtiro.chatex.reps;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,7 +33,7 @@ public interface ShoutRep extends JpaRepository<Shout, UUID> {
                         "ORDER BY s.createdAt DESC")
         List<Shout> findRecentShouts(
                         @Param("variant") ShoutVariant variant,
-                        @Param("threeDaysAgo") LocalDate threeDaysAgo);
+                        @Param("threeDaysAgo") ZonedDateTime threeDaysAgo);
 
         @Query("SELECT s FROM Shout s " +
                         "WHERE s.user IN (SELECT f FROM User u JOIN u.following f WHERE u.id = :userId) " +
@@ -48,7 +48,7 @@ public interface ShoutRep extends JpaRepository<Shout, UUID> {
         List<Shout> findRecentShoutsFromFollowing(
                         @Param("userId") UUID userId,
                         @Param("variant") ShoutVariant variant,
-                        @Param("threeDaysAgo") LocalDate threeDaysAgo);
+                        @Param("threeDaysAgo") ZonedDateTime threeDaysAgo);
 
         /**
          * Finds all authored and re-shouted shouts by a given username, eagerly

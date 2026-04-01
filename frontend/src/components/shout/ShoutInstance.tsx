@@ -48,6 +48,7 @@ const ShoutInstance = (data: Shout) => {
   const [commentsCountView, setCommentsCountview] = useState(commentsCount);
 
   const [open, setOpen] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState("");
 
   const router = useRouter();
@@ -99,6 +100,7 @@ const ShoutInstance = (data: Shout) => {
 
   function handleImage(e: React.MouseEvent<HTMLDivElement>, imgUrl: string) {
     setImageUrl(imgUrl);
+    setImageLoading(true);
     setOpen(true);
     e.stopPropagation();
   }
@@ -137,9 +139,7 @@ const ShoutInstance = (data: Shout) => {
           {/* meta row: name, optional verified badge, username and time */}
           <div className='w-full flex flex-row'>
             <div className='flex flex-row flex-1 gap-1 items-center text-base'>
-              <span className='font-bold max-w-[80px] truncate 
-            md:max-w-none md:whitespace-normal'
-                onClick={(e) => { pushToAccount(e) }}>{name}</span>
+              <span className='font-bold max-w-[80px] truncate md:max-w-none md:whitespace-normal cursor-pointer hover:underline' onClick={(e) => { pushToAccount(e) }}>{name}</span>
 
               {/* verified badge only shown when hasBadge is true */}
 
@@ -154,9 +154,7 @@ const ShoutInstance = (data: Shout) => {
 
 
 
-              <span className='max-w-[80px] truncate 
-            md:max-w-none md:whitespace-normal'
-                onClick={(e) => { pushToAccount(e) }}>@{username}</span>
+              <span className='max-w-[80px] truncate md:max-w-none md:whitespace-normal cursor-pointer hover:underline' onClick={(e) => { pushToAccount(e) }}>@{username}</span>
 
               <span>·</span>
 
@@ -192,7 +190,7 @@ const ShoutInstance = (data: Shout) => {
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden"
                     onClick={(e) => handleImage(e, images[0])}>
                     <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto"
-                      quality="auto" sizes="300px" className="object-cover" placeholder="blur"
+                      quality="auto" sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" placeholder="blur"
                       blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_10,q_30,e_blur:1000/${images[0]}`} />
                   </div>
 
@@ -205,7 +203,7 @@ const ShoutInstance = (data: Shout) => {
                       <div key={img} className="relative aspect-square"
                         onClick={(e) => handleImage(e, img)}>
                         <CldImage fill src={img} alt={`Post image ${i + 1}`} crop="fill" format="auto"
-                          quality="auto" sizes="300px" className="object-cover" placeholder="blur"
+                          quality="auto" sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" placeholder="blur"
                           blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_10,q_30,e_blur:1000/${img}`} />
                       </div>
                     ))}
@@ -215,16 +213,16 @@ const ShoutInstance = (data: Shout) => {
                 {/* Three Images Grid */}
                 {images.length === 3 && (
                   <div className="grid grid-cols-2 grid-rows-2 gap-0.5 h-72 rounded-2xl overflow-hidden">
-                    <div className="relative row-span-2"
+                    <div className="relative row-span-2 cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={(e) => handleImage(e, images[0])}>
-                      <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" placeholder="blur"
+                      <CldImage fill src={images[0]} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" placeholder="blur"
                         blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_10,q_30,e_blur:1000/${images[0]}`} />
                     </div>
                     {images.slice(1).map((img, i) => (
-                      <div key={img} className="relative"
+                      <div key={img} className="relative cursor-pointer hover:opacity-90 transition-opacity"
                         onClick={(e) => handleImage(e, img)}>
                         <CldImage fill src={img} alt={`Post image ${i + 2}`} crop="fill"
-                          format="auto" quality="auto" sizes="300px" className="object-cover"
+                          format="auto" quality="auto" sizes="(max-width: 768px) 100vw, 50vw" className="object-cover"
                           placeholder="blur"
                           blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_10,q_30,e_blur:1000/${img}`} />
                       </div>
@@ -238,7 +236,7 @@ const ShoutInstance = (data: Shout) => {
                     {images.map((img, i) => (
                       <div key={img} className="relative aspect-square"
                         onClick={(e) => handleImage(e, img)}>
-                        <CldImage fill src={img} alt={`Post image ${i + 1}`} crop="fill" format="auto" quality="auto" sizes="300px" className="object-cover" placeholder="blur"
+                        <CldImage fill src={img} alt={`Post image ${i + 1}`} crop="fill" format="auto" quality="auto" sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" placeholder="blur"
                           blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_10,q_30,e_blur:1000/${img}`} />
                       </div>
                     ))}
@@ -252,9 +250,15 @@ const ShoutInstance = (data: Shout) => {
 
                     <DialogContent className='max-w-[95vw] min-h-[65vh] md:max-h-[95vh]'>
 
-                      <CldImage fill src={imageUrl} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="95vw" className="object-cover h-full"
+                      <CldImage fill src={imageUrl} alt="Post image 1" crop="fill" format="auto" quality="auto" sizes="95vw" className={`object-contain w-full h-full transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                        onLoad={() => setImageLoading(false)}
                         placeholder="blur"
                         blurDataURL={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_10,q_30,e_blur:1000/${imageUrl}`} />
+                      {imageLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Spinner />
+                        </div>
+                      )}
                     </DialogContent>
                   </Dialog>
                 </div>
