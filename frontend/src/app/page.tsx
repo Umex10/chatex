@@ -117,10 +117,17 @@ export default function Home() {
               <SignUpAcc>
                 <div className="w-full sm:w-auto shrink-0">
                   <Button size="lg" className="w-full text-lg px-8 py-6 bg-violet-600 text-white hover:bg-violet-700 shadow-lg shadow-violet-500/30 hover:scale-105 transition-all">
-                    Join the Community
+                    Register
                   </Button>
                 </div>
               </SignUpAcc>
+              <SignInAcc>
+                <div className="w-full sm:w-auto shrink-0 sm:hidden">
+                  <Button size="lg" variant="outline" className="w-full text-lg px-8 py-6 border-2 border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:scale-105 transition-all">
+                    Log in
+                  </Button>
+                </div>
+              </SignInAcc>
               <Button onClick={(e) => handleScroll(e as any, 'features')} size="lg" variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 border-2 border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:scale-105 transition-all">
                 Browse Features
               </Button>
@@ -146,7 +153,7 @@ export default function Home() {
                 Everything you need to connect
               </h3>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Chatex isn{"'"}t just a messaging app. It{"'"}s a full-fledged social website designed to show your voice and leave meaningful interactions.
+                Chatex isn&apos;t just a messaging app. It&apos;s a full-fledged social website designed to show your voice and leave meaningful interactions.
               </p>
             </div>
 
@@ -178,7 +185,7 @@ export default function Home() {
                 </div>
                 <h4 className="text-xl font-bold mb-2 dark:text-white">Reshouts & Quotes</h4>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-6 flex-1">
-                  Found something nice? Show it to your own audience or add your unique spin by re-shoutin' them on your feed.
+                  Found something nice? Show it to your own audience or add your unique spin by re-shoutin&apos; them on your feed.
                 </p>
                 <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 transition-transform duration-700 group-hover:scale-[1.02] bg-white dark:bg-black">
                   <Image src="/reshout.jpg" alt="Reshouts and Quotes Feature" width={800} height={600} priority className="w-full h-auto object-contain" />

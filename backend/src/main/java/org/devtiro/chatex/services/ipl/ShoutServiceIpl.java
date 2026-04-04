@@ -47,14 +47,14 @@ public class ShoutServiceIpl implements ShoutService {
 
   @Override
   public List<Shout> getRecentShouts(UUID userId, ShoutVariant variant) {
-    ZonedDateTime threeDaysAgo = ZonedDateTime.now().minusDays(3);
-    return shoutRep.findRecentShouts(variant, threeDaysAgo);
+    ZonedDateTime fourteenDaysAgo = ZonedDateTime.now().minusDays(14);
+    return shoutRep.findRecentShouts(variant, fourteenDaysAgo);
   }
 
   @Override
   public List<Shout> getRecentFollowingShouts(UUID userId, ShoutVariant variant) {
-    ZonedDateTime threeDaysAgo = ZonedDateTime.now().minusDays(3);
-    return shoutRep.findRecentShoutsFromFollowing(userId, variant, threeDaysAgo);
+    ZonedDateTime fourteenDaysAgo = ZonedDateTime.now().minusDays(14);
+    return shoutRep.findRecentShoutsFromFollowing(userId, variant, fourteenDaysAgo);
   }
 
   @Override
