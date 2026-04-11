@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementation of the AuthenticationService interface.
+ * Imlementation of the AuthenticationService interface.
  * Uses Spring Security's AuthenticationManager to validate user credentials.
  */
 @Service

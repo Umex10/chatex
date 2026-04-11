@@ -24,8 +24,6 @@ const api = axios.create({
  */
 export async function signUpRequest(formData: Omit<SignUpAccountValues, "keyConfirm">) {
   try {
-    console.log(api.getUri())
-    console.log(api);
     const res = await api.post("/sign-up", formData);
 
     const setCookieHeader = res.headers["set-cookie"];
@@ -85,6 +83,7 @@ export async function signOutRequest() {
 async function setRefreshCookie(setCookieHeader: string[]) {
   const cookieStore = await cookies();
 
+  // find this cookie: Set-Cookie: refresh_jwt=abc123...; HttpOnly; Path=/
   const refreshTokenCookie = Array.isArray(setCookieHeader)
     ? setCookieHeader.find(c => c.startsWith("refresh_jwt="))
     : setCookieHeader;

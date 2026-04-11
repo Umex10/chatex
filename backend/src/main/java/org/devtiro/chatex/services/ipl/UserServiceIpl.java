@@ -18,7 +18,6 @@ import org.devtiro.chatex.domain.exceptions.OwnException;
 import org.devtiro.chatex.reps.UserRep;
 import org.devtiro.chatex.services.FollowService;
 import org.devtiro.chatex.services.UserService;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +33,6 @@ public class UserServiceIpl implements UserService {
     private final UserRep userRep;
     private final PasswordEncoder encoder;
     private final FollowService followService;
-
-    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Creates a new user account with validation.
