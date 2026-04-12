@@ -33,7 +33,6 @@ export async function refreshAuthSessionRequest() {
   } catch (error: any) {
     const errorMessage =
       error.response?.data?.message || "An error occured while refreshing the auth session";
-
     console.error(errorMessage);
     return { success: false, error: errorMessage };
   }
