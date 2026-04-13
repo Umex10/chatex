@@ -12,7 +12,7 @@ test('Successful Sign-up', async ({ page, baseURL, browserName }) => {
   const { username, email, phone, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
-  const signUpButton = page.getByTestId("sign-up-button");
+  const signUpButton = page.getByTestId("sign-up-account");
   await signUpButton.click();
 
   await page.waitForSelector('[role="dialog"]');
@@ -40,7 +40,7 @@ test('Successful Sign-in', async ({ page, baseURL, browserName }) => {
   const { username, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
-  const signInButton = page.getByTestId("sign-in-button");
+  const signInButton = page.getByTestId("sign-in-account");
   await signInButton.click();
 
   await page.waitForSelector('[role="dialog"]');
@@ -64,7 +64,7 @@ test('Unsuccessful sign-up', async ({ page, baseURL, browserName }) => {
   const { username, email, phone, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
-  const signUpButton = page.getByTestId("sign-up-button");
+  const signUpButton = page.getByTestId("sign-up-account");
   await signUpButton.click();
 
   await page.waitForSelector('[role="dialog"]', { timeout: 10000 });
@@ -102,7 +102,7 @@ test('Unsuccessful sign-in', async ({ page, baseURL, browserName }) => {
   const { username, key } = getTestData(browserName, "unique");
 
   await expect(page).toHaveURL(`${baseURL}/`);
-  const signInButton = page.getByTestId("sign-in-button");
+  const signInButton = page.getByTestId("sign-in-account");
   await signInButton.click();
 
   // Sign-in with false credentials

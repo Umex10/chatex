@@ -122,3 +122,17 @@
     @apply p-0 m-0 bg-background text-foreground overflow-x-hidden;
   }
 }
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 4s ease infinite;
+}

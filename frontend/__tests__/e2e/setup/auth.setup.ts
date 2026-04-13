@@ -19,7 +19,7 @@ setup('authenticate', async ({ page, baseURL, browserName }) => {
   for (const user of usersToCreate) {
     await page.goto('/');
 
-    await page.getByTestId("sign-up-button").click();
+    await page.getByTestId("sign-up-account").click();
     await page.waitForSelector('[role="dialog"]');
 
     await page.getByTestId("name").fill(user.username);

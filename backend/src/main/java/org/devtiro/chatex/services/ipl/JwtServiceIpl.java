@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Implementation of the JwtService interface.
+ * Imlementation of the JwtService interface.
  * Handles JWT token creation, validation, and extraction using the JJWT library.
  */
 @Service

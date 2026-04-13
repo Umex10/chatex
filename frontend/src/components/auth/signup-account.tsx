@@ -155,8 +155,7 @@ export function SignUpAcc({ children }: SignUpAccountProps) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild
-                data-testid="sign-up-button">
+            <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
             <DialogContent className="overflow-y-auto max-h-[90vh] sm:max-w-[500px]">
