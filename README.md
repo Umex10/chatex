@@ -33,6 +33,16 @@ A real-time chat application built with **Next.js** (frontend) and **Spring Boot
 </tr>
 </table>
 
+**On mobile** — the same app, responsive down to a bottom nav bar:
+
+<table>
+<tr>
+<td width="33%"><img src="docs/screenshots/mobile/chatex-landing.jpg" width="100%" alt="Chatex landing on mobile"/></td>
+<td width="33%"><img src="docs/screenshots/mobile/chatex-feed.jpg" width="100%" alt="Chatex feed on mobile"/></td>
+<td width="33%"><img src="docs/screenshots/mobile/chatex-profile.jpg" width="100%" alt="Chatex profile on mobile"/></td>
+</tr>
+</table>
+
 ## Tech Stack
 
 | Layer    | Technology                          |
