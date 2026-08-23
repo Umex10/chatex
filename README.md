@@ -2,6 +2,37 @@
 
 A real-time chat application built with **Next.js** (frontend) and **Spring Boot** (backend), featuring a complete authentication system with JWT-based access and refresh tokens.
 
+## Screenshots
+
+<div align="center">
+  <img src="docs/screenshots/chatex-landing.jpg" width="100%" alt="Chatex landing page"/>
+  <br/>
+  <sub><b>Landing</b> — the entry point, with sign-up and sign-in.</sub>
+</div>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+  <img src="docs/screenshots/chatex-feed.jpg" width="100%" alt="Chatex feed with shouts, likes and reshouts"/>
+  <sub><b>Feed</b> — shouts with likes, reshouts and comments.</sub>
+</td>
+<td width="50%" valign="top">
+  <img src="docs/screenshots/chatex-chat.jpg" width="100%" alt="Chatex direct messages"/>
+  <sub><b>Chat</b> — direct messages over WebSocket, with seen state.</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+  <img src="docs/screenshots/chatex-profile.jpg" width="100%" alt="Chatex user profile"/>
+  <sub><b>Profile</b> — avatar, banner, bio, followers and the user's own shouts.</sub>
+</td>
+<td width="50%" valign="top">
+  <img src="docs/screenshots/chatex-signup.jpg" width="100%" alt="Chatex sign-up dialog"/>
+  <sub><b>Sign-up</b> — posts to <code>/api/v1/auth/sign-up</code>.</sub>
+</td>
+</tr>
+</table>
+
 ## Tech Stack
 
 | Layer    | Technology                          |
